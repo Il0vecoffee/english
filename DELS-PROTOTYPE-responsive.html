@@ -3026,6 +3026,32 @@ table.retro-table{ min-width:560px; }
 .duo-simple .duo-content .card-item .card-desc>ul,
 .duo-simple .duo-content .card-item .card-desc>ol{ margin:0 0 8px !important; }
 .duo-simple .duo-content .card-item .card-desc>*:last-child{ margin-bottom:0 !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE FIX v12 — one chrome to rule them all
+   The REFERENCE card (lavender frame, purple tile + bullets)
+   is now the only card chrome: overrides every rotating
+   accent, flattens nested flow visuals inside shells.
+   ═══════════════════════════════════════════════════════════ */
+.duo-simple .duo-content .card-item,
+.duo-simple .duo-content[class*="accent"] .card-item{
+  border-color:#c6b3ee !important; box-shadow:0 4px 0 #a78bfa !important;
+}
+.duo-simple .duo-content .card-top,
+.duo-simple .duo-content[class*="accent"] .card-top{ border-bottom-color:#e7ddf9 !important; }
+.duo-simple .duo-content .card-icon,
+.duo-simple .duo-content[class*="accent"] .card-icon{
+  background:linear-gradient(135deg,#9d7bea,#7d5bc9) !important;
+  box-shadow:0 3px 0 #6a48b5 !important;
+}
+.duo-simple .duo-content .card-desc::before,
+.duo-simple .duo-content[class*="accent"] .card-desc::before{ color:#7d5bc9 !important; }
+.duo-simple .duo-content .card-item .comm-flow-visual,
+.duo-simple .duo-content .card-item .comm-key-property{
+  background:none !important; border:0 !important; border-radius:0 !important;
+  box-shadow:none !important; padding-left:0 !important; padding-right:0 !important;
+  margin-left:0 !important; margin-right:0 !important;
+}
 </style>
 </head>
 <body>
@@ -4168,6 +4194,14 @@ function briefingCard(b, cat){
        '</div></div>' };
 }
 
+/* Standard concept-card shell shared by every slide type. */
+function shell(icon, title, inner, footLabel, footText){
+  return '<div class="content-grid duo-single-card"><div class="card-item">' +
+    '<div class="card-top"><span class="card-icon">' + icon + '</span><span class="card-title">' + title + '</span></div>' +
+    '<div class="card-desc">' + inner + '</div>' +
+    '<div class="card-footer"><span>' + footLabel + ':</span> ' + footText + '</div></div></div>';
+}
+
 function buildLessonSteps(lesson){
   // PACKED RULE: fill the card, no scroll, fewer slides.
   // Lead joins first chunk, up to 2 cards per slide, tables 6 rows, briefing own slide.
@@ -4239,7 +4273,12 @@ function buildLessonSteps(lesson){
       }
       if(processVisualHtml){
         cardPos++;
-        steps.push({ h: source.h + ' · ' + cardPos + '/' + totalCardSlides, cat: source.cat, t: processVisualHtml });
+        steps.push({ h: source.h + ' · ' + cardPos + '/' + totalCardSlides, cat: source.cat,
+          t: '<div class="content-grid duo-single-card"><div class="card-item">' +
+             '<div class="card-top"><span class="card-icon">🔁</span><span class="card-title">PROCESS MAP</span></div>' +
+             processVisualHtml +
+             '<div class="card-footer"><span>Nature:</span> Two-way, orderly, systematic.</div>' +
+             '</div></div>' });
         processVisualHtml = '';
       }
       for(var c=0; c<cardsArr.length; c++){
@@ -4271,7 +4310,14 @@ function buildLessonSteps(lesson){
     function flush(){
       if(!chunk) return;
       var t2 = chunk;
-      if(t2.indexOf('card-item')===-1 && t2.indexOf('info-box')===-1 && t2.indexOf('table-wrap')===-1 && t2.indexOf('highlight')===-1){
+      if(t2.indexOf('card-item')===-1 && t2.indexOf('info-box')!==-1){
+        var tmp = document.createElement('div'); tmp.innerHTML = t2;
+        var btx = tmp.querySelector('.box-title');
+        var btTxt = btx ? btx.textContent.replace(/\s+/g,' ').trim() : 'NOTES';
+        if(btx) btx.remove();
+        t2 = shell('📘', btTxt, tmp.innerHTML, 'Note', 'Essentials for this section.');
+      }
+      else if(t2.indexOf('card-item')===-1 && t2.indexOf('table-wrap')===-1 && t2.indexOf('highlight')===-1){
         t2 = '<div class="content-grid duo-single-card"><div class="card-item">' +
              '<div class="card-top"><span class="card-icon">📌</span><span class="card-title">KEY POINTS</span></div>' +
              '<div class="card-desc">' + t2 + '</div>' +
