@@ -3052,6 +3052,43 @@ table.retro-table{ min-width:560px; }
   box-shadow:none !important; padding-left:0 !important; padding-right:0 !important;
   margin-left:0 !important; margin-right:0 !important;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE FIX v13 — dossier safety net (deep-check result)
+   Audit: all briefing pushes route via briefingCard(); data
+   boxes are parsed, never rendered raw. Belt-and-suspenders:
+   any stray dossier/study briefing inside a lesson is forced
+   into the same purple standard card + Nunito, so the old
+   Courier dossier look cannot appear on any path.
+   ═══════════════════════════════════════════════════════════ */
+.duo-simple .duo-content .dossier-briefing,
+.duo-simple .duo-content .study-briefing{
+  background:#fff !important; border:2px solid #c6b3ee !important; border-radius:16px !important;
+  box-shadow:0 4px 0 #a78bfa !important; padding:18px !important;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif !important; color:#4b4b4b !important;
+}
+.duo-simple .duo-content .briefing-header{
+  border:0 !important; border-bottom:2px solid #e7ddf9 !important;
+  padding:0 0 10px !important; margin:0 0 10px !important; background:none !important;
+}
+.duo-simple .duo-content .briefing-badge{
+  background:linear-gradient(135deg,#9d7bea,#7d5bc9) !important; color:#fff !important;
+  border:0 !important; border-radius:10px !important;
+  font-family:inherit !important; box-shadow:0 2px 0 #6a48b5 !important;
+}
+.duo-simple .duo-content .briefing-title{
+  color:#3c3c3c !important; font-family:inherit !important; font-weight:900 !important;
+}
+.duo-simple .duo-content .briefing-body{
+  display:block !important; background:none !important; padding:0 !important;
+  font-family:inherit !important; font-size:15px !important; color:#4b4b4b !important;
+}
+.duo-simple .duo-content .briefing-body .briefing-col{ display:block !important; margin:0 0 10px !important; }
+.duo-simple .duo-content .briefing-body strong{
+  display:inline !important; color:#3c3c3c !important; font-weight:800 !important; margin:0 !important;
+}
+.duo-simple .duo-content .comm-key-property-head,
+.duo-simple .duo-content .comm-key-property small{ font-family:inherit !important; }
 </style>
 </head>
 <body>
