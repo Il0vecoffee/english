@@ -4149,6 +4149,25 @@ function communicationProcessVisual(){
   '<div class="comm-key-property"><div class="comm-key-property-head"><span class="comm-key-property-icon">📐</span><span>KEY PROPERTY</span></div><p>Communication is a <strong>two-way process</strong> that occurs in an orderly and systematic sequence to create a <strong>shared understanding</strong>.</p><small>Nature: two-way, orderly, systematic.</small></div>';
 }
 
+/* Standard shell for takeaway briefings: rebuilds the old dossier box
+   (badge + title + columns) as a concept card — tile header,
+   bulleted body, footer caption. */
+function briefingCard(b, cat){
+  if(!b) return null;
+  var titleEl = b.querySelector('.briefing-title');
+  var titleTxt = titleEl ? titleEl.textContent.replace(/\s+/g,' ').trim() : 'KEY TAKEAWAY';
+  var cols = b.querySelectorAll('.briefing-col');
+  var body = '';
+  for(var i = 0; i < cols.length; i++){ body += '<p>' + cols[i].innerHTML + '</p>'; }
+  if(!body) body = '<p>' + b.textContent.replace(/\s+/g,' ').trim() + '</p>';
+  return { h: 'Key takeaway', cat: cat,
+    t: '<div class="content-grid duo-single-card"><div class="card-item">' +
+       '<div class="card-top"><span class="card-icon">📝</span><span class="card-title">' + titleTxt + '</span></div>' +
+       '<div class="card-desc">' + body + '</div>' +
+       '<div class="card-footer"><span>Note:</span> Key takeaway — review before continuing.</div>' +
+       '</div></div>' };
+}
+
 function buildLessonSteps(lesson){
   // PACKED RULE: fill the card, no scroll, fewer slides.
   // Lead joins first chunk, up to 2 cards per slide, tables 6 rows, briefing own slide.
@@ -4202,7 +4221,7 @@ function buildLessonSteps(lesson){
           '</div></div>';
         steps.push({ h: source.h + ' · ' + tablePos + '/' + tableTotal, cat: source.cat, t: tt });
       }
-      if(briefingHtml) steps.push({ h: 'Key takeaway', cat: source.cat, t: briefingHtml });
+      if(briefingHtml) steps.push(briefingCard(briefing, source.cat));
       continue;
     }
 
@@ -4242,7 +4261,7 @@ function buildLessonSteps(lesson){
                '</div></div>' });
         }
       }
-      if(briefingHtml) steps.push({ h: 'Key takeaway', cat: source.cat, t: briefingHtml });
+      if(briefingHtml) steps.push(briefingCard(briefing, source.cat));
       continue;
     }
 
@@ -4270,7 +4289,7 @@ function buildLessonSteps(lesson){
       chunk += kid.outerHTML; chunkLen += len;
     }
     flush();
-    if(hasBrief) steps.push({ h: 'Key takeaway', cat: source.cat, t: briefingHtml });
+    if(hasBrief) steps.push(briefingCard(briefing, source.cat));
   }
   return steps;
 }
