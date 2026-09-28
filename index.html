@@ -1209,8 +1209,8 @@ function shortBankFor(q){
   const seen = {}; const bank = [];
   function add(w){ w=(w||'').trim(); if(!w) return; const k=w.toLowerCase(); if(!seen[k]){ seen[k]=1; bank.push(w); } }
   (q.keywords||[]).forEach(add);
-  (q.keywords||[]).forEach(function(k){ wds(k).forEach(function(w){ if(w.length>1) add(w); }); });
-  wds(q.model).forEach(add);
+  (q.keywords||[]).forEach(function(k){ wds(k).forEach(function(w){ if(w.length>1 && bank.length < 12) add(w); }); });
+  wds(q.model).forEach(function(w){ if(bank.length < 12) add(w); });
   DIST.forEach(function(w){ if(bank.length < 12) add(w); });
   return shuffle(bank).slice(0,12);
 }
