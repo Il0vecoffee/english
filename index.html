@@ -338,6 +338,19 @@ button{font-family:inherit}
 .slide-btn.go{background:#4be000;color:#111}
 .slide-btn:active{transform:translateY(2px);box-shadow:none}
 .slide-btn[disabled]{opacity:.6;cursor:not-allowed;transform:none}
+/* slide + question transitions (duolingo-style fade/slide) */
+@keyframes slideFadeR{from{opacity:0;transform:translateX(48px)}to{opacity:1;transform:none}}
+@keyframes slideFadeL{from{opacity:0;transform:translateX(-48px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.anim-r{animation:slideFadeR .28s ease both}
+.anim-l{animation:slideFadeL .28s ease both}
+.anim-up{animation:fadeUp .22s ease both}
+.slide-body-scroll li{animation:fadeUp .25s ease both}
+.slide-body-scroll li:nth-child(2){animation-delay:.05s}
+.slide-body-scroll li:nth-child(3){animation-delay:.1s}
+.slide-body-scroll li:nth-child(4){animation-delay:.15s}
+.slide-body-scroll li:nth-child(n+5){animation-delay:.2s}
+@media (prefers-reduced-motion: reduce){.anim-r,.anim-l,.anim-up,.slide-body-scroll li{animation:none}}
 
 /* ============================================================
    COMPLETE SCREEN
@@ -1167,6 +1180,7 @@ function renderSlides(){
   const pct = Math.round(((i+1) / list.length) * 100);
   const bullets = sl.b.map(function(x){ return '<li>'+x+'</li>'; }).join('');
   const last = (i === list.length - 1);
+  const dir = (state.slides.dir === 'l') ? 'anim-l' : 'anim-r';
   app.innerHTML = ''
     + '<div class="screen">'
     + '<div class="home-bar"><button data-action="go-home">←</button><span class="t">'+u.section.toUpperCase()+'</span></div>'
@@ -1175,8 +1189,8 @@ function renderSlides(){
     + '<span class="clip-chip">Clip '+(i+1)+' / '+list.length+'</span>'
     + '<span class="clip-chip">⚡'+state.xp+'</span>'
     + '<span class="clip-chip">❤️'+state.hearts+'</span></div>'
-    + '<div class="slide-title-card"><div class="eyebrow">'+unitRoman(u.section)+'</div><h2>'+sl.t+'</h2><p>'+sl.s+'</p></div>'
-    + '<div class="slide-body-card"><div class="slide-body-scroll"><ul>'+bullets+'</ul></div></div>'
+    + '<div class="slide-title-card '+dir+'"><div class="eyebrow">'+unitRoman(u.section)+'</div><h2>'+sl.t+'</h2><p>'+sl.s+'</p></div>'
+    + '<div class="slide-body-card '+dir+'"><div class="slide-body-scroll"><ul>'+bullets+'</ul></div></div>'
     + '<div class="slide-footer"><button class="slide-btn" data-action="slide-back"'+(i===0?' disabled':'')+'>← BACK</button>'
     + '<button class="slide-btn go" data-action="slide-next">'+(last?'START QUIZ ▶':'CONTINUE ▶')+'</button></div>'
     + '</div></div></div>';
@@ -1311,7 +1325,7 @@ function renderLesson(){
         <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
         <div class="hud-hearts ${s.heartShake ? 'shake' : ''}">❤️ <span>${state.hearts}</span></div>
       </header>
-      <div class="scroll lesson-scroll" id="lesson-scroll">
+      <div class="scroll lesson-scroll anim-up" id="lesson-scroll">
         ${renderQuestion(q)}
       </div>
       <footer class="lesson-footer">
@@ -1679,10 +1693,10 @@ app.addEventListener('click', (e) => {
   if(action === 'go-home'){ state.view='home'; render(); return; }
   if(action === 'go-map'){ state.view='home'; render(); return; }
   if(action === 'go-lessons'){ startSlides(state.selectedUnit); return; }
-  if(action === 'slide-back'){ if(state.slides && state.slides.idx > 0){ state.slides.idx--; render(); } return; }
+  if(action === 'slide-back'){ if(state.slides && state.slides.idx > 0){ state.slides.idx--; state.slides.dir = 'l'; render(); } return; }
   if(action === 'slide-next'){
     const uid = state.slides.uid; const list = SLIDES[uid];
-    if(state.slides.idx < list.length - 1){ state.slides.idx++; render(); const sc = document.querySelector('.slide-body-scroll'); if(sc) sc.scrollTop = 0; }
+    if(state.slides.idx < list.length - 1){ state.slides.idx++; state.slides.dir = 'r'; render(); const sc = document.querySelector('.slide-body-scroll'); if(sc) sc.scrollTop = 0; }
     else { const k = mockKey(state.selectedUnit); const u2 = unitById(state.selectedUnit); startCustom(u2.section+' Mock Test', MOCK[k].slice()); }
     return;
   }
