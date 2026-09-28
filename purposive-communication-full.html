@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ENG3A — Learn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --green:#58cc02; --green-dark:#46a302; --green-light:#d7ffb8;
+  --blue:#1cb0f6;  --blue-dark:#1899d6;  --blue-light:#ddf4ff;
+  --red:#ff4b4b;   --red-dark:#d33131;   --red-light:#ffdfe0;
+  --yellow:#ffc800;--yellow-dark:#e5a000;--yellow-light:#fff4cc;
+  --purple:#ce82ff;--purple-dark:#a568cc;--purple-light:#f3e4ff;
+  --orange:#ff9600;--orange-dark:#e08600;
+  --border:#e5e5e5; --border-dark:#cfcfcf;
+  --text:#3c3c3c; --muted:#afafaf; --bg:#f0f2f5;
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-full:999px;
+  --font:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;font-family:var(--font);background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;display:flex;justify-content:center;
+  align-items:center;padding:24px;
+}
+button{font-family:inherit}
+
+/* ============================================================
+   FRAME
+   ============================================================ */
+.app-frame{
+  width:440px;max-width:100%;height:min(880px,calc(100vh - 48px));
+  background:#fff;border-radius:28px;overflow:hidden;position:relative;
+  box-shadow:0 30px 70px rgba(20,30,50,.18), 0 0 0 1px rgba(0,0,0,.05);
+}
+@media (max-width:540px){
+  body{padding:0;align-items:stretch}
+  .app-frame{width:100%;height:100vh;height:100dvh;border-radius:0;box-shadow:none}
+}
+
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:#fff}
+.scroll{flex:1;overflow-y:auto;overscroll-behavior:contain}
+.scroll::-webkit-scrollbar{width:7px}
+.scroll::-webkit-scrollbar-thumb{background:#dcdcdc;border-radius:99px}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  border:none;cursor:pointer;border-radius:var(--r-md);
+  font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  transition:transform .07s ease, box-shadow .07s ease, filter .15s, background .15s;
+  font-size:15px;
+}
+.btn:active{transform:translateY(4px);box-shadow:none !important}
+.btn-check{
+  width:100%;padding:16px 22px;background:var(--green);color:#fff;
+  box-shadow:0 4px 0 var(--green-dark);
+}
+.btn-check:hover:not([disabled]){filter:brightness(1.06)}
+.btn-check[disabled]{
+  background:#e5e5e5;color:#afafaf;box-shadow:none;cursor:not-allowed;transform:none;
+}
+.btn-continue{
+  padding:13px 26px;background:#fff;color:var(--green-dark);
+  box-shadow:0 4px 0 rgba(0,0,0,.12);font-size:14px;flex-shrink:0;
+}
+.fb-wrong .btn-continue{color:var(--red-dark)}
+
+/* ============================================================
+   PATH SCREEN
+   ============================================================ */
+.top-hud{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 18px 14px;border-bottom:1px solid #f2f2f2;
+  background:#fff;position:relative;z-index:5;
+}
+.chip{
+  display:flex;align-items:center;gap:5px;font-weight:800;font-size:15px;
+  color:var(--text);white-space:nowrap;
+}
+.chip .emoji{font-size:17px;line-height:1}
+.chip.hearts{color:var(--red)}
+.spacer{flex:1}
+
+.path-scroll{padding:22px 18px 40px}
+
+.unit{margin-bottom:8px}
+.unit-banner{
+  width:100%;max-width:340px;margin:14px auto 32px;
+  color:#fff;border-radius:var(--r-md);padding:14px 18px;
+  position:relative;
+}
+.unit-banner .eyebrow{
+  font-size:11px;font-weight:800;letter-spacing:1.2px;
+  text-transform:uppercase;opacity:.85;
+}
+.unit-banner h3{margin:4px 0 0;font-size:18px;font-weight:900;line-height:1.25}
+
+.node-row{
+  display:flex;justify-content:center;margin-bottom:24px;position:relative;
+  transition:transform .25s ease;
+}
+.node{
+  width:70px;height:70px;border-radius:50%;border:none;
+  display:grid;place-items:center;font-size:26px;font-weight:900;
+  cursor:pointer;position:relative;color:#fff;
+  transition:transform .08s, box-shadow .08s, filter .15s;
+}
+.node:active:not([disabled]){transform:translateY(5px);box-shadow:none !important}
+.node.done{background:var(--green);box-shadow:0 6px 0 var(--green-dark);font-size:28px}
+.node.current{background:var(--green);box-shadow:0 6px 0 var(--green-dark)}
+.node.current::before{
+  content:'';position:absolute;inset:-9px;border-radius:50%;
+  border:3px solid rgba(88,204,2,.35);animation:pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);opacity:.9}
+  50%{transform:scale(1.09);opacity:.3}
+}
+.node.locked{
+  background:#e5e5e5;box-shadow:0 6px 0 #cfcfcf;color:#b5b5b5;
+  cursor:not-allowed;font-size:22px;
+}
+.node-tip{
+  position:absolute;bottom:82px;left:50%;transform:translateX(-50%);
+  background:#fff;border:2px solid var(--border);border-radius:var(--r-sm);
+  padding:7px 14px;font-size:11.5px;font-weight:900;color:var(--green-dark);
+  letter-spacing:1px;text-transform:uppercase;white-space:nowrap;
+  animation:bob 1.8s ease-in-out infinite;pointer-events:none;
+}
+.node-tip::after{
+  content:'';position:absolute;bottom:-7px;left:50%;width:10px;height:10px;
+  background:#fff;border-right:2px solid var(--border);
+  border-bottom:2px solid var(--border);
+  transform:translateX(-50%) rotate(45deg);
+}
+@keyframes bob{0%,100%{margin-bottom:0}50%{margin-bottom:6px}}
+
+.bottomnav{
+  display:flex;border-top:2px solid var(--border);background:#fff;
+  padding:8px 4px 10px;
+}
+.bottomnav a{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--muted);text-decoration:none;padding:6px 0;border-radius:var(--r-sm);
+}
+.bottomnav a .emoji{font-size:21px;line-height:1;filter:grayscale(1);opacity:.5}
+.bottomnav a.active{color:var(--green-dark);background:var(--green-light)}
+.bottomnav a.active .emoji{filter:none;opacity:1}
+
+/* ============================================================
+   LESSON SCREEN
+   ============================================================ */
+.lesson-hud{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 18px;background:#fff;position:relative;z-index:5;flex-shrink:0;
+}
+.icon-btn{
+  background:none;border:none;font-size:20px;color:var(--muted);
+  cursor:pointer;padding:2px 6px;line-height:1;font-weight:800;
+}
+.icon-btn:hover{color:#7a8291}
+.progress{
+  flex:1;height:16px;background:var(--border);border-radius:var(--r-full);
+  overflow:hidden;position:relative;
+}
+.progress-fill{
+  height:100%;border-radius:var(--r-full);
+  background:linear-gradient(#7ee63a,#58cc02);
+  position:relative;transition:width .35s cubic-bezier(.4,0,.2,1);
+}
+.progress-fill::after{
+  content:'';position:absolute;top:4px;left:8px;right:8px;height:4px;
+  border-radius:99px;background:rgba(255,255,255,.45);
+}
+.hud-hearts{display:flex;align-items:center;gap:4px;font-weight:900;font-size:16px;color:var(--red)}
+.hud-hearts.shake{animation:shake .4s}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-5px)}
+  75%{transform:translateX(5px)}
+}
+
+.lesson-scroll{flex:1;overflow-y:auto;padding:26px 22px 30px}
+.lesson-scroll::-webkit-scrollbar{width:7px}
+.lesson-scroll::-webkit-scrollbar-thumb{background:#dcdcdc;border-radius:99px}
+
+.q-prompt{
+  font-size:22px;font-weight:900;line-height:1.35;margin:0 0 22px;
+  letter-spacing:-.2px;
+}
+.q-prompt .kicker{
+  display:block;font-size:12.5px;font-weight:800;color:var(--muted);
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:9px;
+}
+.q-prompt em{font-style:normal;color:var(--blue-dark)}
+
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.options.single{grid-template-columns:1fr}
+.option{
+  background:#fff;border:2px solid var(--border);border-bottom-width:4px;
+  border-radius:var(--r-md);padding:16px 14px;font-size:15.5px;font-weight:800;
+  color:var(--text);cursor:pointer;text-align:center;transition:.12s;
+  line-height:1.3;
+}
+.option:hover{background:#fafafa}
+.option.selected{
+  border-color:#84d8ff;background:var(--blue-light);color:var(--blue-dark);
+}
+.option.multi.selected{
+  border-color:#84d8ff;background:var(--blue-light);color:var(--blue-dark);
+}
+.option .box{
+  display:inline-block;width:18px;height:18px;border:2px solid var(--border-dark);
+  border-radius:5px;margin-right:9px;vertical-align:-3px;position:relative;
+}
+.option.multi.selected .box{background:var(--blue);border-color:var(--blue)}
+.option.multi.selected .box::after{
+  content:'✓';position:absolute;inset:0;color:#fff;font-size:13px;
+  display:grid;place-items:center;line-height:1;
+}
+.option .box{display:none}
+.option.multi .box{display:inline-block}
+
+/* fill in the blank */
+.blank{
+  display:inline-block;min-width:104px;padding:2px 12px;
+  border-bottom:3px solid var(--blue);color:var(--blue-dark);
+  text-align:center;font-weight:900;transition:.15s;
+}
+.blank.empty{color:transparent;border-bottom-style:dashed}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.chip-word{
+  background:#fff;border:2px solid var(--border);border-bottom-width:4px;
+  border-radius:var(--r-md);padding:12px 18px;font-size:15px;font-weight:800;
+  cursor:pointer;transition:.12s;color:var(--text);
+}
+.chip-word:hover{background:#fafafa}
+.chip-word.selected{
+  border-color:#84d8ff;background:var(--blue-light);color:var(--blue-dark);
+}
+.chip-word.used{opacity:.35;pointer-events:none}
+
+/* match */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.match-col{display:flex;flex-direction:column;gap:10px}
+.match-item{
+  background:#fff;border:2px solid var(--border);border-bottom-width:4px;
+  border-radius:var(--r-md);padding:13px 12px;font-size:14px;font-weight:800;
+  cursor:pointer;text-align:left;transition:.12s;color:var(--text);line-height:1.3;
+}
+.match-item:hover:not(.matched){background:#fafafa}
+.match-item.selected{border-color:#84d8ff;background:var(--blue-light);color:var(--blue-dark)}
+.match-item.matched{
+  border-color:var(--green);background:var(--green-light);color:var(--green-dark);
+  pointer-events:none;cursor:default;
+}
+.match-item.wrong{
+  border-color:var(--red);background:var(--red-light);color:var(--red-dark);
+  animation:shake .35s;
+}
+
+/* footer */
+.lesson-footer{flex-shrink:0;border-top:2px solid var(--border);background:#fff}
+.footer-bar{padding:16px 22px 22px}
+.feedback{
+  padding:18px 22px 22px;display:flex;align-items:flex-start;gap:16px;
+}
+.feedback.fb-correct{background:var(--green-light)}
+.feedback.fb-wrong{background:var(--red-light)}
+.fb-text{flex:1;min-width:0}
+.fb-text strong{
+  display:block;font-size:17px;font-weight:900;margin-bottom:4px;
+}
+.fb-correct .fb-text strong{color:var(--green-dark)}
+.fb-wrong .fb-text strong{color:var(--red-dark)}
+.fb-text span{font-size:14px;font-weight:700;line-height:1.45;color:#5b6472}
+.fb-icon{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  font-size:19px;flex-shrink:0;background:#fff;
+}
+.fb-correct .fb-icon{color:var(--green-dark)}
+.fb-wrong .fb-icon{color:var(--red-dark)}
+
+/* ============ BRUTALIST HOME (PATHFIT ref) ============ */
+.home-bar{background:#1b2440;color:#fff;display:flex;align-items:center;gap:10px;padding:14px;font-weight:900;letter-spacing:1px}
+.home-bar button{background:none;border:none;color:#fff;font-size:20px;font-weight:900;cursor:pointer}
+.home-bar .t{margin-left:auto;font-size:15px;letter-spacing:2px}
+.home-scroll{flex:1;overflow-y:auto;background:#e9f1e2;padding:14px 14px 30px}
+.home-frame{border:3px solid #111;border-radius:18px;background:#f4f6ec;padding:18px 14px;box-shadow:4px 4px 0 #111}
+.home-eyebrow{font-family:'Courier New',monospace;font-weight:900;letter-spacing:3px;font-size:13px}
+.home-h1{font-size:44px;line-height:.95;font-weight:900;margin:8px 0 4px;letter-spacing:-1px}
+.home-sub{font-family:'Courier New',monospace;font-weight:700;font-size:17px;margin-bottom:14px}
+.menu-card{display:flex;gap:12px;align-items:flex-start;background:#fff;border:3px solid #111;border-radius:16px;padding:16px 14px;margin:12px 0;box-shadow:0 5px 0 #111;cursor:pointer;text-align:left;width:100%}
+.menu-card:active{transform:translateY(3px);box-shadow:0 1px 0 #111}
+.menu-card.green{background:#4be000}
+.menu-card h3{margin:0;font-size:22px;font-weight:900}
+.menu-card p{margin:4px 0 0;font-family:'Courier New',monospace;font-weight:700;font-size:14px}
+.menu-ico{width:52px;height:52px;border:3px solid #111;border-radius:12px;display:grid;place-items:center;font-size:24px;font-weight:900;background:#fff;flex-shrink:0}
+.photo-row{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 10px}
+.photo-slot{min-width:150px;height:100px;border:3px solid #111;border-radius:12px;background:#fff;display:grid;place-items:center;overflow:hidden;position:relative;cursor:pointer;box-shadow:0 4px 0 #111;padding:0}
+.photo-slot img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
+.photo-slot span{font-size:11px;font-weight:900;text-align:center;padding:6px;position:relative;z-index:1}
+.photo-slot input{display:none}
+.unit-pick{background:#fff;border:3px solid #111;border-radius:16px;padding:14px;margin-top:12px;box-shadow:0 5px 0 #111}
+.unit-pick h4{margin:0 0 10px;font-family:'Courier New',monospace;letter-spacing:2px;font-size:13px}
+.unit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.unit-btn{border:3px solid #111;border-radius:12px;padding:12px;font-weight:900;font-family:'Courier New',monospace;font-size:16px;background:#eef2e6;cursor:pointer;box-shadow:0 4px 0 #111}
+.unit-btn.sel{background:#4be000}
+.lesson-row{display:flex;gap:10px;align-items:center;background:#fff;border:3px solid #111;border-radius:12px;padding:12px;box-shadow:0 4px 0 #111;cursor:pointer;width:100%;margin-top:10px;text-align:left}
+.lessons-list{display:flex;flex-direction:column;gap:2px}
+
+/* ============================================================
+   COMPLETE SCREEN
+   ============================================================ */
+.complete-wrap{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:36px 26px;gap:24px;
+  position:relative;overflow:hidden;
+}
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.confetti span{
+  position:absolute;width:9px;height:9px;border-radius:2px;opacity:.85;
+  animation:fall 3.2s linear infinite;
+}
+@keyframes fall{
+  from{transform:translateY(-30px) rotate(0)}
+  to{transform:translateY(880px) rotate(540deg)}
+}
+.trophy{
+  font-size:82px;line-height:1;
+  filter:drop-shadow(0 12px 20px rgba(255,200,0,.45));
+  animation:pop .55s cubic-bezier(.2,1.6,.5,1) both;
+}
+@keyframes pop{from{transform:scale(.35);opacity:0}to{transform:scale(1);opacity:1}}
+.complete-wrap h2{
+  margin:0;font-size:28px;font-weight:900;color:var(--yellow-dark);
+  letter-spacing:-.4px;
+}
+.complete-wrap p{margin:0;font-weight:800;color:#8b93a1;font-size:15px}
+.stat-tiles{display:flex;gap:12px;width:100%;max-width:340px}
+.stat-tile{
+  flex:1;border-radius:var(--r-md);padding:11px 6px 10px;border:2px solid var(--border);
+  background:#fff;
+}
+.stat-tile .label{
+  display:block;font-size:10px;font-weight:900;letter-spacing:.9px;
+  text-transform:uppercase;color:#8b93a1;
+}
+.stat-tile .value{display:block;font-size:19px;font-weight:900;margin-top:3px}
+.stat-tile.xp{border-color:var(--yellow);background:var(--yellow-light)}
+.stat-tile.xp .value{color:var(--yellow-dark)}
+.stat-tile.time{border-color:var(--blue);background:var(--blue-light)}
+.stat-tile.time .value{color:var(--blue-dark)}
+.stat-tile.acc{border-color:var(--green);background:var(--green-light)}
+.stat-tile.acc .value{color:var(--green-dark)}
+.complete-actions{width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px}
+
+/* ============================================================
+   OVERLAY
+   ============================================================ */
+.overlay{
+  position:absolute;inset:0;background:rgba(20,25,35,.55);
+  display:grid;place-items:center;padding:28px;z-index:60;
+  animation:fade .2s ease;
+}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.overlay-card{
+  background:#fff;border-radius:var(--r-lg);padding:28px 24px;
+  text-align:center;max-width:330px;width:100%;
+  box-shadow:0 24px 50px rgba(0,0,0,.3);
+}
+.overlay-card .big{font-size:52px;line-height:1;margin-bottom:10px}
+.overlay-card h3{margin:0 0 8px;font-size:21px;font-weight:900;color:var(--red)}
+.overlay-card p{margin:0 0 22px;font-weight:700;color:#7a8291;font-size:14px;line-height:1.5}
+.overlay-card .btn-check{background:var(--red);box-shadow:0 4px 0 var(--red-dark)}
+</style>
+</head>
+<body>
+<div class="app-frame" id="app"></div>
+
+<script>
+/* ============================================================
+   1. COURSE CONTENT  —  built from the 4 lecture files
+   ============================================================ */
+const COURSE = [
+  {
+    id:'u1', section:'Lecture 1', color:'#58cc02', colorDark:'#46a302',
+    title:'Communication Process, Principles and Ethics',
+    lessons:[
+      {
+        id:'u1l1', icon:'📣', title:'What Is Communication?',
+        questions:[
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Communication is derived from the Latin words con (with), munus (a business), communis (common), communico (to confer or relate with one another). Putting all these words together, communication basically pertains to what?',
+            options:['The process of accomplishing a goal, with a business to confer or relate with one another','The act of speaking loudly in public','The act of writing formally','The ability to listen silently'],
+            answer:0, explain:'Lecture 1, Page 3: Putting all these words together, we can infer that communication basically pertains to the process of accomplishing a goal, with a business to confer or relate with one another.' },
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'Our lives consist of four domains where communication is integrated. Select all four.',
+            options:['Academics: Communication skills are tied to academic success','Professional: English courses provide important skills essential for functioning in entry-level jobs','Personal: Communication is crucial for a person’s success','Civic: We are engaged with the world around us, participate in our society, and become a virtuous citizen','Astrological: Communication is guided by the stars'],
+            answers:[0,1,2,3], explain:'Lecture 1, Page 4: Academics, Professional, Personal, Civic — full wordings as in options.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match each need communication meets to its full description.',
+            pairs:[
+              ['Physical needs','affects well-being'],
+              ['Instrumental needs','helps us achieve long-term and short-term goals'],
+              ['Relational needs','maintains social bonds and interpersonal relationships'],
+              ['Identity needs','allows us to present ourselves in a distinct manner']
+            ],
+            explain:'Lecture 1, Page 5: Communication helps us achieve certain physical and instrumental needs, and feeds into our identities and relationships.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'O’Neil (2006) defines culture as what?',
+            options:['A full range of learned human behavioral patterns which includes knowledge, belief, art, law, morals, customs, capabilities, and habits acquired by man as a member of the society','The circumstances that form the setting for an event, statement, or idea','A business to confer with one another','A short-term goal'],
+            answer:0, explain:'Lecture 1, Page 6: Full O’Neil (2006) definition of culture.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Context (Oxford Dictionary, 2018) is what?',
+            options:['The circumstances that form the setting for an event, statement, or idea, and in terms of which it can be fully understood','Knowledge, belief, art, law, and morals','A business transaction','A physical need'],
+            answer:0, explain:'Lecture 1, Page 6: Full Oxford Dictionary (2018) definition of context.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'Communication is learned rather than innate. It is learned through human contact. However, our manner of communication varies from one person to another based on culture and context.',
+            answer:true, explain:'Lecture 1, Page 7: Exact statement — Communication is learned.' },
+          { type:'fill', kicker:'Complete the sentence',
+            prompt:'Communication ethics deals with the process of negotiating and reflecting on our actions and communication regarding what we believe to be right and ______.',
+            before:'Communication ethics deals with the process of negotiating and reflecting on our actions and communication regarding what we believe to be right and ', after:'.',
+            bank:['wrong','good','effective','fast'], answer:'wrong',
+            explain:'Lecture 1, Page 7: Communication is more concerned with the decisions people make about what is right and wrong.' }
+        ]
+      },
+      {
+        id:'u1l2', icon:'🔗', title:'Types and Elements',
+        questions:[
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Verbal Communication is a form of transmitting messages using word symbols representing ideas and objects. It comes in two forms. Oral Communication includes which examples?',
+            options:['Face-to-face interaction, speaking to someone on the phone, participating in meetings, delivering speeches in programs, giving lectures or discussions','Hand-written symbols printed with an electronic device only','Time, space, and silence','Eye contact and posture only'],
+            answer:0, explain:'Lecture 1, Page 8: Full list of oral examples.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Written Communication uses what?',
+            options:['Symbols that are hand-written or printed with an electronic device','Only spoken language','Only body movements','Only silence'],
+            answer:0, explain:'Lecture 1, Page 8: Written Communication definition.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Non-verbal communication refers to the sending of messages to another person using methods or means other than the spoken language. Non-verbal cues may both be intentional and unintentional and are categorized into which 2 categories?',
+            options:['Non-verbal cues produced by the body AND Non-verbal messages produced by the broad setting such as time, space, and silence','Oral and written','Content and context','Clarity and attention'],
+            answer:0, explain:'Lecture 1, Page 9: Full two categories.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match each element to its full lecture definition.',
+            pairs:[
+              ['SENDER','A person, group, or organization who initiates the communication. Also called source, encoder, speaker, writer, or communicator'],
+              ['MESSAGE','An element transmitted consisting of the idea, opinion, information, feeling, or attitude of the sender'],
+              ['CHANNEL','A pathway or medium through which the message travels. It may be oral, written, visual'],
+              ['RECEIVER','A person who receives, analyzes, understands, and interprets the message. Also called decoder, reader, or listener']
+            ],
+            explain:'Lecture 1, Page 10: Full element definitions.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match the remaining elements.',
+            pairs:[
+              ['FEEDBACK','The receiver’s response that provides information to the sender. Return process with verbal and non-verbal signals to show whether the message is understood or not'],
+              ['ADJUSTMENT','Done if the message is distorted or is not clearly understood by the receiver'],
+              ['NOISE','A form of distortion, barrier, or obstacle in any phase. May be visual, aural, physical, or psychological. May interfere, break the process, distort hearing, distract attention']
+            ],
+            explain:'Lecture 1, Page 11: Full feedback, adjustment, noise definitions.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'Noise may be visual, aural, physical, or psychological in form and may interfere with or break the whole communication process.',
+            answer:true, explain:'Lecture 1, Page 11: Exact noise description.' }
+        ]
+      },
+      {
+        id:'u1l3', icon:'🧩', title:'Issues and Principles',
+        questions:[
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match each issue in communication to its lecture definition.',
+            pairs:[
+              ['CONTENT','The information and experiences provided to the receiver'],
+              ['PROCESS','The way the message is presented or delivered. Content should not contradict non-verbal cues'],
+              ['CONTEXT','The situation or environment in which your message is delivered. When and where communication happens']
+            ],
+            explain:'Lecture 1, Page 13: Essential issues — CONTENT, PROCESS, CONTEXT.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match the first three principles.',
+            pairs:[
+              ['Principle of Clarity','The information or message should be coded or worded clearly'],
+              ['Principle of Attention','The receiver’s attention should be drawn to the message to make communication effective'],
+              ['Principle of Feedback','There should be feedback from the receiver to know whether she/he understood the message in the same sense the sender meant it']
+            ],
+            explain:'Lecture 1, Page 14: First three principles verbatim.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match the next four principles.',
+            pairs:[
+              ['Informality','Informal communication may prove effective when formal communication may not achieve desired results'],
+              ['Consistency','Consistency avoids conflict in an organization; inconsistency leads to confusion'],
+              ['Timeliness','Communication should be done in real time so it helps and is relevant in implementing plans; delayed communication may not serve any purpose'],
+              ['Adequacy','Information should be complete; essential to take proper decisions and make action plans; inadequate information may delay action and create confusion']
+            ],
+            explain:'Lecture 1, Page 15: Principles of Informality, Consistency, Timeliness, Adequacy.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Which principle states: consistency avoids conflict in an organization; inconsistency leads to confusion?',
+            options:['Principle of Consistency','Principle of Clarity','Principle of Attention','Principle of Timeliness'],
+            answer:0, explain:'Lecture 1, Page 15: Principle of Consistency verbatim.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Which principle states: communication should be done in real time; delayed communication may not serve any purpose?',
+            options:['Principle of Timeliness','Principle of Informality','Principle of Feedback','Principle of Clarity'],
+            answer:0, explain:'Lecture 1, Page 15: Principle of Timeliness.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'Communication is a two-way process which occurs in an orderly and systematic sequence. It is the transfer of information, thoughts, or ideas to create a shared understanding between a sender and a receiver.',
+            answer:true, explain:'Lecture 1, Page 20: Summary statement verbatim.' }
+        ]
+      },
+      {
+        id:'u1l4', icon:'⚖️', title:'Ethics, Credo and Quote',
+        questions:[
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Communication ethics deals with the behavior of an individual or a group which is governed by their morals and in turn affects communication. What is the difference stated in the lecture?',
+            options:['ETHICAL enhances human worth and dignity. UNETHICAL causes threats to the quality of communication','ETHICAL means fast. UNETHICAL means slow','ETHICAL is written. UNETHICAL is oral','There is no difference'],
+            answer:0, explain:'Lecture 1, Page 16: Ethical vs Unethical verbatim.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'The NATIONAL COMMUNICATION ASSOCIATION (NCA) developed the Credo for Ethical Communication which reminds us of what?',
+            options:['That communication ethics is relevant across contexts and applies to every channel of communication','That ethics only applies to written communication','That ethics is not relevant','That only teachers need ethics'],
+            answer:0, explain:'Lecture 1, Page 16: NCA Credo relevance statement.' },
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'Which are part of the CREDO FOR ETHICAL COMMUNICATION by NCA (Pages 17-19)? Select all that apply.',
+            options:['Advocate truthfulness, accuracy, honesty, and reason as essential to the integrity of communication','Endorse freedom of expression, diversity of perspective, and tolerance of dissent','Strive to understand and respect other communicators before evaluating and responding','Condemn communication that degrades individuals through distortion, intimidation, coercion, violence, intolerance and hatred','Accept responsibility for short-term and long-term consequences of our own communication'],
+            answers:[0,1,2,3,4], explain:'Lecture 1, Pages 17-19: All listed are in the Credo. Full Credo also includes: Promote access to resources, Promote climates of caring, Commit to courageous expression for fairness and justice, Advocate sharing info while respecting privacy and confidentiality.' },
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'Which are also in the NCA Credo? Select all that apply.',
+            options:['Promote access to communication resources and opportunities to fulfill human potential and contribute to families, communities, society','Promote communication climates of caring and mutual understanding respecting unique needs','Commit to courageous expression of personal convictions in pursuit of fairness and justice','Advocate sharing information, opinions, feelings when facing significant choices while respecting privacy and confidentiality','Ignore consequences of communication'],
+            answers:[0,1,2,3], explain:'Lecture 1, Pages 18-19: All first four are verbatim Credo items. The last one is false — we must ACCEPT responsibility.' },
+          { type:'fill', kicker:'Complete the sentence',
+            prompt:'EVERY ACT OF COMMUNICATION IS AN ______ CHOICE, FOR LANGUAGE DOES NOT MERELY DESCRIBE OUR WORLD — IT SHAPES THE KIND OF WORLD WE CREATE TOGETHER.',
+            before:'EVERY ACT OF COMMUNICATION IS AN ', after:' CHOICE.',
+            bank:['ETHICAL','EASY','FAST','OPTIONAL'], answer:'ETHICAL',
+            explain:'Lecture 1, Page 22: Famous closing quote verbatim.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'Textbook reference: Manzano, B.M. et al (2018). Communication Process, Principles, and Ethics. In Purposive Communication for College Freshmen (pp. 7-14). Plaridel, Bulacan: St. Andrew Publishing House.',
+            answer:true, explain:'Lecture 1, Page 21: Textbook reference.' }
+        ]
+      }
+    ]
+  },
+  {
+    id:'u2', section:'Lecture 2', color:'#1cb0f6', colorDark:'#1899d6',
+    title:'Communication and Globalization',
+    lessons:[
+      {
+        id:'u2l1', icon:'🧠', title:'Competence in Detail',
+        questions:[
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Communication competence is the ability to function effectively in a truly communicative setting. It involves not only knowing how language works, but also what?',
+            options:['Knowing how, when, and why to use it appropriately in different situations','Memorizing the alphabet','Speaking loudly','Avoiding all interaction'],
+            answer:0, explain:'Lecture 2, Page 3: Full definition of communication competence.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match the three essential elements of communication competence.',
+            pairs:[
+              ['Knowledge','Knowing the language, communication patterns, and conventions'],
+              ['Ability to use','Applying that knowledge effectively in actual communication'],
+              ['Ability to adapt','Adjusting communication according to different people, situations, cultures, and contexts']
+            ],
+            explain:'Lecture 2, Page 3: Three essential elements verbatim.' },
+          { type:'fill', kicker:'Complete the sentence',
+            prompt:'Competence is what we know; communication competence is how we use what we know effectively and appropriately in different ______.',
+            before:'Competence is what we know; communication competence is how we use what we know effectively and appropriately in different ', after:'.',
+            bank:['contexts','rooms','books','tests'], answer:'contexts',
+            explain:'Lecture 2, Page 4: Competence refers to conscious and unconscious knowledge of language including structures, rules, meanings, appropriate use.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match the four competences to full definitions.',
+            pairs:[
+              ['Grammatical competence','Knowledge and use of grammar and vocabulary necessary to construct meaningful and accurate messages'],
+              ['Sociolinguistic competence','Understanding the social context: recognizing relationships, what they already know, purpose of interaction'],
+              ['Discourse competence','Ability to understand how individual messages are connected to create a meaningful whole; meaning from larger discourse, not only words'],
+              ['Strategic competence','Strategies to manage communication when difficulties arise; initiate, maintain, repair, redirect, or terminate interaction']
+            ],
+            explain:'Lecture 2, Pages 5-6: Full four competences.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'Strategic competence refers to strategies used to manage communication, particularly when difficulties arise, helping to initiate, maintain, repair, redirect, or terminate an interaction.',
+            answer:true, explain:'Lecture 2, Page 6: Verbatim strategic competence.' }
+        ]
+      },
+      {
+        id:'u2l2', icon:'🎓', title:'Expected Skills and Chen Model',
+        questions:[
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'By graduation, NCA expects students to: State ideas clearly, Communicate ethically, Recognize when it is appropriate to communicate, Identify communication goals. Which others are also expected? Select all that apply.',
+            options:['Select the appropriate medium: choose most effective channel for message and audience','Demonstrate credibility: establish trustworthiness','Identify and manage misunderstandings: recognize breakdowns and clarify','Manage conflict constructively and Be open-minded + Listen attentively','Refuse to listen to others'],
+            answers:[0,1,2,3], explain:'Lecture 2, Pages 7-8: Full 10 expected skills. State ideas clearly = express thoughts clearly; Communicate ethically = truthfully, responsibly, respectfully; Recognize when = necessary/appropriate/delayed; Identify goals = what to accomplish.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Chen (2005) presents global communication competence as what?',
+            options:['The capacity to communicate effectively and appropriately across cultural and global contexts, developing shared understanding, awareness of multiple identities, cultural adaptability, contributing to a more peaceful and productive society','The ability to memorize grammar','The ability to avoid foreigners','The ability to speak only English'],
+            answer:0, explain:'Lecture 2, Page 9: Chen (2005) model verbatim.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match the four dimensions of communication competence (Chen).',
+            pairs:[
+              ['Global Mindset','Perceive beyond own cultural perspective; recognize our way of seeing the world is not the only way'],
+              ['Unfolding the Self','Understand others via shared symbols; understand thoughts, feelings, emotions; requires empathy and perspective-taking'],
+              ['Mapping the Culture','Recognizing and comparing cultural differences; adjust ways of communicating to function effectively'],
+              ['Aligning the Interaction','Communicate effectively while respecting norms; cultural adroitness without violating norms']
+            ],
+            explain:'Lecture 2, Pages 10-11: Four dimensions full wordings.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'A global mindset encourages us to recognize that our way of seeing the world is not the only way of seeing it.',
+            answer:true, explain:'Lecture 2, Page 10: Global Mindset verbatim.' }
+        ]
+      },
+      {
+        id:'u2l3', icon:'🌍', title:'Globalization, Media, Language',
+        questions:[
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Globalization refers to the increasing interconnectedness of people, societies, economies, cultures, and institutions. It is not simply about countries becoming connected; it also involves what?',
+            options:['The movement, speed, and long-term development of interactions across boundaries','Isolation and separation','Only economic profit','Only technology'],
+            answer:0, explain:'Lecture 2, Page 12: Globalization definition verbatim.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match each feature of globalization.',
+            pairs:[
+              ['Deterritorialization','Reduces limitations of geographical boundaries; interactions even when physically far apart'],
+              ['Social Interconnectedness','Growth of connections among people and societies across geographical and political boundaries'],
+              ['Speed or Velocity','Increasing speed of information, ideas, people, goods, cultural practices'],
+              ['Long-Term Process','Not sudden or temporary; continuous process of interconnection and interdependence']
+            ],
+            explain:'Lecture 2, Page 12: Four features verbatim.' },
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'Two major developments highlighted are Technological Development and Economic Transformation. Which statements match the lecture?',
+            options:['Technological Development: Advances in communication and transportation have made globalization widespread and difficult to reverse','Economic Transformation: Increased connections among economies across the world','Globalization requires language ability used accurately and appropriately','Globalization has no effect on communication'],
+            answers:[0,1,2], explain:'Lecture 2, Page 13 + Page 21: Both trends + language requirement.' },
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'Global communication requires understanding culture, technology, distance, context. Which four areas are particularly important per lecture?',
+            options:['Virtual communication: strengths/limits of media; urgent = video call, formal agreement = email/formal document','Same language ≠ same meaning: culture influences vocabulary, tone, taboos; harmless in one may offend in another','Non-verbal: eye contact, distance, posture, gestures differ; respectful in one may differ in another; not universal','Time zones: awareness of availability, response expectations, deadlines, schedules','Ignoring all differences'],
+            answers:[0,1,2,3], explain:'Lecture 2, Pages 15-18: All four impact areas verbatim.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'Same language does not necessarily mean communicating in the same way. Same language ≠ same meaning.',
+            answer:true, explain:'Lecture 2, Page 16: Core statement.' },
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'Communication media roles in globalization per lecture. Select all that apply.',
+            options:['Enables real-time communication across distances','Advances the globalization of communication','Transforms education and learning','Has transformed how education, learning, culture, information are experienced in 21st century','Prevents all communication'],
+            answers:[0,1,2,3], explain:'Lecture 2, Page 19: Three roles + transformation statement.' },
+          { type:'fill', kicker:'Complete the sentence',
+            prompt:'In the 21st century, language exists within an increasingly digital and interconnected global environment. The 21st century language has become the language that exists in the ______ world.',
+            before:'The 21st century language has become the language that exists in the ', after:' world.',
+            bank:['global','local','ancient','silent'], answer:'global',
+            explain:'Lecture 2, Pages 20-21: Language and Globalization — new technologies introduced new forms; language keeps evolving as people become more literate globally.' }
+        ]
+      }
+    ]
+  },
+  {
+    id:'u3', section:'Lecture 3', color:'#ce82ff', colorDark:'#a568cc',
+    title:'Local and Global in Multicultural Setting',
+    lessons:[
+      {
+        id:'u3l1', icon:'🤝', title:'Culture, Local, Global, Language',
+        questions:[
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Culture is manifested through our actions and influences how we express our identity, values, and beliefs. Context refers to what?',
+            options:['The stimuli, environment, or circumstances surrounding an event that influence how communication is understood','A Latin word','A spelling rule','A type of slang'],
+            answer:0, explain:'Lecture 3, Page 3: Communication shaped by culture and context verbatim.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match Local, Global, Intercultural.',
+            pairs:[
+              ['Local communication','Reflects culture as people construct and express self-identity, values, sense of community'],
+              ['Global communication','Modifying influence introducing ideas, practices, conventions reshaping local interaction'],
+              ['Intercultural communication','Examines how culture influences communication; recognize, understand, respect, value differences']
+            ],
+            explain:'Lecture 3, Page 4: Local, Global, Intercultural verbatim.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'Language is a fundamental component of intercultural understanding because it reflects how people express identity, culture, values, beliefs, and experiences. Intercultural competence involves more than linguistic accuracy.',
+            answer:true, explain:'Lecture 3, Page 5: Language and intercultural communication verbatim. Requires awareness of how cultural differences influence meaning, expressions, styles, interpretations.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Which generalization from Page 19 states: Local reflects cultural identity and community, while global can reshape local practices?',
+            options:['Local communication reflects cultural identity and community, while global communication can reshape local practices and conventions','Culture has no effect','Global ignores local','Local and global are identical'],
+            answer:0, explain:'Lecture 3, Page 19: Generalization verbatim.' }
+        ]
+      },
+      {
+        id:'u3l2', icon:'💬', title:'Grice and Modes',
+        questions:[
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Grice’s Cooperative Principle suggests effective conversation depends on participants working together to achieve mutual understanding, considering not only what is said but also how, when, and why it is said. Maxim of Relation (Relevance) means?',
+            options:['Contribute information relevant to conversation and appropriate to cultural and situational context','Provide appropriate amount and fair share; avoid dominating or unnecessary details','Communicate accurate, truthful info supported by evidence; avoid assumptions as facts','Communicate clearly, orderly, appropriately; expression influences interpretation across cultures'],
+            answer:0, explain:'Lecture 3, Page 6: Maxim of Relation verbatim.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Maxim of Quantity (Informativeness) means?',
+            options:['Provide appropriate amount and allow fair share; avoid dominating or unnecessary details','Be truthful with evidence','Be relevant','Be clear and orderly'],
+            answer:0, explain:'Lecture 3, Page 6: Maxim of Quantity verbatim.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Maxim of Quality (Truthfulness) means?',
+            options:['Strive to communicate accurate, truthful info supported by adequate knowledge or evidence. Avoid presenting assumptions or unsupported claims as facts','Provide fair share of speaking time','Be relevant to context','Use slang always'],
+            answer:0, explain:'Lecture 3, Page 7: Maxim of Quality verbatim.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Maxim of Manner (Clarity) means?',
+            options:['Communicate clearly, orderly, appropriately. Way expressed influences interpretation across cultures','Provide too much detail','Present assumptions as facts','Dominate conversation'],
+            answer:0, explain:'Lecture 3, Page 7: Maxim of Manner verbatim.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match modes of communication.',
+            pairs:[
+              ['Language','Words, greetings, expressions shaped by cultural conventions; same word may differ in meaning/appropriateness'],
+              ['Body language','Bodily movements conveying messages independently or alongside speech: gestures, facial expressions, eye contact, posture, distance'],
+              ['Words and gestures','Carry culturally shaped meanings; gestures can reinforce, complement, or alter message']
+            ],
+            explain:'Lecture 3, Page 8: Modes verbatim.' }
+        ]
+      },
+      {
+        id:'u3l3', icon:'🔤', title:'ABCs and Barriers',
+        questions:[
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match A-B-C of Intercultural Communication (Page 9).',
+            pairs:[
+              ['A – ACKNOWLEDGED','Differences in style should be acknowledged; each person has particular style giving identity; anticipating awareness increases uniqueness awareness'],
+              ['B – BI-LEVEL','Not only speaking/listening but holistic including verbal and non-verbal; non-verbal critical due to cultural nuances; varies by culture'],
+              ['C – CLARIFY','If doubtful, ask for clarification; devote extra time to verify to save time and avoid frustration']
+            ],
+            explain:'Lecture 3, Page 9: ABCs full wordings.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match the four cultural barriers (Page 10).',
+            pairs:[
+              ['Language Barrier','Differences in language, especially second/foreign language'],
+              ['Hostile Stereotypes','Generalized assumptions about group characteristics leading to bias, misunderstanding, prejudice'],
+              ['Behavioral Differences','Different norms on gestures, manners, styles, practices causing misunderstandings'],
+              ['Emotional Display','Cultures differ in appropriate emotion expression; acceptable in one may differ in another']
+            ],
+            explain:'Lecture 3, Page 10: Barriers verbatim.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'Stereotypes are generalized assumptions about characteristics or behaviors of members of a particular group.',
+            answer:true, explain:'Lecture 3, Page 10: Hostile Stereotypes definition.' }
+        ]
+      },
+      {
+        id:'u3l4', icon:'🚧', title:'Tips and Ambiguous Expressions',
+        questions:[
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'Enhancing ORAL communication (Pages 11-12). Select all that are listed.',
+            options:['Learn basic foreign phrases; Use simple English avoid jargon/idioms; Speak slowly articulate clearly','Observe eye contact/non-verbals; Encourage accurate feedback; Check frequently for comprehension','Accept responsibility for misunderstandings; Listen actively without interrupting; Smile when appropriate; Follow up in writing','Use complicated jargon and interrupt constantly'],
+            answers:[0,1,2], explain:'Lecture 3, Pages 11-12: All 10 oral tips listed verbatim in first three options.' },
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'Developing WRITTEN communication (Page 13). Select all listed.',
+            options:['Consider local styles; Observe titles/status; Use short sentences/paragraphs; Avoid ambiguous expressions','Strive for clarity; Use correct grammar; Cite numbers carefully; Accommodate reader via organization, tone, style','Write long confusing paragraphs with errors','Ignore the reader'],
+            answers:[0,1], explain:'Lecture 3, Page 13: All 8 written tips.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match ambiguous expression types to examples from Pages 14-18.',
+            pairs:[
+              ['Idioms: beat the clock','to do something before the deadline'],
+              ['Idioms: labor of love','a work that brings great pleasure'],
+              ['Slang: gonna / wanna','going to / want to'],
+              ['Acronym: ASAP / IMO','as soon as possible / in my opinion']
+            ],
+            explain:'Lecture 3: Idioms meanings differ from literal; slang highly informal; acronyms from initial letters.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match more ambiguous examples.',
+            pairs:[
+              ['Abbreviation: Acct / recd / w/o','account / received / without'],
+              ['Abbreviation: fwd / ad','forward / advertisement'],
+              ['Jargon: bang for the buck','getting the most for your money (business)'],
+              ['Jargon: helicopter view / cubicle farm','overview of project / office section with cubicles']
+            ],
+            explain:'Lecture 3, Pages 17-18: Abbreviations are shortened forms to save space/time; Jargon is specialized language within profession.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Which full list correctly gives acronym examples from Page 16?',
+            options:['LAM — leave a message; IMO — in my opinion; AKA — also known as; AWOL — absent without leave; ASAP — as soon as possible','ABC, DEF, GHI','USA, UK, PH only','No examples given'],
+            answer:0, explain:'Lecture 3, Page 16: Full acronym list verbatim.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'Jargon example: end-user perspective means what the customer thinks about a product or service; desk job means a job confined to duties from a desk.',
+            answer:true, explain:'Lecture 3, Page 18: Jargon examples verbatim.' }
+        ]
+      }
+    ]
+  },
+  {
+    id:'u4', section:'Lecture 4', color:'#ff9600', colorDark:'#e08600',
+    title:'Varieties and Registers',
+    lessons:[
+      {
+        id:'u4l1', icon:'🗺️', title:'Repertoire and Varieties Full',
+        questions:[
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'Our linguistic repertoire consists of different language varieties we know and use, influenced by speech community, geographic location, social background, communicative needs. What is the distinction?',
+            options:['A dialect is associated with a particular group of users (geographic/social). A register is chosen according to situation or purpose. Halliday et al. (1964) described register as variety according to use','Dialect and register are identical','Repertoire means only one language','Halliday never wrote about register'],
+            answer:0, explain:'Lecture 4, Page 2: Discussion overview verbatim.' },
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'Varieties of English differ in pronunciation, vocabulary, spelling, grammar, expressions, while still recognizable as English. Which descriptions match Pages 3-6?',
+            options:['American English (AmE): widely used in US; distinctive spelling, vocab, pronunciation; color not colour, apartment not flat','British English (BrE): spoken in UK; with AmE, main variant taught in ESL/EFL','Australian English (AuE): spoken in Australia; diverged after late 18th century settlement; similar to NZ; resembles South East England; BrE spelling','New Zealand English (NZE): first language of most in NZ; most similar to Australian in pronunciation with differences'],
+            answers:[0,1,2,3], explain:'Lecture 4, Pages 3-5: All four verbatim.' },
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'Which descriptions of Black English, Singapore English, Philippine English match Page 5-6?',
+            options:['Black English (AAVE): broad term for American/British English as spoken by black communities in US/UK; also Caribbean/Africa; two major sub-varieties: African American Vernacular and British Black English','Singapore English (SingEng/Singlish): most popular medium in academe; two forms: Singapore English and Singapore Colloquial English','Philippine English (PhE): related to AmE in spelling/grammar; English native + official besides Filipino; non-native pronunciations abound; code-switching prevalent in formal and more likely informal','Australian English is identical to American English'],
+            answers:[0,1,2], explain:'Lecture 4, Pages 5-6: Full variety descriptions.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'In simple terms: Register is how we adjust our language to fit the situation. For example, talking with a close friend differs from speaking to a professor, giving a formal presentation, or writing an academic paper.',
+            answer:true, explain:'Lecture 4, Page 11: Register definition + example verbatim.' }
+        ]
+      },
+      {
+        id:'u4l2', icon:'📚', title:'Vocabulary Full Tables',
+        questions:[
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match AmE to BrE/AuE from Page 7 (Part 1).',
+            pairs:[
+              ['drugstore','chemist’s / chemist/pharmacy'],
+              ['afternoon','afternoon / arvo'],
+              ['apartment','flat / apartment/flat'],
+              ['candy','sweets / lollies']
+            ],
+            explain:'Lecture 4, Page 7: Lexical variation — different words for same thing reflecting geography/culture.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match more Page 7 vocabulary.',
+            pairs:[
+              ['liquor store','off-licence / bottle shop'],
+              ['potato chips','crisps / chips'],
+              ['stroller','push-chair / pusher'],
+              ['subway','underground/tube / loop']
+            ],
+            explain:'Lecture 4, Page 7: Full table rows. Also: attorney/barrister/lawyer, billboard/hoarding/billboard, corn/maize/corn, kerosene/paraffin/kerosene, mail/post/mail, optometrist/oculist/optometrist, rubbers/Wellington/gum boots.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match AmE to BrE from Page 8.',
+            pairs:[
+              ['cab / expressway / gas','taxi / motorway / petrol'],
+              ['hood / windshield / elevator','bonnet / windscreen / lift'],
+              ['diaper / pants / purse','nappy / trousers / handbag'],
+              ['cookie / flashlight / garbage','biscuit / torch / rubbish']
+            ],
+            explain:'Lecture 4, Page 8: Full AmE/BrE lists including automobile/car, highway/main road, intersection/crossroads, motor/engine, patrolman/policeman, eraser/rubber, fall/autumn, zipper/zip, sneakers/trainers, vacation/holiday, etc.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'Different varieties of English may use different words to refer to the same thing. This is known as lexical variation, referring to differences in vocabulary across varieties.',
+            answer:true, explain:'Lecture 4, Page 7: Lexical variation definition verbatim.' }
+        ]
+      },
+      {
+        id:'u4l3', icon:'✏️', title:'Spelling Rules Full',
+        questions:[
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match -or/-our and -er/-re spelling (Page 9).',
+            pairs:[
+              ['favor (AmE)','favour (BrE)'],
+              ['color (AmE)','colour (BrE)'],
+              ['center (AmE)','centre (BrE)'],
+              ['theater (AmE)','theatre (BrE)']
+            ],
+            explain:'Lecture 4, Page 9: -our to -or; -re to -er. Full lists: humor/humour, behavior/behaviour, honor/honour, labor/labour; caliber/calibre, fiber/fibre, meter/metre.' },
+          { type:'mc', kicker:'Choose the correct answer',
+            prompt:'There are pairs which are nouns and verbs. In British English: advice-advise, licence-license, practice-practise. How does American English handle some of these?',
+            options:['American English keeps same spelling for both noun and verb, notably: license-license, practice-practice','American English never uses these words','American English reverses them','No difference at all'],
+            answer:0, explain:'Lecture 4, Page 10: ce/-se rule verbatim.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match -t to -ed participles (Page 10).',
+            pairs:[
+              ['dreamt','dreamed'],
+              ['leapt','leaped'],
+              ['learnt','learned'],
+              ['spelt','spelled']
+            ],
+            explain:'Lecture 4, Page 10: Verbs making participle with -t in BrE use -ed in AmE. When writing, choose variety and use consistently.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'When writing, it is important to choose an appropriate variety and use it consistently throughout the text.',
+            answer:true, explain:'Lecture 4, Page 9: Consistency instruction verbatim.' }
+        ]
+      },
+      {
+        id:'u4l4', icon:'🎚️', title:'Register and Bias-Free Full',
+        questions:[
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match the three registers (Page 12).',
+            pairs:[
+              ['Formal Register','Professional, academic, business, serious/official; follows standard conventions; e.g. academic papers, job interviews, formal presentations'],
+              ['Informal Register','Relaxed/familiar with friends, classmates, family; contractions, colloquial; e.g. casual conversations, texts, personal chats'],
+              ['Neutral Register','Neither strongly formal nor informal; straightforward objective; e.g. general announcements, news reports, informational materials']
+            ],
+            explain:'Lecture 4, Page 12: Forms of register verbatim.' },
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'Bias-free language avoids stereotypes and promotes respect, fairness, inclusivity. Which guidelines from Page 13 are correct?',
+            options:['Be clear and objective without unnecessary judgment','Avoid generalizations based on gender, ethnicity, race, orientation, disability, age','Consider audience: harmless to one may offend another; mindful of understanding','Use inclusive language recognizing people as individuals not stereotypes','Use stereotypes for clarity'],
+            answers:[0,1,2,3], explain:'Lecture 4, Page 13: Four bias-free guidelines verbatim.' },
+          { type:'match', kicker:'Tap the pairs',
+            prompt:'Match gender-biased to improved (Page 15).',
+            pairs:[
+              ['businessman, salesman','businessperson, sales representative'],
+              ['manpower / forefather','workforce/labor / ancestor'],
+              ['policeman / spokesman','police officer / spokesperson, representative'],
+              ['stewardess, steward','flight attendant']
+            ],
+            explain:'Lecture 4, Pages 14-15: Avoid masculine pronouns when unknown; use they/them; chairperson/chair, firefighter, salesperson. Also: man/men to person/people, brotherhood of man to humanity.' },
+          { type:'multi', kicker:'Select all that apply',
+            prompt:'Avoid racial/ethnic, age, disability bias per Pages 16-18. Which are correct?',
+            options:['Mention race/ethnicity only when relevant; Black/African American acceptable; use preferred terms; Asian not Oriental; Native American/tribal identity over Indian','Mention age only when relevant; People over 59 should be helped (not senior citizens); refer to role/experience not age','Mention disability only when relevant; person-centered: person who uses wheelchair not confined; person with disease not victim; person with disability; Henry has asthma not suffers','Always mention age, race, disability even if irrelevant'],
+            answers:[0,1,2], explain:'Lecture 4, Pages 16-18: Full racial, age, disability guidance including tables: disabled to person with disability; Brenda is with mental illness.' },
+          { type:'fill', kicker:'Complete the sentence',
+            prompt:'Use gender-neutral job titles such as ______ or chair instead of chairman, firefighter instead of fireman, salesperson instead of salesman.',
+            before:'Use gender-neutral job titles such as ', after:' or chair instead of chairman.',
+            bank:['chairperson','chairman','man','boy'], answer:'chairperson',
+            explain:'Lecture 4, Page 14: Gender-neutral titles verbatim.' },
+          { type:'tf', kicker:'True or false',
+            prompt:'Generalization Page 19: English varieties may differ in vocabulary and spelling. Writers should use appropriate variety and maintain consistency. Effective communication should use sensitive and bias-free language.',
+            answer:true, explain:'Lecture 4, Page 19: Generalization verbatim.' }
+        ]
+      }
+    ]
+  }
+];
+
+/* ============================================================
+   2. STATE
+   ============================================================ */
+const STORAGE_KEY = 'pc-lesson-progress-v1';
+
+const state = {
+  view:'home',
+  selectedUnit:'u1',
+  homePhotos:{},
+  hearts:5,
+  gems:480,
+  streak:12,
+  xp:0,
+  completed:new Set(),
+  session:null
+};
+
+const app = document.getElementById('app');
+
+/* ---------- persistence ---------- */
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      completed:[...state.completed],
+      xp:state.xp,
+      streak:state.streak,
+      gems:state.gems,
+      hearts:state.hearts
+    }));
+  }catch(e){}
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const d = JSON.parse(raw);
+    state.completed = new Set(d.completed || []);
+    state.xp        = d.xp || 0;
+    state.streak    = d.streak || 12;
+    state.gems      = d.gems || 480;
+    state.hearts    = (typeof d.hearts === 'number') ? d.hearts : 5;
+  }catch(e){}
+}
+
+/* ---------- helpers ---------- */
+function allLessons(){
+  const out = [];
+  COURSE.forEach(u => u.lessons.forEach(l => out.push({...l, unitId:u.id})));
+  return out;
+}
+function findLesson(id){
+  for(const u of COURSE) for(const l of u.lessons) if(l.id === id) return {...l, unitId:u.id};
+  return null;
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function fmtTime(ms){
+  const s = Math.round(ms/1000);
+  return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+}
+
+/* ============================================================
+   2b. HOME (PATHFIT ref) + PHOTOS + NAV
+   ============================================================ */
+/* MOCK TESTS from user - exact */
+const MOCK = {
+u1: [
+{type:'mc', kicker:'Lecture 1 • Q1', prompt:'Communication is derived from Latin con, munus, communis, communico. What does communis mean?', options:['with','business','common','to confer'], answer:2, explain:'Answer Key: c) common. con=with, munus=business, communis=common.'},
+{type:'short', kicker:'Lecture 1 • Q2', prompt:'Fill in: communico (______). Type the meaning.', keywords:['confer','relate'], need:2, model:'to confer or relate with one another', explain:'Answer Key: to confer or relate with one another.'},
+{type:'tf', kicker:'Lecture 1 • Q3', prompt:'Communication is innate and not learned.', answer:false, explain:'Answer Key: False. Communication is learned through human contact.'},
+{type:'fill', kicker:'Lecture 1 • Q4', prompt:'The four domains are academics, professional, personal, and ______.', before:'academics, professional, personal, and ', after:'.', bank:['civic','social','digital','moral'], answer:'civic', explain:'Answer Key: civic.'},
+{type:'mc', kicker:'Lecture 1 • Q5', prompt:'Which is NOT a need met by communication?', options:['Physical needs','Instrumental needs','Financial needs','Identity needs'], answer:2, explain:'Answer Key: c) Financial needs. Needs are Physical, Instrumental, Relational, Identity.'},
+{type:'mc', kicker:'Lecture 1 • Q6', prompt:'Which is an example of instrumental needs?', options:['maintaining social bonds','achieving long-term and short-term goals','presenting oneself distinctly','affecting well-being'], answer:1, explain:'Answer Key: b) achieving long-term and short-term goals.'},
+{type:'mc', kicker:'Lecture 1 • Q7', prompt:'According to O’Neil (2006), culture includes all EXCEPT:', options:['knowledge','belief','art','technology'], answer:3, explain:'Answer Key: d) technology. Culture = knowledge, belief, art, law, morals, customs, capabilities, habits.'},
+{type:'tf', kicker:'Lecture 1 • Q8', prompt:'Context (Oxford 2018) refers to circumstances forming the setting for an event, statement, or idea.', answer:true, explain:'Answer Key: True.'},
+{type:'short', kicker:'Lecture 1 • Q9', prompt:'Define communication ethics (key words).', keywords:['negotiating','reflecting','right and wrong'], need:2, model:'deals with the process of negotiating and reflecting on our actions and communication regarding what we believe to be right and wrong', explain:'Answer Key: deals with negotiating and reflecting on actions and communication regarding right and wrong.'},
+{type:'match', kicker:'Lecture 1 • Q10', prompt:'Match element to description.', pairs:[['Sender','D) initiates communication'],['Message','E) idea, opinion, information, feeling'],['Channel','A) pathway or medium'],['Receiver','B) receives, analyzes, interprets'],['Feedback','C) receiver response to sender'],['Noise','F) distortion, barrier, obstacle']], explain:'Answer Key: Sender-D, Message-E, Channel-A, Receiver-B, Feedback-C, Noise-F.'},
+{type:'mc', kicker:'Lecture 1 • Q11', prompt:'Term for situation/environment where message is delivered?', options:['Content','Process','Context','Channel'], answer:2, explain:'Answer Key: c) Context.'},
+{type:'short', kicker:'Lecture 1 • Q12', prompt:'Difference between content and process?', keywords:['information','experiences','way','presented','delivered'], need:3, model:'Content = information and experiences; Process = way message is presented or delivered', explain:'Answer Key: Content = information/experiences; Process = way presented/delivered.'},
+{type:'tf', kicker:'Lecture 1 • Q13', prompt:'Principle of consistency: inconsistency leads to confusion.', answer:true, explain:'Answer Key: True.'},
+{type:'short', kicker:'Lecture 1 • Q14', prompt:'List two principles (type any two: clarity attention feedback informality consistency timeliness adequacy).', keywords:['clarity','attention','feedback','informality','consistency','timeliness','adequacy'], need:2, model:'clarity, attention, feedback, informality, consistency, timeliness, adequacy', explain:'Answer Key: Any two of clarity, attention, feedback, informality, consistency, timeliness, adequacy.'},
+{type:'fill', kicker:'Lecture 1 • Q15', prompt:'Principle of ______: informal works when formal fails.', before:'Principle of ', after:' prevails when formal fails.', bank:['informality','clarity','timeliness','adequacy'], answer:'informality', explain:'Answer Key: informality.'},
+{type:'tf', kicker:'Lecture 1 • Q16', prompt:'Principle of adequacy: information should be complete.', answer:true, explain:'Answer Key: True.'},
+{type:'fill', kicker:'Lecture 1 • Q17', prompt:'Principle of ______: feedback to know if understood.', before:'Principle of ', after:' checks understanding.', bank:['feedback','noise','channel','context'], answer:'feedback', explain:'Answer Key: feedback.'},
+{type:'mc', kicker:'Lecture 1 • Q18', prompt:'Example of non-verbal communication?', options:['Writing a letter','Speaking on the phone','Facial expressions','Sending an email'], answer:2, explain:'Answer Key: c) Facial expressions.'},
+{type:'mc', kicker:'Lecture 1 • Q19', prompt:'Which is NOT a category of non-verbal cues?', options:['produced by the body','produced by the broad setting','produced by written words','both a and b are categories'], answer:2, explain:'Answer Key: c) produced by written words. Categories: body + broad setting (time, space, silence).'},
+{type:'fill', kicker:'Lecture 1 • Q20', prompt:'NCA developed the ______ for Ethical Communication.', before:'NCA developed the ', after:' for Ethical Communication.', bank:['Credo','Rule','Law','Plan'], answer:'Credo', explain:'Answer Key: Credo.'},
+{type:'tf', kicker:'Lecture 1 • Q21', prompt:'Ethical communication enhances human worth and dignity.', answer:true, explain:'Answer Key: True.'},
+{type:'tf', kicker:'Lecture 1 • Q22', prompt:'Ethical communication causes threats to quality.', answer:false, explain:'Answer Key: False. UNETHICAL causes threats.'},
+{type:'fill', kicker:'Lecture 1 • Q23', prompt:'NCA Credo advocates truthfulness, accuracy, honesty, and ______.', before:'truthfulness, accuracy, honesty, and ', after:'.', bank:['reason','speed','silence','wealth'], answer:'reason', explain:'Answer Key: reason.'},
+{type:'mc', kicker:'Lecture 1 • Q24', prompt:'Principle of timeliness emphasizes?', options:['done in real time','delayed for effect','informal','consistent'], answer:0, explain:'Answer Key: a) done in real time.'},
+{type:'short', kicker:'Lecture 1 • Q25', prompt:'Two forms of verbal communication?', keywords:['oral','written'], need:2, model:'Oral and written', explain:'Answer Key: Oral and written.'},
+{type:'tf', kicker:'Lecture 1 • Q26', prompt:'Communication is a one-way process.', answer:false, explain:'Answer Key: False. It is two-way, orderly, systematic.'},
+{type:'fill', kicker:'Lecture 1 • Q27', prompt:'Principle of ______: draw receiver attention.', before:'Principle of ', after:' draws attention.', bank:['attention','clarity','noise','content'], answer:'attention', explain:'Answer Key: attention.'}
+],
+u2: [
+{type:'mc', kicker:'Lecture 2 • Q1', prompt:'Communication competence: three elements. Which is NOT one?', options:['Knowledge','Ability to use','Ability to adapt','Ability to memorize'], answer:3, explain:'Answer Key: d) Ability to memorize.'},
+{type:'fill', kicker:'Lecture 2 • Q2', prompt:'Communication competence is the ability to function in a truly ______ setting.', before:'truly ', after:' setting.', bank:['communicative','quiet','empty','fast'], answer:'communicative', explain:'Answer Key: communicative.'},
+{type:'tf', kicker:'Lecture 2 • Q3', prompt:'Competence is how we use what we know.', answer:false, explain:'Answer Key: False. Competence = what we know; communication competence = how we use it.'},
+{type:'fill', kicker:'Lecture 2 • Q4', prompt:'Grammatical competence: knowledge of ______ and vocabulary.', before:'knowledge of ', after:' and vocabulary.', bank:['grammar','culture','speed','silence'], answer:'grammar', explain:'Answer Key: grammar.'},
+{type:'mc', kicker:'Lecture 2 • Q5', prompt:'Which involves social context?', options:['Grammatical','Sociolinguistic','Discourse','Strategic'], answer:1, explain:'Answer Key: b) Sociolinguistic.'},
+{type:'short', kicker:'Lecture 2 • Q6', prompt:'Define discourse competence.', keywords:['connected','meaningful whole'], need:2, model:'ability to understand how messages are connected to create a meaningful whole', explain:'Answer Key: ability to understand how messages are connected into a meaningful whole.'},
+{type:'mc', kicker:'Lecture 2 • Q7', prompt:'Strategic competence refers to:', options:['grammar knowledge','social context','strategies when difficulties arise','connecting messages'], answer:2, explain:'Answer Key: c) strategies to manage communication when difficulties arise.'},
+{type:'short', kicker:'Lecture 2 • Q8', prompt:'List two NCA expected skills for graduates.', keywords:['state ideas','ethically','appropriate','goals','medium','credibility','misunderstandings','conflict','open-minded','listen'], need:1, model:'state ideas clearly, communicate ethically, select medium, demonstrate credibility, manage conflict, listen attentively', explain:'Answer Key: Any two of the 10 NCA skills.'},
+{type:'match', kicker:'Lecture 2 • Q9', prompt:'Match expected skill to description.', pairs:[['State ideas clearly','B) clear, organized manner'],['Communicate ethically','D) truthfully, responsibly'],['Demonstrate credibility','A) trustworthiness'],['Listen attentively','C) genuine understanding']], explain:'Answer Key: State-B, Ethically-D, Credibility-A, Listen-C.'},
+{type:'match', kicker:'Lecture 2 • Q10', prompt:'Match Chen dimension to description.', pairs:[['Global Mindset','B) beyond own perspective'],['Unfolding the Self','D) shared symbols'],['Mapping the Culture','A) comparing differences'],['Aligning the Interaction','C) respecting norms']], explain:'Answer Key: Global-B, Unfolding-D, Mapping-A, Aligning-C.'},
+{type:'fill', kicker:'Lecture 2 • Q11', prompt:'Chen (2005): capacity to communicate across ______ and global contexts.', before:'Across ', after:' and global contexts.', bank:['cultural','empty','silent','narrow'], answer:'cultural', explain:'Answer Key: cultural.'},
+{type:'tf', kicker:'Lecture 2 • Q12', prompt:'Global mindset: our way is the only way.', answer:false, explain:'Answer Key: False. Not the only way.'},
+{type:'short', kicker:'Lecture 2 • Q13', prompt:'Four dimensions per Chen (2005)?', keywords:['global mindset','unfolding','mapping','aligning'], need:3, model:'global mindset, unfolding the self, mapping the culture, aligning the interaction', explain:'Answer Key: Global mindset, unfolding self, mapping culture, aligning interaction.'},
+{type:'mc', kicker:'Lecture 2 • Q14', prompt:'Globalization: all EXCEPT:', options:['deterritorialization','social interconnectedness','speed','isolation'], answer:3, explain:'Answer Key: d) isolation.'},
+{type:'tf', kicker:'Lecture 2 • Q15', prompt:'Globalization is sudden and temporary.', answer:false, explain:'Answer Key: False. Continuous long-term.'},
+{type:'fill', kicker:'Lecture 2 • Q16', prompt:'Technological development and ______ transformation.', before:'and ', after:' transformation.', bank:['economic','artistic','silent','local'], answer:'economic', explain:'Answer Key: economic.'},
+{type:'mc', kicker:'Lecture 2 • Q17', prompt:'One impact on communication?', options:['decreased competence need','virtual collaboration','less awareness','slower circulation'], answer:1, explain:'Answer Key: b) Virtual communication and collaboration.'},
+{type:'tf', kicker:'Lecture 2 • Q18', prompt:'Same language guarantees same meaning.', answer:false, explain:'Answer Key: False. Same language ≠ same meaning.'},
+{type:'short', kicker:'Lecture 2 • Q19', prompt:'Why is non-verbal important globally?', keywords:['different meanings','cultures'], need:2, model:'non-verbal cues carry different meanings across cultures', explain:'Answer Key: cues carry different meanings across cultures.'},
+{type:'mc', kicker:'Lecture 2 • Q20', prompt:'Role of media in globalization?', options:['real-time across distances','advances globalization','transforms education','All of the above'], answer:3, explain:'Answer Key: d) All of the above.'},
+{type:'fill', kicker:'Lecture 2 • Q21', prompt:'Accurate language use is a requirement of a ______ society.', before:'requirement of a ', after:' society.', bank:['globalizing','closed','silent','small'], answer:'globalizing', explain:'Answer Key: globalizing.'},
+{type:'tf', kicker:'Lecture 2 • Q22', prompt:'Language is static, does not evolve.', answer:false, explain:'Answer Key: False. Language evolves.'}
+],
+u3: [
+{type:'fill', kicker:'Lecture 3 • Q1', prompt:'Communication is shaped by ______ and context.', before:'shaped by ', after:' and context.', bank:['culture','weather','speed','noise'], answer:'culture', explain:'Answer Key: culture.'},
+{type:'mc', kicker:'Lecture 3 • Q2', prompt:'Stimuli/environment/circumstances = ?', options:['Culture','Context','Language','Globalization'], answer:1, explain:'Answer Key: b) Context.'},
+{type:'tf', kicker:'Lecture 3 • Q3', prompt:'Local reflects cultural identity and community.', answer:true, explain:'Answer Key: True.'},
+{type:'mc', kicker:'Lecture 3 • Q4', prompt:'Local reflects:', options:['cultural identity','global conventions','modifying influences','intercultural competence'], answer:0, explain:'Answer Key: a).'},
+{type:'tf', kicker:'Lecture 3 • Q5', prompt:'Intercultural needs only linguistic accuracy.', answer:false, explain:'Answer Key: False. More than accuracy.'},
+{type:'fill', kicker:'Lecture 3 • Q6', prompt:'Grice’s maxims: Relation, Quantity, Quality, and ______.', before:'Relation, Quantity, Quality, and ', after:'.', bank:['Manner','Speed','Noise','Silence'], answer:'Manner', explain:'Answer Key: Manner.'},
+{type:'mc', kicker:'Lecture 3 • Q7', prompt:'Appropriate amount + fair share = ?', options:['Relation','Quantity','Quality','Manner'], answer:1, explain:'Answer Key: b) Quantity.'},
+{type:'short', kicker:'Lecture 3 • Q8', prompt:'What is Maxim of Quantity?', keywords:['appropriate amount','fair share','dominating'], need:2, model:'appropriate amount, fair share, avoid dominating or unnecessary details', explain:'Answer Key: appropriate amount, fair share, avoid dominating.'},
+{type:'match', kicker:'Lecture 3 • Q9', prompt:'Match maxim to description.', pairs:[['Relation','C) relevant to context'],['Quality','D) accurate, truthful, evidence'],['Manner','A) clear, orderly'],['Quantity','B) appropriate amount, fair share']], explain:'Answer Key: Relation-C, Quality-D, Manner-A, Quantity-B.'},
+{type:'match', kicker:'Lecture 3 • Q10', prompt:'Match ABC to description.', pairs:[['Acknowledged','B) acknowledge differences'],['Bi-level','C) verbal + non-verbal holistic'],['Clarify','A) ask when doubtful']], explain:'Answer Key: Acknowledged-B, Bi-level-C, Clarify-A.'},
+{type:'mc', kicker:'Lecture 3 • Q11', prompt:'Cultural barrier?', options:['Language barrier','Hostile stereotypes','Behavioral differences','All of the above'], answer:3, explain:'Answer Key: d) All of the above. (+ Emotional display).'},
+{type:'tf', kicker:'Lecture 3 • Q12', prompt:'Emotional display same across cultures.', answer:false, explain:'Answer Key: False.'},
+{type:'short', kicker:'Lecture 3 • Q13', prompt:'Two ways to enhance ORAL in multicultural settings?', keywords:['foreign phrases','simple english','slowly','eye contact','feedback','comprehension','responsibility','listen','smile','writing'], need:2, model:'simple English, speak slowly, check comprehension, listen actively', explain:'Answer Key: Any two of 10 oral tips.'},
+{type:'mc', kicker:'Lecture 3 • Q14', prompt:'Ambiguous expression example?', options:['Idiom','Slang','Acronym','All of the above'], answer:3, explain:'Answer Key: d).'},
+{type:'fill', kicker:'Lecture 3 • Q15', prompt:'Jargon: specialized language within a particular ______.', before:'a particular ', after:'.', bank:['profession','room','page','day'], answer:'profession', explain:'Answer Key: profession, occupation, or field.'},
+{type:'tf', kicker:'Lecture 3 • Q16', prompt:'Abbreviations save space and time.', answer:true, explain:'Answer Key: True.'},
+{type:'short', kicker:'Lecture 3 • Q17', prompt:'Two guidelines for WRITTEN multicultural audiences?', keywords:['local styles','titles','short sentences','ambiguous','clarity','grammar','numbers','accommodate'], need:2, model:'short sentences, clarity, correct grammar, accommodate reader', explain:'Answer Key: Any two of 8 written tips.'},
+{type:'mc', kicker:'Lecture 3 • Q18', prompt:'ABCs include:', options:['Acknowledged','Bi-level','Clarify','All of the above'], answer:3, explain:'Answer Key: d).'},
+{type:'fill', kicker:'Lecture 3 • Q19', prompt:'Same word may differ in ______ across cultures.', before:'levels of ', after:' across cultures.', bank:['appropriateness','speed','color','size'], answer:'appropriateness', explain:'Answer Key: appropriateness.'},
+{type:'fill', kicker:'Lecture 3 • Q20', prompt:'Body language is ______ communication.', before:'is ', after:' communication.', bank:['non-verbal','written','fast','oral'], answer:'non-verbal', explain:'Answer Key: non-verbal.'}
+],
+u4: [
+{type:'mc', kicker:'Lecture 4 • Q1', prompt:'What is a register?', options:['group variety','variety according to use','geographical dialect','social dialect'], answer:1, explain:'Answer Key: b) variety according to use.'},
+{type:'fill', kicker:'Lecture 4 • Q2', prompt:'A ______ is variety of a group (geographic/social).', before:'A ', after:' is group variety.', bank:['dialect','register','book','test'], answer:'dialect', explain:'Answer Key: dialect.'},
+{type:'tf', kicker:'Lecture 4 • Q3', prompt:'Halliday (1964): register as variety according to use.', answer:true, explain:'Answer Key: True.'},
+{type:'tf', kicker:'Lecture 4 • Q4', prompt:'AmE uses colour, BrE uses color.', answer:false, explain:'Answer Key: False. AmE color, BrE colour.'},
+{type:'fill', kicker:'Lecture 4 • Q5', prompt:'BrE for apartment is ______.', before:'BrE for apartment is ', after:'.', bank:['flat','house','room','tent'], answer:'flat', explain:'Answer Key: flat.'},
+{type:'fill', kicker:'Lecture 4 • Q6', prompt:'AmE for flat is ______.', before:'AmE for flat is ', after:'.', bank:['apartment','flat','room','tent'], answer:'apartment', explain:'Answer Key: apartment.'},
+{type:'mc', kicker:'Lecture 4 • Q7', prompt:'NOT a variety mentioned?', options:['American','British','Australian','Canadian'], answer:3, explain:'Answer Key: d) Canadian English.'},
+{type:'short', kicker:'Lecture 4 • Q8', prompt:'Two main forms of Singapore English?', keywords:['singapore english','colloquial'], need:2, model:'Singapore English and Singapore Colloquial English', explain:'Answer Key: Singapore English and Singapore Colloquial English.'},
+{type:'match', kicker:'Lecture 4 • Q9', prompt:'Match variety to description.', pairs:[['Australian','C) diverged after late 18th century'],['New Zealand','D) similar to Australian'],['Black English','B) black communities'],['Philippine','A) AmE spelling, official']], explain:'Answer Key: Aus-C, NZ-D, Black-B, Phil-A.'},
+{type:'match', kicker:'Lecture 4 • Q10', prompt:'Match AmE to BrE.', pairs:[['elevator','D) lift'],['gas','A) petrol'],['hood','B) bonnet'],['garbage','C) rubbish']], explain:'Answer Key: Elevator-D, Gas-A, Hood-B, Garbage-C.'},
+{type:'mc', kicker:'Lecture 4 • Q11', prompt:'Correct spelling difference?', options:['AmE center / BrE centre','AmE centre / BrE center','AmE color / BrE colour','Both a and c'], answer:3, explain:'Answer Key: d) Both a and c.'},
+{type:'tf', kicker:'Lecture 4 • Q12', prompt:'Formal register is relaxed/familiar.', answer:false, explain:'Answer Key: False. Informal is relaxed.'},
+{type:'short', kicker:'Lecture 4 • Q13', prompt:'What is bias-free language?', keywords:['avoids stereotypes','discriminate'], need:1, model:'avoids stereotypes, unfair assumptions, discrimination', explain:'Answer Key: avoids stereotypes, unfair assumptions, discrimination.'},
+{type:'mc', kicker:'Lecture 4 • Q14', prompt:'Gender-biased example?', options:['Chairperson','Firefighter','Salesman','Police officer'], answer:2, explain:'Answer Key: c) Salesman.'},
+{type:'fill', kicker:'Lecture 4 • Q15', prompt:'Use ______ language for disability (person-first).', before:'Use ', after:' language.', bank:['person-centered','harsh','fast','old'], answer:'person-centered', explain:'Answer Key: person-centered.'},
+{type:'tf', kicker:'Lecture 4 • Q16', prompt:'Mention race even when irrelevant is fine.', answer:false, explain:'Answer Key: False. Only when relevant.'},
+{type:'mc', kicker:'Lecture 4 • Q17', prompt:'Maintain consistency by?', options:['mix spellings','choose variety and be consistent','use slang formally','ignore register'], answer:1, explain:'Answer Key: b).'},
+{type:'short', kicker:'Lecture 4 • Q18', prompt:'Age-biased example + improved?', keywords:['senior citizens','over 59','old man','old woman'], need:1, model:'senior citizens to People over 59; remove poor/old/weak', explain:'Answer Key: senior citizens to People over 59.'},
+{type:'tf', kicker:'Lecture 4 • Q19', prompt:'Register = adjust language to situation.', answer:true, explain:'Answer Key: True.'},
+{type:'fill', kicker:'Lecture 4 • Q20', prompt:'Singapore English and Singapore ______ English.', before:'Singapore English and Singapore ', after:' English.', bank:['Colloquial','British','Old','Fast'], answer:'Colloquial', explain:'Answer Key: Colloquial.'}
+]
+};
+
+function unitById(id){ return COURSE.find(u=>u.id===id); }
+function unitRoman(sec){ return sec.replace('Lecture 1','UNIT I').replace('Lecture 2','UNIT II').replace('Lecture 3','UNIT III').replace('Lecture 4','UNIT IV'); }
+function renderHome(){
+  const sel = state.selectedUnit;
+  const units = COURSE.map(function(u){
+    return '<button class="unit-btn '+(u.id===sel?'sel':'')+'" data-action="pick-unit" data-unit="'+u.id+'">'+unitRoman(u.section)+'</button>';
+  }).join('');
+  const u = unitById(sel);
+  app.innerHTML = ''
+    + '<div class="screen">'
+    + '<div class="home-bar"><span class="t" style="margin-left:0">ENG3A</span></div>'
+    + '<div class="home-scroll"><div class="home-frame">'
+    + '<div class="home-eyebrow">ENG3A / HOME</div>'
+    + '<div class="home-h1">ENG3A</div>'
+    + '<div class="home-sub">Choose where you want to begin.</div>'
+    + '<button class="menu-card green" data-action="go-lessons"><span class="menu-ico">▶</span><span><h3>Start Lessons</h3><p>Study the selected unit’s lessons.</p></span></button>'
+    + '<button class="menu-card" data-action="go-quiz"><span class="menu-ico">?</span><span><h3>Quiz</h3><p>Unit mock test (Lecture Q&A).</p></span></button>'
+    + '<button class="menu-card" data-action="go-long"><span class="menu-ico">?</span><span><h3>Long Quiz</h3><p>Combined Units 1-4 • Sets A B C D.</p></span></button>'
+    + '<div class="unit-pick" id="unit-pick"><h4>CHOOSE A UNIT FOR LESSONS & QUIZZES</h4><div class="unit-grid">'+units+'</div>'
+    + '<p id="unit-sel-text" style="font-family: monospace;font-size:12px">Selected: <b>'+u.title+'</b> • '+u.lessons.length+' lessons</p></div>'
+    + '</div></div></div>';
+}
+function renderLessonsList(){
+  const u = unitById(state.selectedUnit);
+  let rows = '';
+  u.lessons.forEach(function(l){
+    const done = state.completed.has(l.id) ? '✓ ' : '';
+    rows += '<button class="lesson-row" data-action="open-lesson" data-lesson="'+l.id+'"><span class="menu-ico">'+l.icon+'</span><span style="text-align:left"><b>'+done+l.title+'</b><br><small style="font-family:monospace">'+l.questions.length+' activities</small></span></button>';
+  });
+  app.innerHTML = ''
+    + '<div class="screen"><div class="home-bar"><button data-action="go-home">←</button><span class="t">'+u.section.toUpperCase()+'</span></div>'
+    + '<div class="home-scroll"><div class="home-frame"><div class="home-eyebrow">'+u.section.toUpperCase()+' / LESSONS</div>'
+    + '<div class="home-h1" style="font-size:28px">'+u.title+'</div>'
+    + '<div class="lessons-list">'+rows+'</div>'
+    + '<button class="menu-card green" data-action="go-quiz"><span class="menu-ico">?</span><span><h3>Unit Quiz</h3><p>Checkpoint for this unit.</p></span></button>'
+    + '</div></div></div>';
+}
+function mockKey(uid){ if(uid==='u1') return 'u1'; if(uid==='u2') return 'u2'; if(uid==='u3') return 'u3'; return 'u4'; }
+function buildLongSets(){
+  const lists = [MOCK.u1, MOCK.u2, MOCK.u3, MOCK.u4];
+  const maxLen = Math.max(lists[0].length, lists[1].length, lists[2].length, lists[3].length);
+  let combined = [];
+  for(let i=0;i<maxLen;i++){ for(let k=0;k<4;k++){ if(lists[k][i]) combined.push(lists[k][i]); } }
+  const per = Math.ceil(combined.length / 4);
+  return [combined.slice(0,per), combined.slice(per,per*2), combined.slice(per*2,per*3), combined.slice(per*3)];
+}
+function renderLongSets(){
+  const sets = buildLongSets();
+  const names = ['A','B','C','D'];
+  let rows = '';
+  sets.forEach(function(s,i){
+    rows += '<button class="lesson-row" data-action="start-set" data-set="'+i+'"><span class="menu-ico">?</span><span style="text-align:left"><b>Set '+names[i]+' • '+s.length+' questions</b><br><small style="font-family:monospace">Combined Units 1-4</small></span></button>';
+  });
+  app.innerHTML = ''
+    + '<div class="screen"><div class="home-bar"><button data-action="go-home">←</button><span class="t">LONG QUIZ</span></div>'
+    + '<div class="home-scroll"><div class="home-frame"><div class="home-eyebrow">ENG3A / LONG QUIZ</div>'
+    + '<div class="home-h1" style="font-size:28px">Sets A B C D</div>'
+    + '<div class="home-sub">Combined from Units 1-4 mock tests.</div>'
+    + '<div class="lessons-list">'+rows+'</div>'
+    + '</div></div></div>';
+}
+function collectUnitQuestions(uid, n){
+  const u = unitById(uid); let all = [];
+  u.lessons.forEach(function(l){ l.questions.forEach(function(q){ all.push(q); }); });
+  for(let i=all.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const tmp=all[i]; all[i]=all[j]; all[j]=tmp; }
+  return all.slice(0, n || all.length);
+}
+function shortBankFor(q){
+  const DIST = ['always','never','only','people','time','very','without','clearly','truly','because'];
+  function wds(s){ return (s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(function(x){return !!x;}); }
+  const seen = {}; const bank = [];
+  function add(w){ w=(w||'').trim(); if(!w) return; const k=w.toLowerCase(); if(!seen[k]){ seen[k]=1; bank.push(w); } }
+  (q.keywords||[]).forEach(add);
+  (q.keywords||[]).forEach(function(k){ wds(k).forEach(function(w){ if(w.length>1) add(w); }); });
+  wds(q.model).forEach(add);
+  DIST.forEach(function(w){ if(bank.length < 12) add(w); });
+  return shuffle(bank).slice(0,12);
+}
+function prepQuestions(list){
+  return list.map(function(o){
+    const q = {}; for(const k in o){ const v = o[k]; q[k] = (v instanceof Array) ? v.slice() : v; }
+    if(q.pairs) q.pairs = o.pairs.map(function(p){ return p.slice(); });
+    if(q.type === 'mc' && q.options){
+      const idx = q.options.map(function(_,i){ return i; });
+      for(let i=idx.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=idx[i]; idx[i]=idx[j]; idx[j]=t; }
+      q.options = idx.map(function(i){ return o.options[i]; });
+      q.answer = idx.indexOf(o.answer);
+    } else if(q.type === 'multi' && q.options){
+      const idx = q.options.map(function(_,i){ return i; });
+      for(let i=idx.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=idx[i]; idx[i]=idx[j]; idx[j]=t; }
+      q.options = idx.map(function(i){ return o.options[i]; });
+      q.answers = o.answers.map(function(a){ return idx.indexOf(a); });
+    } else if(q.type === 'fill' && q.bank){
+      const b = q.bank.slice();
+      for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=b[i]; b[i]=b[j]; b[j]=t; }
+      q.bank = b;
+    } else if(q.type === 'tf'){
+      const arr = [true,false];
+      for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=arr[i]; arr[i]=arr[j]; arr[j]=t; }
+      q._tfOrder = arr;
+    } else if(q.type === 'short'){
+      q._bank = shortBankFor(o);
+    } else if(q.type === 'match' && q.pairs){
+      const order = q.pairs.map(function(_,i){ return i; });
+      for(let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=order[i]; order[i]=order[j]; order[j]=t; }
+      q.pairs = order.map(function(i){ return o.pairs[i].slice(); });
+    }
+    return q;
+  });
+}
+function startCustom(title, questions){
+  state.session = { lessonId:'custom', lessonTitle:title, questions:prepQuestions(questions), index:0, correctCount:0, startedAt:Date.now(), selected:null, multiSel:[], selectedWord:null, shortText:'', matched:{}, matchSel:null, matchRightOrder:[], matchWrong:null, checked:false, correct:false, explain:'', heartShake:false };
+  if(state.hearts<=0) state.hearts = 5;
+  resetQuestionState(); state.view='lesson'; render();
+}
+
+/* ============================================================
+   3. RENDER — PATH (removed roadmap style, redirect to HOME)
+   ============================================================ */
+function renderPath(){ renderHome(); return; }
+
+function bottomNav(){ return ''; }
+
+/* ============================================================
+   4. RENDER — LESSON
+   ============================================================ */
+function renderLesson(){
+  const s = state.session;
+  const q = s.questions[s.index];
+  const pct = (s.index / s.questions.length) * 100;
+
+  app.innerHTML = `
+    <div class="screen">
+      <header class="lesson-hud">
+        <button class="icon-btn" data-action="close-lesson" aria-label="Quit lesson">✕</button>
+        <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <div class="hud-hearts ${s.heartShake ? 'shake' : ''}">❤️ <span>${state.hearts}</span></div>
+      </header>
+      <div class="scroll lesson-scroll" id="lesson-scroll">
+        ${renderQuestion(q)}
+      </div>
+      <footer class="lesson-footer">
+        ${renderFooter()}
+      </footer>
+    </div>
+  `;
+
+  s.heartShake = false;
+}
+
+function renderQuestion(q){
+  let body = '';
+
+  if(q.type === 'mc'){
+    body = `<div class="options single">
+      ${q.options.map((o,i) => `
+        <button class="option ${state.session.selected === i ? 'selected' : ''}"
+                data-action="pick" data-index="${i}">${o}</button>
+      `).join('')}
+    </div>`;
+  }
+
+  else if(q.type === 'tf'){
+    const order = q._tfOrder || [true,false];
+    body = `<div class="options single">
+      ${order.map((val) => `
+        <button class="option ${state.session.selected === val ? 'selected' : ''}"
+                data-action="pick-tf" data-value="${val}">${val ? 'True' : 'False'}</button>
+      `).join('')}
+    </div>`;
+  }
+
+  else if(q.type === 'multi'){
+    body = `<div class="options single">
+      ${q.options.map((o,i) => `
+        <button class="option multi ${state.session.multiSel.includes(i) ? 'selected' : ''}"
+                data-action="pick-multi" data-index="${i}">
+          <span class="box"></span>${o}
+        </button>
+      `).join('')}
+    </div>`;
+  }
+
+  else if(q.type === 'fill'){
+    const word = state.session.selectedWord;
+    body = `
+      <div class="chips">
+        ${q.bank.map(w => `
+          <button class="chip-word ${word === w ? 'selected' : ''}"
+                  data-action="pick-word" data-word="${w}">${w}</button>
+        `).join('')}
+      </div>`;
+  }
+
+  else if(q.type === 'short'){
+    const v = state.session.shortText || '';
+    const bank = q._bank || shortBankFor(q);
+    q._bank = bank;
+    body = '<div><textarea id="short-input" rows="2" placeholder="Type your answer… or tap the word buttons below" style="width:100%;border:3px solid #111;border-radius:12px;padding:12px;font-family:monospace;font-weight:700;font-size:14px">'+v+'</textarea>'
+      + '<div class="chips">'
+      + bank.map(function(w){ return '<button class="chip-word" data-action="short-chip" data-word="'+w+'">'+w+'</button>'; }).join('')
+      + '</div></div>';
+  }
+
+  else if(q.type === 'match'){
+    const st = state.session;
+    body = `
+      <div class="match-grid">
+        <div class="match-col">
+          ${q.pairs.map((p,i) => {
+            const isMatched = st.matched[i] !== undefined;
+            const isSel = st.matchSel === i;
+            return `<button class="match-item ${isMatched ? 'matched' : ''} ${isSel ? 'selected' : ''}"
+                            data-action="match-left" data-index="${i}"
+                            ${isMatched ? 'disabled' : ''}>${p[0]}</button>`;
+          }).join('')}
+        </div>
+        <div class="match-col">
+          ${st.matchRightOrder.map(item => {
+            const isMatched = Object.values(st.matched).includes(item);
+            const isWrong = st.matchWrong === item;
+            return `<button class="match-item ${isMatched ? 'matched' : ''} ${isWrong ? 'wrong' : ''}"
+                            data-action="match-right" data-word="${item}"
+                            ${isMatched ? 'disabled' : ''}>${item}</button>`;
+          }).join('')}
+        </div>
+      </div>`;
+  }
+
+  /* prompt line */
+  let promptHTML;
+  if(q.type === 'fill'){
+    const word = state.session.selectedWord;
+    const stem = (q.prompt || '').split('______').join('…');
+    promptHTML = `
+      <h2 class="q-prompt">
+        <span class="kicker">${q.kicker}</span>
+        ${stem}
+      </h2>
+      <h2 class="q-prompt" style="font-size:19px;margin-top:-8px;">
+        ${q.before}<span class="blank ${word ? '' : 'empty'}">${word || '​'}</span>${q.after}
+      </h2>`;
+  } else {
+    promptHTML = `
+      <h2 class="q-prompt">
+        <span class="kicker">${q.kicker}</span>
+        ${q.prompt}
+      </h2>`;
+  }
+
+  return promptHTML + body;
+}
+
+function renderFooter(){
+  const s = state.session;
+
+  if(s.checked){
+    const cls  = s.correct ? 'fb-correct' : 'fb-wrong';
+    const icon = s.correct ? '✓' : '✕';
+    const head = s.correct ? 'Nice work!' : 'Not quite';
+    return `
+      <div class="feedback ${cls}">
+        <div class="fb-icon">${icon}</div>
+        <div class="fb-text">
+          <strong>${head}</strong>
+          <span>${s.explain || ''}</span>
+        </div>
+        <button class="btn btn-continue" data-action="continue">Continue</button>
+      </div>`;
+  }
+
+  const q = s.questions[s.index];
+  let ready = false;
+  if(q.type === 'mc' || q.type === 'tf') ready = s.selected !== null;
+  else if(q.type === 'multi')            ready = s.multiSel.length > 0;
+  else if(q.type === 'fill')             ready = s.selectedWord !== null;
+  else if(q.type === 'short')            ready = true;
+
+  return `
+    <div class="footer-bar">
+      <button class="btn btn-check" data-action="check" ${ready ? '' : 'disabled'}>Check</button>
+    </div>`;
+}
+
+/* ============================================================
+   5. RENDER — COMPLETE
+   ============================================================ */
+function renderComplete(){
+  const s = state.session;
+  const total = s.questions.length;
+  const acc = Math.round((s.correctCount / total) * 100);
+  const xp  = s.correctCount * 2 + 4;
+
+  const colors = ['#58cc02','#1cb0f6','#ffc800','#ff4b4b','#ce82ff'];
+  let confetti = '';
+  for(let i=0;i<44;i++){
+    const c = colors[i % colors.length];
+    confetti += `<span style="left:${Math.random()*100}%;
+                          top:${-Math.random()*100}%;
+                          background:${c};
+                          animation-delay:${(Math.random()*3).toFixed(2)}s;
+                          animation-duration:${(2.4+Math.random()*1.8).toFixed(2)}s;
+                          ${Math.random()>.6?'border-radius:50%;':''}"></span>`;
+  }
+
+  app.innerHTML = `
+    <div class="screen">
+      <div class="complete-wrap">
+        <div class="confetti">${confetti}</div>
+        <div class="trophy">🏆</div>
+        <div>
+          <h2>Lesson complete!</h2>
+          <p>${s.correctCount} of ${total} correct · ${s.lessonTitle}</p>
+        </div>
+        <div class="stat-tiles">
+          <div class="stat-tile xp">
+            <span class="label">Total XP</span>
+            <span class="value">${xp}</span>
+          </div>
+          <div class="stat-tile acc">
+            <span class="label">Accuracy</span>
+            <span class="value">${acc}%</span>
+          </div>
+          <div class="stat-tile time">
+            <span class="label">Time</span>
+            <span class="value">${fmtTime(Date.now() - s.startedAt)}</span>
+          </div>
+        </div>
+        <div class="complete-actions">
+          <button class="btn btn-check" data-action="back-to-path">Continue</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   6. RENDER DISPATCHER
+   ============================================================ */
+function render(){
+  if(state.view === 'home'){ renderHome(); return; }
+  if(state.view === 'lessons'){ renderLessonsList(); return; }
+  if(state.view === 'lesson' && state.session){
+    renderLesson();
+  } else if(state.view === 'complete' && state.session){
+    renderComplete();
+  } else {
+    renderHome();
+  }
+}
+
+/* ============================================================
+   7. LESSON SESSION LOGIC
+   ============================================================ */
+function startLesson(lessonId){
+  const lesson = findLesson(lessonId);
+  if(!lesson) return;
+
+  state.session = {
+    lessonId,
+    lessonTitle: lesson.title,
+    questions: prepQuestions(lesson.questions),
+    index: 0,
+    correctCount: 0,
+    startedAt: Date.now(),
+    /* per-question state */
+    selected: null,
+    multiSel: [],
+    selectedWord: null,
+    shortText: '',
+    matched: {},
+    matchSel: null,
+    matchRightOrder: [],
+    matchWrong: null,
+    checked: false,
+    correct: false,
+    explain: '',
+    heartShake: false
+  };
+
+  if(state.hearts <= 0) state.hearts = 5;   /* demo refill */
+  resetQuestionState();
+  state.view = 'lesson';
+  render();
+}
+
+function resetQuestionState(){
+  const s = state.session;
+  const q = s.questions[s.index];
+  s.selected     = null;
+  s.multiSel     = [];
+  s.selectedWord = null;
+  s.shortText    = '';
+  s.matched      = {};
+  s.matchSel     = null;
+  s.matchWrong   = null;
+  s.checked      = false;
+  s.correct      = false;
+  s.explain      = q.explain || '';
+
+  if(q.type === 'match'){
+    s.matchRightOrder = shuffle(q.pairs.map(p => p[1]));
+  }
+}
+
+function checkAnswer(){
+  const s = state.session;
+  const q = s.questions[s.index];
+  let correct = false;
+
+  if(q.type === 'mc' || q.type === 'tf'){
+    correct = s.selected === q.answer;
+  } else if(q.type === 'multi'){
+    const a = [...s.multiSel].sort().join(',');
+    const b = [...q.answers].sort().join(',');
+    correct = a === b;
+  } else if(q.type === 'fill'){
+    correct = s.selectedWord === q.answer;
+  } else if(q.type === 'short'){
+    const inp = document.getElementById('short-input');
+    const val = (inp ? inp.value : (s.shortText||'')).toLowerCase();
+    s.shortText = val;
+    let hits = 0;
+    (q.keywords||[]).forEach(function(k){ if(val.indexOf(k.toLowerCase()) !== -1) hits++; });
+    correct = hits >= (q.need || 1);
+    if(!correct && q.model && val.trim() === q.model.toLowerCase()) correct = true;
+    if(!correct && q.model) s.explain = (q.explain||'') + ' Model: ' + q.model;
+  }
+
+  s.correct = correct;
+  s.checked = true;
+
+  if(correct){
+    s.correctCount++;
+  } else {
+    state.hearts = Math.max(0, state.hearts - 1);
+    s.heartShake = true;
+    saveState();
+  }
+
+  render();
+
+  if(state.hearts <= 0){
+    setTimeout(showOutOfHearts, 420);
+  }
+}
+
+function continueLesson(){
+  const s = state.session;
+  s.index++;
+
+  if(s.index >= s.questions.length){
+    finishLesson();
+    return;
+  }
+  resetQuestionState();
+  render();
+  const sc = document.getElementById('lesson-scroll');
+  if(sc) sc.scrollTop = 0;
+}
+
+function finishLesson(){
+  const s = state.session;
+  state.completed.add(s.lessonId);
+  state.xp += s.correctCount * 2 + 4;
+  saveState();
+  state.view = 'complete';
+  render();
+}
+
+/* ============================================================
+   8. OUT-OF-HEARTS OVERLAY
+   ============================================================ */
+function showOutOfHearts(){
+  const el = document.createElement('div');
+  el.className = 'overlay';
+  el.innerHTML = `
+    <div class="overlay-card">
+      <div class="big">💔</div>
+      <h3>You're out of hearts!</h3>
+      <p>Hearts refill over time — or grab a refill to keep going right now.</p>
+      <button class="btn btn-check" data-action="refill">Refill hearts</button>
+    </div>`;
+  app.appendChild(el);
+}
+
+/* ============================================================
+   9. EVENT DELEGATION
+   ============================================================ */
+app.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-action]');
+  if(!el) return;
+
+  const action = el.dataset.action;
+  const s = state.session;
+
+  /* ---------- global ---------- */
+  if(action === 'go-home'){ state.view='home'; render(); return; }
+  if(action === 'go-map'){ state.view='home'; render(); return; }
+  if(action === 'go-lessons'){ state.view='lessons'; render(); return; }
+  if(action === 'pick-unit'){
+    e.preventDefault();
+    state.selectedUnit = el.dataset.unit;
+    const all = app.querySelectorAll('.unit-btn');
+    all.forEach(function(b){ b.classList.toggle('sel', b.dataset.unit === state.selectedUnit); });
+    const u = unitById(state.selectedUnit);
+    const txt = document.getElementById('unit-sel-text');
+    if(txt) txt.innerHTML = 'Selected: <b>'+u.title+'</b> • '+u.lessons.length+' lessons';
+    return;
+  }
+  if(action === 'go-quiz'){ const k = mockKey(state.selectedUnit); const u = unitById(state.selectedUnit); startCustom(u.section+' Mock Test', MOCK[k].slice()); return; }
+  if(action === 'go-long'){ state.view='longsets'; renderLongSets(); return; }
+  if(action === 'start-set'){ const sets = buildLongSets(); const i = Number(el.dataset.set); const names=['A','B','C','D']; startCustom('Long Quiz Set '+names[i], sets[i].slice()); return; }
+  if(action === 'open-lesson'){
+    startLesson(el.dataset.lesson);
+    return;
+  }
+  if(action === 'back-to-path'){
+    state.view = 'home';
+    render();
+    return;
+  }
+  if(action === 'refill'){
+    state.hearts = 5;
+    saveState();
+    document.querySelector('.overlay')?.remove();
+    render();
+    return;
+  }
+  if(action === 'close-lesson'){
+    state.view = 'home';
+    state.session = null;
+    render();
+    return;
+  }
+
+  if(!s) return;
+
+  /* ---------- answering ---------- */
+  if(action === 'pick'){
+    s.selected = Number(el.dataset.index);
+    render();
+    return;
+  }
+  if(action === 'pick-tf'){
+    s.selected = el.dataset.value === 'true';
+    render();
+    return;
+  }
+  if(action === 'pick-multi'){
+    const i = Number(el.dataset.index);
+    const pos = s.multiSel.indexOf(i);
+    if(pos >= 0) s.multiSel.splice(pos,1);
+    else s.multiSel.push(i);
+    render();
+    return;
+  }
+  if(action === 'pick-word'){
+    s.selectedWord = el.dataset.word;
+    render();
+    return;
+  }
+  if(action === 'short-chip'){
+    const w = el.dataset.word;
+    const inp = document.getElementById('short-input');
+    if(inp){ inp.value = (inp.value ? inp.value.trim()+' ' : '') + w; s.shortText = inp.value; inp.focus(); }
+    else { s.shortText = ((s.shortText||'')+' '+w).trim(); render(); }
+    return;
+  }
+
+  /* ---------- matching ---------- */
+  if(action === 'match-left'){
+    if(s.checked) return;
+    s.matchSel = Number(el.dataset.index);
+    render();
+    return;
+  }
+  if(action === 'match-right'){
+    if(s.checked || s.matchSel === null) return;
+    const q = s.questions[s.index];
+    const word = el.dataset.word;
+    const leftIdx = s.matchSel;
+    const expected = q.pairs[leftIdx][1];
+
+    if(expected === word){
+      s.matched[leftIdx] = word;
+      s.matchSel = null;
+      s.matchWrong = null;
+
+      if(Object.keys(s.matched).length === q.pairs.length){
+        s.checked = true;
+        s.correct = true;
+        s.correctCount++;
+      }
+      render();
+    } else {
+      s.matchWrong = word;
+      render();
+      setTimeout(() => {
+        if(state.session === s){
+          s.matchWrong = null;
+          render();
+        }
+      }, 480);
+    }
+    return;
+  }
+
+  /* ---------- footer ---------- */
+  if(action === 'check'){
+    checkAnswer();
+    return;
+  }
+  if(action === 'continue'){
+    continueLesson();
+    return;
+  }
+});
+
+/* ============================================================
+   10. BOOT + PHOTO UPLOAD
+   ============================================================ */
+app.addEventListener('change', function(e){
+  const inp = e.target.closest('input[data-photo]');
+  if(!inp || !inp.files || !inp.files[0]) return;
+  const idx = inp.getAttribute('data-photo');
+  const url = URL.createObjectURL(inp.files[0]);
+  state.homePhotos[idx] = url;
+  render();
+});
+loadState();
+if(!state.selectedUnit) state.selectedUnit = 'u1';
+state.view = 'home';
+render();
+</script>
+</body>
+</html>
