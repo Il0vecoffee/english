@@ -1978,7 +1978,7 @@ body{
 .duo-step-path{display:flex;gap:4px;margin-top:9px;}
 .duo-step{height:6px;flex:1;min-width:8px;background:#d3c5a0;border:1px solid #b8a97e;}
 .duo-step.done{background:#58a700;border-color:#3a7d00;}.duo-step.current{background:#ffe168;border-color:#8a6b13;}
-.duo-body{flex:1;min-height:0;overflow-y:auto;padding:10px 32px 14px;display:flex;align-items:flex-start;scrollbar-width:thin;}
+.duo-body{flex:1;min-height:0;overflow-y:auto;padding:10px 32px 14px;display:flex;align-items:center;scrollbar-width:thin;}
 .duo-col{max-width:1300px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px;padding:10px 0;justify-content:center;max-height:100%;flex:1;}
 .duo-tag{align-self:flex-start;font-size:13px;font-weight:800;letter-spacing:1px;color:#ffe9a8;background:#3a3425;border:1px solid #2e2a1f;border-radius:999px;padding:6px 14px;text-transform:uppercase;}
 .duo-title{font-size:clamp(28px,3.4vw,38px);line-height:1.15;color:#23201a;margin:0;font-weight:900;}
@@ -2033,84 +2033,356 @@ body{
 .duo-simple .lesson-player-stats,.duo-simple .lesson-course-banner,.duo-simple .lesson-slide-card,.duo-simple .slide-nav,.duo-simple .communication-lab{display:none !important;}
 @media(max-width:640px){.duo-nav{padding:12px 14px 16px;}.duo-btn.ghost{flex:0 0 100px;}.duo-body{padding:4px 14px 10px;}.duo-top,.duo-course-bar{padding-left:14px;padding-right:14px;}.duo-course-title{font-size:16px;}.duo-course-meta{font-size:10px;}}
 
-/* FlowChart Academy lesson treatment */
-.duo-simple{background:#fff;font-family:'Nunito','Segoe UI',system-ui,sans-serif;color:#4b4b4b;display:flex;flex-direction:column;flex:1;height:100%;}
-.duo-top{padding:10px 18px 8px;background:#fff;border-bottom:2px solid #e5e5e5;}
-.duo-x{font-size:20px;color:#afafaf;padding:4px 8px;}
-.duo-progress{height:16px;background:#e5e5e5;border-radius:999px;}
-.duo-progress-fill{background:#58cc02;border-radius:999px;}
-.duo-count{font-size:12px;color:#777;min-width:48px;}
+/* FlowChart Academy lesson treatment — Balanced, Centered Layout */
+.duo-simple{
+  background:#fff;
+  font-family:'Nunito','Segoe UI',system-ui,sans-serif;
+  color:#334155;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  height:100%;
+}
+.duo-top{
+  padding:12px 24px;
+  background:#fff;
+  border-bottom:2px solid #e5e5e5;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  box-sizing:border-box;
+}
+.duo-top-inner{
+  max-width:860px;
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  box-sizing:border-box;
+}
+.duo-x{
+  font-size:20px;
+  color:#94a3b8;
+  padding:4px 8px;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  border-radius:8px;
+  line-height:1;
+}
+.duo-x:hover{color:#475569;background:#f1f5f9;}
+.duo-progress{
+  flex:1;
+  height:14px;
+  background:#e2e8f0;
+  border-radius:999px;
+  overflow:hidden;
+}
+.duo-progress-fill{
+  background:linear-gradient(90deg,#58cc02,#7ee617);
+  border-radius:999px;
+  height:100%;
+  transition:width .25s ease;
+}
+.duo-count{
+  font-size:13px;
+  font-weight:800;
+  color:#64748b;
+  min-width:54px;
+  text-align:right;
+}
 .duo-course-bar{display:none;}
-.duo-body{padding:20px 20px 18px;background:#fff;align-items:flex-start;overflow:hidden;flex:1 !important;min-height:0;display:flex;}
-.duo-col{max-width:760px;gap:14px;padding:10px 0 24px;justify-content:flex-start;}
-.duo-tag{align-self:flex-start;margin-bottom:0;padding:5px 12px;background:#ddf4ff;border:0;border-radius:999px;color:#1899d6;font-size:11px;letter-spacing:1.4px;}
-.duo-subtag{font-size:12px;color:#777;font-weight:800;letter-spacing:.04em;text-transform:uppercase;}
-.duo-title{font-size:clamp(34px,2vw + 22px,54px);line-height:1.12;color:#4b4b4b;letter-spacing:-.5px;}
-.duo-content{font-size:20px;line-height:1.7;color:#777;justify-content:flex-start;}
-.duo-content>.duo-main-card,.duo-content>.lead-p{background:transparent !important;border:0 !important;box-shadow:none !important;border-radius:0 !important;padding:0 !important;min-height:0;display:block;font-size:20px !important;line-height:1.7 !important;color:#777 !important;}
-.duo-content>.duo-main-card{margin-bottom:6px !important;}
-.duo-content>.duo-main-card .lead-p{color:#777 !important;}
-.duo-content .content-grid{gap:12px !important;}
-.duo-content .card-item{background:#f7f7f7 !important;border:2px solid #dfdfdf !important;border-radius:22px !important;box-shadow:none !important;padding:18px 20px 16px !important;min-height:0 !important;display:flex !important;flex-direction:column !important;gap:10px !important;}
-.duo-content .card-top{border-bottom:0 !important;padding:0 !important;display:flex !important;align-items:center !important;gap:12px !important;}
-.duo-content .card-icon{display:inline-flex !important;align-items:center !important;justify-content:center !important;width:38px !important;height:38px !important;border-radius:12px !important;background:#7d5bc9 !important;font-size:20px !important;line-height:1 !important;box-shadow:inset 0 -3px 0 rgba(0,0,0,.12) !important;}
-.duo-content .card-title{font-size:19px !important;color:#363636 !important;letter-spacing:.2px !important;font-weight:900 !important;text-transform:uppercase !important;}
-.duo-content .card-desc{font-size:18px !important;line-height:1.6 !important;color:#555 !important;}
-.duo-content .card-footer{font-size:11px !important;color:#676767 !important;font-weight:700 !important;border-top:0 !important;padding-top:0 !important;}
+.duo-body{
+  padding:24px 28px;
+  background:#fff;
+  overflow-y:auto;
+  overflow-x:hidden;
+  flex:1 !important;
+  min-height:0;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  scrollbar-width:thin;
+}
+.duo-col{
+  max-width:860px;
+  width:100%;
+  margin:auto !important;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  padding:10px 0;
+  justify-content:center;
+  box-sizing:border-box;
+}
+.duo-content-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:2px;
+}
+.duo-tag{
+  align-self:flex-start;
+  margin-bottom:0;
+  padding:5px 14px;
+  background:#ddf4ff;
+  border:0;
+  border-radius:999px;
+  color:#0284c7;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+.duo-subtag{
+  font-size:12px;
+  color:#64748b;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.duo-title{
+  font-size:clamp(26px, 1.8vw + 12px, 36px);
+  line-height:1.25;
+  color:#1e293b;
+  letter-spacing:-.4px;
+  font-weight:900;
+  margin:4px 0 10px 0;
+}
+.duo-content{
+  font-size:18px;
+  line-height:1.65;
+  color:#475569;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:16px;
+}
+.duo-content .content-grid{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:14px !important;
+  width:100%;
+}
+.duo-content .card-item{
+  background:#ffffff !important;
+  border:2px solid #dfdfdf !important;
+  border-radius:20px !important;
+  box-shadow:0 4px 0 #dfdfdf !important;
+  padding:24px 28px 22px !important;
+  min-height:180px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:space-between !important;
+  gap:14px !important;
+  box-sizing:border-box !important;
+}
+.duo-content .card-top{
+  border-bottom:2px solid #eef0f4 !important;
+  padding:0 0 12px !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:14px !important;
+}
+.duo-content .card-icon{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:42px !important;
+  height:42px !important;
+  border-radius:12px !important;
+  background:#7d5bc9 !important;
+  font-size:22px !important;
+  line-height:1 !important;
+  box-shadow:inset 0 -3px 0 rgba(0,0,0,.15) !important;
+  flex-shrink:0 !important;
+  color:#fff !important;
+}
+.duo-content .card-title{
+  font-size:18px !important;
+  color:#1e293b !important;
+  letter-spacing:.3px !important;
+  font-weight:900 !important;
+  text-transform:uppercase !important;
+}
+.duo-content .card-desc{
+  font-size:17.5px !important;
+  line-height:1.65 !important;
+  color:#334155 !important;
+  font-weight:500 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+  flex:1 !important;
+}
+.duo-content .card-desc strong{
+  color:#0f172a !important;
+  font-weight:800 !important;
+}
+.duo-content .card-footer{
+  font-size:13px !important;
+  color:#64748b !important;
+  font-weight:700 !important;
+  border-top:1px dashed rgba(0,0,0,.08) !important;
+  padding-top:12px !important;
+  margin-top:auto !important;
+}
 .duo-content .card-item:nth-child(2n) .card-icon{background:#f39c2f !important;}
 .duo-content .card-item:nth-child(3n) .card-icon{background:#3ea7d8 !important;}
-.duo-content .info-box,.duo-content .dossier-briefing,.duo-content .study-briefing{background:#f7f7f7 !important;border:2px solid #dfdfdf !important;border-radius:22px !important;box-shadow:none !important;padding:18px 20px 16px !important;min-height:0 !important;max-width:100% !important;margin:0 !important;}
-.duo-content .briefing-header{display:flex !important;align-items:center !important;gap:12px !important;border:0 !important;background:transparent !important;padding:0 0 10px !important;margin:0 0 10px !important;min-height:0 !important;box-sizing:border-box !important;}
-.duo-content .briefing-badge{display:inline-flex !important;align-items:center !important;justify-content:center !important;flex:0 0 auto !important;width:auto !important;min-height:38px !important;padding:0 12px !important;border:0 !important;background:#7d5bc9 !important;color:#fff !important;font-size:11px !important;font-weight:800 !important;letter-spacing:1px !important;text-transform:uppercase !important;line-height:1.2 !important;border-radius:12px !important;}
-.duo-content .briefing-title{display:block !important;flex:1 1 auto !important;padding:0 !important;font-size:16px !important;font-weight:900 !important;letter-spacing:.2px !important;text-transform:uppercase !important;color:#363636 !important;white-space:normal !important;line-height:1.2 !important;}
-.duo-content .info-box .box-title{color:#1899d6 !important;background:transparent !important;font-size:12px !important;letter-spacing:1px;}
-.duo-content .info-box p,.duo-content .info-box li,.duo-content .briefing-body{font-size:16px !important;line-height:1.7 !important;color:#3d3d3d !important;}
+.duo-content .info-box,.duo-content .dossier-briefing,.duo-content .study-briefing{
+  background:#ffffff !important;
+  border:2px solid #dfdfdf !important;
+  border-radius:20px !important;
+  box-shadow:0 4px 0 #dfdfdf !important;
+  padding:22px 26px !important;
+  min-height:0 !important;
+  max-width:100% !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+}
+.duo-content .briefing-header{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  border:0 !important;
+  border-bottom:2px solid #eef0f4 !important;
+  padding:0 0 10px !important;
+  margin:0 0 12px !important;
+}
+.duo-content .briefing-badge{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:4px 12px !important;
+  border:0 !important;
+  background:#7d5bc9 !important;
+  color:#fff !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+  letter-spacing:1px !important;
+  text-transform:uppercase !important;
+  border-radius:10px !important;
+}
+.duo-content .briefing-title{
+  font-size:16px !important;
+  font-weight:900 !important;
+  letter-spacing:.2px !important;
+  text-transform:uppercase !important;
+  color:#1e293b !important;
+}
+.duo-content .info-box .box-title{color:#0284c7 !important;background:transparent !important;font-size:13px !important;letter-spacing:1px;}
+.duo-content .info-box p,.duo-content .info-box li,.duo-content .briefing-body{font-size:16px !important;line-height:1.65 !important;color:#334155 !important;}
 .duo-content .briefing-body{display:block !important;padding:0 !important;}
-.duo-content .briefing-body .briefing-col{display:block !important;margin:0 0 18px !important;}
+.duo-content .briefing-body .briefing-col{display:block !important;margin:0 0 14px !important;}
 .duo-content .briefing-body .briefing-col:last-child{margin-bottom:0 !important;}
-.duo-content .briefing-body strong{display:block !important;color:#2f2f2f !important;font-weight:800 !important;margin:0 0 6px !important;}
+.duo-content .briefing-body strong{display:block !important;color:#0f172a !important;font-weight:800 !important;margin:0 0 4px !important;}
 .duo-content .briefing-body em{font-style:italic !important;}
-.duo-content .info-box.blue-box{background:#f7f7f7 !important;border-color:#dfdfdf !important;border-left-color:#dfdfdf !important;}
-.duo-content .highlight{background:#f7f7f7 !important;border:2px solid #dfdfdf !important;border-radius:22px !important;box-shadow:none !important;color:#4b4b4b !important;font-size:14px !important;padding:18px 20px !important;}
-.duo-content table.retro-table{background:#fff !important;border:2px solid #e5e5e5 !important;border-radius:12px !important;color:#777 !important;}
-.duo-content table.retro-table th{background:#f7f7f7 !important;color:#4b4b4b !important;}
-.duo-content table.retro-table th,.duo-content table.retro-table td{border-color:#e5e5e5 !important;color:#777 !important;}
-.comm-flow-visual{background:#f7f7f7;border:2px solid #e5e5e5;border-radius:18px;box-shadow:0 3px 0 #e5e5e5;padding:24px 20px;margin:12px 0 12px;}
-.comm-flow-label{font-size:13px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:#1899d6;margin-bottom:18px;}
+.duo-content .highlight{
+  background:#ffffff !important;
+  border:2px solid #ffd08a !important;
+  border-radius:20px !important;
+  box-shadow:0 4px 0 #f5b95c !important;
+  color:#334155 !important;
+  font-size:15px !important;
+  padding:20px 24px !important;
+}
+.duo-content table.retro-table{background:#fff !important;border:2px solid #e5e5e5 !important;border-radius:14px !important;color:#475569 !important;}
+.duo-content table.retro-table th{background:#f8fafc !important;color:#1e293b !important;font-weight:800 !important;}
+.duo-content table.retro-table th,.duo-content table.retro-table td{border-color:#e5e5e5 !important;padding:10px 14px !important;}
+.comm-flow-visual{background:#ffffff;border:2px solid #e5e5e5;border-radius:18px;box-shadow:0 3px 0 #e5e5e5;padding:24px 20px;margin:8px 0;}
+.comm-flow-label{font-size:13px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:#0284c7;margin-bottom:18px;}
 .comm-flow-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;}
 .comm-flow-node{min-width:132px;padding:20px 18px;text-align:center;font-size:17px;font-weight:900;color:#fff;border-radius:14px;line-height:1.15;box-shadow:inset 0 -3px 0 rgba(0,0,0,.12);}
 .comm-flow-node.sender{background:#ff4b4b;}.comm-flow-node.message{background:#1cb0f6;}.comm-flow-node.channel{background:#ff9600;}.comm-flow-node.noise{background:#ce82ff;}.comm-flow-node.receiver{background:#58cc02;}
-.comm-flow-arrow{font-size:26px;font-weight:900;color:#afafaf;}
-.comm-flow-loop{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px;padding-top:12px;border-top:2px dashed #c9bda9;color:#8a7d55;font-size:16px;font-weight:900;text-align:center;flex-wrap:wrap;}
-.comm-key-property{background:#fff;border:2px solid #e5e5e5;border-radius:16px;box-shadow:0 3px 0 #e5e5e5;padding:20px 22px;margin-top:14px;}
-.comm-key-property-head{display:flex;align-items:center;gap:9px;color:#4b4b4b;font-family:Consolas,monospace;font-size:14px;font-weight:900;letter-spacing:.4px;margin-bottom:10px;}
+.comm-flow-arrow{font-size:26px;font-weight:900;color:#cbd5e1;}
+.comm-flow-loop{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;padding-top:14px;border-top:2px dashed #e2e8f0;color:#64748b;font-size:15px;font-weight:800;text-align:center;flex-wrap:wrap;}
+.comm-key-property{background:#ffffff;border:2px solid #e5e5e5;border-radius:16px;box-shadow:0 3px 0 #e5e5e5;padding:20px 22px;margin-top:12px;}
+.comm-key-property-head{display:flex;align-items:center;gap:9px;color:#1e293b;font-size:14px;font-weight:900;letter-spacing:.4px;margin-bottom:8px;}
 .comm-key-property-icon{font-size:22px;line-height:1;}
-.comm-key-property p{margin:0;color:#777;font-size:18px;line-height:1.6;}
-.comm-key-property p strong{color:#4b4b4b;}
-.comm-key-property small{display:block;margin-top:10px;color:#afafaf;font:12px Consolas,monospace;}
-.duo-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px 18px;background:#fff;border-top:2px solid #e5e5e5;box-sizing:border-box;}
-.duo-btn{height:48px;border-radius:16px;border:0;background:#fff;color:#777;box-shadow:0 3px 0 #e5e5e5;font-size:14px;display:flex;align-items:center;justify-content:center;min-width:0;flex:1 1 0;max-width:220px;}
-.duo-btn.ghost{border:2px solid #e5e5e5;box-shadow:0 2px 0 #e5e5e5;flex:0 0 150px;}
-.duo-btn.primary{background:#58cc02;border:0;box-shadow:0 4px 0 #46a302;color:#fff;flex:0 0 220px;margin-left:auto;}
-.duo-btn.primary:hover{background:#61d609;}
-.duo-tight .duo-title{font-size:24px;}.duo-tight .duo-content{font-size:14px;}.duo-tight .duo-content .card-item{padding:12px 14px !important;}
-.quiz-container{background:#fff;padding:18px 20px 20px;max-width:660px;font-family:'Nunito','Segoe UI',system-ui,sans-serif;}
-.quiz-top-bar{margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid #e5e5e5;}
-.quiz-progress-outer{height:16px;background:#e5e5e5;border:0;border-radius:999px;padding:0;overflow:hidden;}
+.comm-key-property p{margin:0;color:#475569;font-size:17px;line-height:1.6;}
+.comm-key-property p strong{color:#0f172a;}
+.comm-key-property small{display:block;margin-top:8px;color:#94a3b8;font-size:12px;font-weight:700;}
+.duo-nav{
+  padding:14px 24px 18px !important;
+  background:#fff !important;
+  border-top:2px solid #e5e5e5 !important;
+  box-sizing:border-box !important;
+  width:100% !important;
+  display:flex !important;
+  justify-content:center !important;
+}
+.duo-nav-inner{
+  max-width:860px !important;
+  width:100% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:16px !important;
+  box-sizing:border-box !important;
+}
+.duo-btn{
+  height:48px;
+  border-radius:14px;
+  border:0;
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:.5px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+}
+.duo-btn.ghost{
+  border:2px solid #e5e5e5;
+  background:#fff;
+  color:#64748b;
+  box-shadow:0 3px 0 #e5e5e5;
+  flex:0 0 130px;
+}
+.duo-btn.ghost:hover:not(:disabled){
+  background:#f8fafc;
+  color:#334155;
+}
+.duo-btn.primary{
+  background:linear-gradient(180deg,#61d609,#58cc02);
+  border:0;
+  box-shadow:0 4px 0 #46a302;
+  color:#fff;
+  flex:0 0 200px;
+  text-shadow:0 1px 0 rgba(0,0,0,.2);
+}
+.duo-btn.primary:hover:not(:disabled){
+  background:linear-gradient(180deg,#6fe316,#61d609);
+  transform:translateY(-1px);
+}
+.duo-btn.primary:active:not(:disabled){
+  transform:translateY(2px);
+  box-shadow:0 2px 0 #46a302;
+}
+.duo-btn:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+  box-shadow:none;
+}
+.quiz-container{background:#fff;padding:28px 32px 32px;max-width:720px;margin:auto;width:100%;font-family:'Nunito','Segoe UI',system-ui,sans-serif;}
+.quiz-top-bar{margin-bottom:24px;padding-bottom:14px;border-bottom:2px solid #e5e5e5;display:flex;align-items:center;gap:16px;}
+.quiz-progress-outer{height:16px;background:#e5e5e5;border:0;border-radius:999px;padding:0;overflow:hidden;flex:1;}
 .quiz-progress-inner{background:#58cc02;border-radius:999px;}
-.quiz-hearts{font-family:'Nunito','Segoe UI',system-ui,sans-serif;background:transparent;border:0;padding:0;font-size:16px;}
-.quiz-meta-tag{font-family:'Nunito','Segoe UI',system-ui,sans-serif;color:#1899d6;background:#ddf4ff;border-radius:999px;padding:5px 12px;display:inline-block;font-size:11px;letter-spacing:1px;margin-bottom:14px;}
-.quiz-question-box{font-family:'Nunito','Segoe UI',system-ui,sans-serif;font-size:24px;line-height:1.35;color:#4b4b4b;background:#fff;border:0;padding:0;margin-bottom:20px;box-shadow:none;}
-.quiz-opts{gap:11px;margin-bottom:14px;}
-.quiz-opt{background:#fff;border:2px solid #e5e5e5;border-radius:16px;box-shadow:0 3px 0 #e5e5e5;padding:14px 18px;font-family:'Nunito','Segoe UI',system-ui,sans-serif;font-size:16px;color:#4b4b4b;min-height:52px;}
-.quiz-opt:hover{background:#f7fbff;border-color:#1cb0f6;}
-.quiz-opt.sel{border-color:#1cb0f6;background:#ddf4ff;}
-.quiz-opt-letter{width:28px;height:28px;background:#f7f7f7;border:2px solid #e5e5e5;border-radius:50%;}
-.quiz-opt.ok{background:#d7ffb8 !important;border-color:#58a700 !important;box-shadow:0 3px 0 #46a302;}
-.quiz-opt.bad{background:#ffdfe0 !important;border-color:#ea2b2b !important;box-shadow:0 3px 0 #ea2b2b;}
-.quiz-feedback{border-radius:14px;font-family:'Nunito','Segoe UI',system-ui,sans-serif;}
-.quiz-feedback.ok{background:#d7ffb8;border-color:#58a700;color:#46a302;}.quiz-feedback.bad{background:#ffdfe0;border-color:#ea2b2b;color:#ea2b2b;}
-.quiz-btn-row{padding-top:14px;border-top:2px solid #e5e5e5;}
+.quiz-hearts{font-family:'Nunito','Segoe UI',system-ui,sans-serif;background:transparent;border:0;padding:0;font-size:18px;font-weight:800;}
+.quiz-meta-tag{font-family:'Nunito','Segoe UI',system-ui,sans-serif;color:#1899d6;background:#ddf4ff;border-radius:999px;padding:6px 14px;display:inline-block;font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:18px;}
+.quiz-question-box{font-family:'Nunito','Segoe UI',system-ui,sans-serif;font-size:26px;line-height:1.4;color:#2e2e2e;font-weight:800;background:#fff;border:0;padding:0;margin-bottom:28px;box-shadow:none;}
+.quiz-opts{display:flex;flex-direction:column;gap:14px;margin-bottom:24px;}
+.quiz-opt{background:#fff;border:2.5px solid #e5e5e5;border-radius:18px;box-shadow:0 4px 0 #e5e5e5;padding:16px 20px;font-family:'Nunito','Segoe UI',system-ui,sans-serif;font-size:17px;font-weight:700;color:#383838;min-height:58px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .12s ease, border-color .12s ease;}
+.quiz-opt:hover{background:#f7fbff;border-color:#1cb0f6;transform:translateY(-1px);}
+.quiz-opt.sel{border-color:#1cb0f6;background:#ddf4ff;box-shadow:0 4px 0 #b3e3fa;}
+.quiz-opt-letter{width:32px;height:32px;background:#f7f7f7;border:2px solid #e5e5e5;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0;}
+.quiz-opt.ok{background:#d7ffb8 !important;border-color:#58a700 !important;box-shadow:0 4px 0 #46a302;}
+.quiz-opt.bad{background:#ffdfe0 !important;border-color:#ea2b2b !important;box-shadow:0 4px 0 #ea2b2b;}
+.quiz-feedback{border-radius:16px;font-family:'Nunito','Segoe UI',system-ui,sans-serif;padding:16px 20px;font-size:16px;line-height:1.5;margin-bottom:20px;}
+.quiz-feedback.ok{background:#d7ffb8;border-color:#58a700;color:#2e7500;}.quiz-feedback.bad{background:#ffdfe0;border-color:#ea2b2b;color:#c71f1f;}
+.quiz-btn-row{padding-top:18px;border-top:2px solid #e5e5e5;}
 @media(max-width:640px){.duo-body{padding:14px 16px 12px;}.duo-title{font-size:24px;}.duo-nav{padding:12px 16px 16px;}.duo-content .card-item{padding:14px !important;}}
 
 .crt-monitor:has(.win.maximized.open) .system-topbar{display:none;}
@@ -2241,11 +2513,12 @@ body{
 .duo-course-bar{
   display:block;
   max-width:none;
-  padding:12px 24px 10px;
+  padding:14px 20px 12px;
   background:#f7f5f3;
   border:2px solid #292929;
   border-radius:14px;
-  margin:0 12px 6px;
+  margin:0 20px 8px;
+  flex-shrink:0;
 }
 .duo-course-meta{
   color:#1d1d1d;
@@ -2255,41 +2528,46 @@ body{
 .duo-course-title{
   margin-top:8px;
   color:#171717;
-  font-size:29px;
+  font-size:clamp(22px,2.8vw,32px);
   font-weight:900;
   letter-spacing:0;
+  line-height:1.15;
 }
 .duo-step-path{display:none;}
 .duo-body{
-  padding:0 12px 8px;
+  padding:0 20px 12px;
   background:#e9ede8;
   overflow:hidden;
+  align-items:stretch;
 }
 .duo-col{
   max-width:none;
-  gap:5px;
-  padding:0;
-  justify-content:flex-start;
+  gap:14px;
+  padding:12px 0;
+  justify-content:center;
+  flex:1;
+  min-height:0;
 }
 .duo-tag{
   align-self:stretch;
   margin:0;
-  padding:14px 12px 5px;
+  padding:10px 12px 6px;
   background:transparent;
   border:0;
   border-radius:0;
   color:#1d1d1d;
-  font-size:34px;
+  font-size:clamp(26px,3vw,36px);
   font-weight:900;
   letter-spacing:0;
   text-transform:none;
+  flex-shrink:0;
 }
 .duo-subtag{display:none;}
 .duo-title{display:none;}
 .duo-content{
   flex:1;
   min-height:0;
-  padding:16px 16px 22px;
+  padding:24px 28px;
   background:#f3f5f2;
   border:2px solid #292929;
   border-radius:14px;
@@ -2297,7 +2575,10 @@ body{
   font-size:24px;
   font-weight:900;
   line-height:1.55;
-  overflow:hidden;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 .duo-content>.duo-main-card,
 .duo-content>.lead-p{
@@ -2311,7 +2592,7 @@ body{
   color:#1d1d1d !important;
   font-size:24px !important;
   font-weight:900 !important;
-  line-height:1.55 !important;
+  line-height:1.65 !important;
 }
 .duo-content li,
 .duo-content p,
@@ -2328,9 +2609,9 @@ body{
   box-shadow:none !important;
   color:#1d1d1d !important;
 }
-.duo-content .card-item{min-height:170px !important;padding:22px 20px !important;}
+.duo-content .card-item{min-height:0 !important;padding:22px 24px !important;flex:1;}
 .duo-content .card-title{color:#1d1d1d !important;font-size:25px !important;font-weight:900 !important;}
-.duo-content .duo-double .card-item{min-height:190px !important;padding:22px 20px !important;}
+.duo-content .duo-double .card-item{min-height:0 !important;padding:20px 22px !important;}
 .duo-content .card-desc,
 .duo-content .info-box p,
 .duo-content .info-box li{color:#1d1d1d !important;font-size:22px !important;font-weight:900 !important;line-height:1.55 !important;}
@@ -2350,9 +2631,9 @@ body{
 .duo-nav{
   flex:0 0 auto;
   max-width:none;
-  padding:8px 16px 10px;
+  padding:12px 20px 14px;
   background:#e9ede8;
-  border-top:0;
+  border-top:2px solid #c8ccc8;
 }
 .duo-btn{
   height:45px;
@@ -2391,16 +2672,16 @@ body{
   .duo-course-bar{margin:0 8px 4px;padding:9px 12px 8px;border-radius:10px;}
   .duo-course-meta{font-size:9px;letter-spacing:.6px;}
   .duo-course-title{font-size:22px;margin-top:5px;}
-  .duo-body{padding:0 8px 6px;overflow:hidden;}
-  .duo-col{width:100%;gap:3px;padding:0;}
-  .duo-tag{padding:9px 8px 4px;font-size:26px;}
-  .duo-content{padding:12px 10px 16px;font-size:17px;line-height:1.4;overflow-y:auto;}
+  .duo-body{padding:0 10px 8px;overflow:hidden;align-items:stretch;}
+  .duo-col{width:100%;gap:10px;padding:8px 0;justify-content:center;flex:1;min-height:0;}
+  .duo-tag{padding:8px 6px 4px;font-size:22px;}
+  .duo-content{padding:16px 14px;font-size:17px;line-height:1.4;overflow-y:auto;display:flex;flex-direction:column;justify-content:center;}
   .duo-content>.duo-main-card,
   .duo-content>.lead-p,
   .duo-content .duo-main-card .lead-p{font-size:17px !important;line-height:1.4 !important;}
   .duo-content .content-grid{gap:9px !important;}
   .duo-content .card-item,
-  .duo-content .duo-double .card-item{min-height:0 !important;padding:16px 14px !important;}
+  .duo-content .duo-double .card-item{min-height:0 !important;padding:16px 14px !important;flex:1;}
   .duo-content .card-title{font-size:18px !important;line-height:1.25 !important;}
   .duo-content .card-desc,
   .duo-content .duo-double .card-desc,
@@ -2411,7 +2692,7 @@ body{
   .duo-content .duo-boxname,
   .duo-content small{font-size:13px !important;line-height:1.35 !important;}
   .duo-content .card-icon{width:32px !important;height:32px !important;font-size:16px !important;}
-  .duo-nav{gap:8px;padding:8px 10px 10px;}
+  .duo-nav{gap:8px;padding:10px 10px 12px;border-top:1px solid #c8ccc8;}
   .duo-btn{height:44px;font-size:11px;border-radius:10px;}
   .duo-btn.ghost{flex:0 0 88px;}
   .duo-btn.primary{flex:1 1 auto;max-width:none;}
@@ -2745,7 +3026,7 @@ table.retro-table{ min-width:560px; }
   -ms-overflow-style:none !important;
 }
 .duo-body::-webkit-scrollbar{ display:none !important; width:0 !important; height:0 !important; }
-.duo-col{ height:100% !important; }
+.duo-col{ height:auto !important; }
 .duo-content{ overflow:hidden !important; }
 .duo-content .table-wrap{ overflow:hidden !important; }
 .duo-content table.retro-table{ table-layout:fixed !important; }
@@ -2803,37 +3084,65 @@ table.retro-table{ min-width:560px; }
 /* top progress row */
 .duo-simple .duo-top{
   background:#fff !important; border-bottom:0 !important;
-  max-width:1000px !important; width:100% !important; margin:0 auto !important;
-  padding:14px 20px 6px !important;
+  max-width:1080px !important; width:100% !important; margin:0 auto !important;
+  padding:18px 32px 10px !important; display:flex !important; align-items:center !important; gap:16px !important;
 }
-.duo-simple .duo-x{ color:#afafaf !important; font-weight:900 !important; }
+.duo-simple .duo-x{ color:#afafaf !important; font-weight:900 !important; font-size:22px !important; cursor:pointer !important; }
 .duo-simple .duo-x:hover{ color:#4b4b4b !important; }
-.duo-simple .duo-progress{ background:#e5e5e5 !important; border:0 !important; height:12px !important; border-radius:999px !important; }
+.duo-simple .duo-progress{ background:#e5e5e5 !important; border:0 !important; height:14px !important; border-radius:999px !important; flex:1 !important; }
 .duo-simple .duo-progress-fill{ background:#58cc02 !important; border-radius:999px !important; }
 .duo-simple .duo-count{
   background:none !important; border:0 !important; border-radius:0 !important;
-  color:#afafaf !important; font-family:inherit !important; font-weight:800 !important;
+  color:#888 !important; font-family:inherit !important; font-size:14px !important; font-weight:800 !important;
+  min-width:60px !important; text-align:right !important;
 }
 /* course banner merged away — window title + lesson pill carry context */
 .duo-simple .duo-course-bar{ display:none !important; }
 /* stage */
-.duo-simple .duo-body{ background:#fff !important; }
-.duo-simple .duo-col{ max-width:640px !important; }
+.duo-simple .duo-body{
+  background:#fff !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  padding:24px 32px !important;
+  overflow-y:auto !important;
+}
+.duo-simple .duo-col{
+  max-width:760px !important;
+  width:100% !important;
+  height:auto !important;
+  margin:auto !important;
+  padding:16px 0 24px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+}
 /* no outer box — content sits on the white canvas */
 .duo-simple .duo-content{
   background:transparent !important; border:0 !important; border-radius:0 !important;
-  box-shadow:none !important; padding:6px 20px 18px !important;
-  font-size:17px !important;
+  box-shadow:none !important; padding:0 !important;
+  font-size:17px !important; width:100% !important;
 }
-/* header: green chip + gray section label + bold title */
-.duo-simple .duo-content-head{ border-bottom:0 !important; padding-bottom:0 !important; margin-bottom:2px !important; }
+/* header: green chip + gray section label + bold title with even vertical rhythm */
+.duo-simple .duo-content-head{
+  border-bottom:0 !important; padding-bottom:0 !important; margin-bottom:12px !important;
+  display:flex !important; align-items:center !important; gap:12px !important; flex-wrap:wrap !important;
+}
 .duo-simple .duo-tag{
-  background:#d7ffb8 !important; color:#58a700 !important;
-  font-family:inherit !important; font-size:12px !important; font-weight:900 !important;
-  letter-spacing:1px !important; padding:6px 12px !important; border-radius:999px !important;
+  background:#d7ffb8 !important; color:#46a302 !important;
+  font-family:inherit !important; font-size:13px !important; font-weight:900 !important;
+  letter-spacing:0.8px !important; padding:6px 14px !important; border-radius:999px !important;
 }
-.duo-simple .duo-subtag{ color:#afafaf !important; font-family:inherit !important; font-weight:800 !important; }
-.duo-simple .duo-content h2.duo-title{ color:#3c3c3c !important; font-family:inherit !important; font-weight:900 !important; }
+.duo-simple .duo-subtag{
+  color:#888 !important; font-family:inherit !important; font-size:13px !important; font-weight:800 !important;
+  letter-spacing:0.6px !important; text-transform:uppercase !important;
+}
+.duo-simple .duo-content h2.duo-title{
+  color:#2b2b2b !important; font-family:inherit !important; font-size:clamp(26px,2.4vw,36px) !important;
+  font-weight:900 !important; letter-spacing:-0.3px !important; line-height:1.25 !important;
+  margin:0 0 24px 0 !important;
+}
 /* lead = instruction line, not a box */
 .duo-simple .duo-main-card,
 .duo-simple .duo-content>.duo-main-card,
@@ -2841,79 +3150,105 @@ table.retro-table{ min-width:560px; }
 .duo-simple .duo-content .duo-main-card .lead-p,
 .duo-simple .duo-content .lead-p{
   background:transparent !important; border:0 !important; border-radius:0 !important;
-  box-shadow:none !important; padding:0 !important; margin:0 0 14px !important;
-  min-height:0 !important; color:#3c3c3c !important;
-  font-family:inherit !important; font-size:19px !important; font-weight:800 !important; line-height:1.5 !important;
+  box-shadow:none !important; padding:0 !important; margin:0 0 20px !important;
+  min-height:0 !important; color:#383838 !important;
+  font-family:inherit !important; font-size:20px !important; font-weight:800 !important; line-height:1.6 !important;
 }
-/* the one idea = white 3D card */
+/* the one idea = white 3D card with generous padding & balanced spacing */
 .duo-simple .duo-content .content-grid{ gap:0 !important; }
 .duo-simple .duo-content .content-grid.duo-single-card{ max-width:none !important; }
 .duo-simple .duo-content .card-item{
-  background:#fff !important; border:2px solid #e5e5e5 !important; border-radius:16px !important;
-  box-shadow:0 4px 0 #e5e5e5 !important; padding:20px 20px 16px !important;
+  background:#fff !important; border:2.5px solid #e5e5e5 !important; border-radius:24px !important;
+  box-shadow:0 5px 0 rgba(0,0,0,0.06) !important; padding:32px 36px 28px !important;
 }
-.duo-simple .duo-content .card-top{ border-bottom:2px solid #f0f0f0 !important; padding-bottom:10px !important; margin-bottom:10px !important; }
-.duo-simple .duo-content .card-icon{ border-radius:12px !important; }
-.duo-simple .duo-content .card-title{ color:#3c3c3c !important; font-family:inherit !important; font-size:17px !important; font-weight:900 !important; }
-.duo-simple .duo-content .card-desc{ color:#4b4b4b !important; font-family:inherit !important; font-size:16px !important; font-weight:600 !important; line-height:1.6 !important; }
-.duo-simple .duo-content .card-desc strong{ color:#3c3c3c !important; }
+.duo-simple .duo-content .card-top{
+  border-bottom:2px solid #f2f2f2 !important; padding-bottom:16px !important; margin-bottom:18px !important;
+  display:flex !important; align-items:center !important; gap:16px !important;
+}
+.duo-simple .duo-content .card-icon{
+  width:48px !important; height:48px !important; border-radius:14px !important;
+  display:inline-flex !important; align-items:center !important; justify-content:center !important; flex-shrink:0 !important;
+  font-size:24px !important;
+}
+.duo-simple .duo-content .card-title{
+  color:#2b2b2b !important; font-family:inherit !important; font-size:20px !important;
+  font-weight:900 !important; letter-spacing:0.4px !important; line-height:1.3 !important;
+}
+.duo-simple .duo-content .card-desc{
+  color:#383838 !important; font-family:inherit !important; font-size:18px !important;
+  font-weight:600 !important; line-height:1.75 !important; margin:0 0 16px 0 !important; padding-left:0 !important;
+}
+.duo-simple .duo-content .card-desc strong{ color:#1f1f1f !important; font-weight:800 !important; }
 .duo-simple .duo-content .card-desc::before{ color:#1cb0f6 !important; }
 .duo-simple .duo-content .card-footer{
-  color:#afafaf !important; font-family:inherit !important; font-size:12px !important; font-weight:700 !important;
-  border-top:1px solid #f0f0f0 !important; padding-top:8px !important; margin-top:8px !important;
+  color:#6b6b6b !important; font-family:inherit !important; font-size:14px !important; font-weight:700 !important;
+  border-top:1.5px solid #f2f2f2 !important; padding-top:16px !important; margin-top:20px !important; line-height:1.5 !important;
+  display:flex !important; align-items:center !important; gap:6px !important; flex-wrap:wrap !important;
 }
+.duo-simple .duo-content .card-footer span{ color:#383838 !important; font-weight:800 !important; }
 /* briefing / info / highlight = duo "tip" cards */
 .duo-simple .duo-content .info-box,
 .duo-simple .duo-content .dossier-briefing,
 .duo-simple .duo-content .study-briefing{
-  background:#f7f7f7 !important; border:2px solid #e5e5e5 !important; border-radius:16px !important;
-  box-shadow:0 4px 0 #e5e5e5 !important; padding:18px !important; margin-top:12px !important;
+  background:#f7f7f7 !important; border:2.5px solid #e5e5e5 !important; border-radius:24px !important;
+  box-shadow:0 5px 0 rgba(0,0,0,0.06) !important; padding:28px 32px 24px !important; margin-top:20px !important;
 }
-.duo-simple .duo-content .briefing-header{ border-bottom:2px solid #f0f0f0 !important; padding-bottom:8px !important; margin-bottom:8px !important; }
+.duo-simple .duo-content .briefing-header{ border-bottom:2px solid #f2f2f2 !important; padding-bottom:14px !important; margin-bottom:16px !important; gap:14px !important; }
 .duo-simple .duo-content .briefing-badge{
-  background:#1cb0f6 !important; color:#fff !important; border-radius:10px !important;
-  font-family:inherit !important; font-size:11px !important;
+  background:#1cb0f6 !important; color:#fff !important; border-radius:12px !important;
+  font-family:inherit !important; font-size:12px !important; min-height:38px !important; padding:0 14px !important;
 }
-.duo-simple .duo-content .briefing-title{ color:#3c3c3c !important; font-family:inherit !important; font-size:14px !important; font-weight:900 !important; }
-.duo-simple .duo-content .info-box .box-title{ color:#1cb0f6 !important; font-family:inherit !important; }
+.duo-simple .duo-content .briefing-title{ color:#2b2b2b !important; font-family:inherit !important; font-size:16px !important; font-weight:900 !important; }
+.duo-simple .duo-content .info-box .box-title{ color:#1cb0f6 !important; font-family:inherit !important; font-size:14px !important; }
 .duo-simple .duo-content .info-box p,.duo-simple .duo-content .info-box li,
-.duo-simple .duo-content .briefing-body{ color:#4b4b4b !important; font-family:inherit !important; font-size:15px !important; font-weight:600 !important; }
-.duo-simple .duo-content .briefing-body strong{ color:#3c3c3c !important; }
+.duo-simple .duo-content .briefing-body{ color:#383838 !important; font-family:inherit !important; font-size:17px !important; font-weight:600 !important; line-height:1.7 !important; }
+.duo-simple .duo-content .briefing-body strong{ color:#1f1f1f !important; }
 .duo-simple .duo-content .highlight{
-  background:#ddf4ff !important; border:2px solid #1cb0f6 !important; border-radius:16px !important;
-  box-shadow:0 4px 0 #abd8f0 !important; color:#3c3c3c !important;
-  font-family:inherit !important; font-style:normal !important; font-size:15px !important; padding:16px 18px !important;
+  background:#ddf4ff !important; border:2.5px solid #1cb0f6 !important; border-radius:20px !important;
+  box-shadow:0 4px 0 #abd8f0 !important; color:#2b2b2b !important;
+  font-family:inherit !important; font-style:normal !important; font-size:17px !important; line-height:1.7 !important; padding:22px 26px !important; margin:18px 0 !important;
 }
-.duo-simple .duo-content .highlight strong{ color:#1cb0f6 !important; }
+.duo-simple .duo-content .highlight strong{ color:#1cb0f6 !important; font-weight:800 !important; }
 /* tables go clean */
-.duo-simple .duo-content table.retro-table{ border:2px solid #e5e5e5 !important; border-radius:12px !important; background:#fff !important; }
-.duo-simple .duo-content table.retro-table th{ background:#f7f7f7 !important; color:#3c3c3c !important; font-family:inherit !important; border-color:#e5e5e5 !important; }
-.duo-simple .duo-content table.retro-table td{ color:#4b4b4b !important; font-family:inherit !important; border-color:#e5e5e5 !important; }
-.duo-simple .duo-boxname{ color:#afafaf !important; font-family:inherit !important; }
-.duo-simple .duo-sub{ color:#afafaf !important; font-family:inherit !important; }
+.duo-simple .duo-content table.retro-table{ border:2.5px solid #e5e5e5 !important; border-radius:16px !important; background:#fff !important; }
+.duo-simple .duo-content table.retro-table th{ background:#f7f7f7 !important; color:#2b2b2b !important; font-family:inherit !important; border-color:#e5e5e5 !important; font-size:15px !important; padding:12px 14px !important; }
+.duo-simple .duo-content table.retro-table td{ color:#383838 !important; font-family:inherit !important; border-color:#e5e5e5 !important; font-size:15px !important; padding:12px 14px !important; }
+.duo-simple .duo-boxname{ color:#888 !important; font-family:inherit !important; font-size:14px !important; margin-bottom:12px !important; }
+.duo-simple .duo-sub{ color:#888 !important; font-family:inherit !important; }
 /* bottom bar: hairline + 3D buttons */
 .duo-simple .duo-nav{
   background:#fff !important; border-top:2px solid #e5e5e5 !important; box-shadow:none !important;
-  max-width:1000px !important; width:100% !important; margin:0 auto !important;
+  max-width:1080px !important; width:100% !important; margin:0 auto !important;
+  padding:16px 32px 20px !important; gap:16px !important;
 }
 .duo-simple .duo-btn{
   font-family:inherit !important; text-transform:uppercase !important; letter-spacing:.8px !important; font-weight:900 !important;
-  border-radius:14px !important; border:2px solid #e5e5e5 !important;
-  background:#fff !important; color:#afafaf !important; box-shadow:0 3px 0 #e5e5e5 !important;
+  height:52px !important; font-size:15px !important;
+  border-radius:16px !important; border:2px solid #e5e5e5 !important;
+  background:#fff !important; color:#888 !important; box-shadow:0 3px 0 #e5e5e5 !important;
 }
-.duo-simple .duo-btn.ghost{ flex:0 0 130px !important; }
+.duo-simple .duo-btn.ghost{ flex:0 0 140px !important; }
 .duo-simple .duo-btn.primary{
-  background:#58cc02 !important; border:0 !important; box-shadow:0 4px 0 #58a700 !important;
-  color:#fff !important; text-shadow:0 1px 0 rgba(0,0,0,.15) !important;
+  background:#58cc02 !important; border:0 !important; box-shadow:0 4px 0 #46a302 !important;
+  color:#fff !important; flex:0 0 220px !important; text-shadow:0 1px 0 rgba(0,0,0,.15) !important;
 }
 .duo-simple .duo-btn.primary:hover{ background:#61d609 !important; }
-.duo-simple .duo-btn.primary:active{ box-shadow:0 1px 0 #58a700 !important; transform:translateY(2px) !important; }
+.duo-simple .duo-btn.primary:active{ box-shadow:0 1px 0 #46a302 !important; transform:translateY(2px) !important; }
 .duo-simple .duo-btn:disabled{ background:#f0f0f0 !important; color:#cfcfcf !important; box-shadow:none !important; border-color:#f0f0f0 !important; }
 @media(max-width:768px){
-  .duo-simple .duo-top{ padding:10px 14px 4px !important; }
-  .duo-simple .duo-content{ padding:4px 14px 14px !important; }
-  .duo-simple .duo-content .card-item{ padding:16px 16px 14px !important; }
+  .duo-simple .duo-body{ padding:14px 16px !important; }
+  .duo-simple .duo-top{ padding:12px 16px 6px !important; }
+  .duo-simple .duo-content .card-item{ padding:20px 20px 18px !important; border-radius:18px !important; }
+  .duo-simple .duo-content .card-desc{ font-size:16px !important; line-height:1.6 !important; }
+  .duo-simple .duo-content h2.duo-title{ font-size:22px !important; margin-bottom:16px !important; }
   .duo-simple .duo-btn.ghost{ flex:0 0 100px !important; }
+  .duo-simple .duo-col{ max-width:none !important; }
+  .duo-simple .duo-nav{ padding:12px 16px 16px !important; }
+}
+@media(min-width:900px){
+  .duo-simple .duo-content .card-item{ padding:36px 42px 30px !important; }
+  .duo-simple .duo-content .card-desc{ font-size:19px !important; line-height:1.8 !important; }
+  .duo-simple .duo-content h2.duo-title{ font-size:clamp(26px,2.4vw,36px) !important; }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -2938,18 +3273,47 @@ table.retro-table{ min-width:560px; }
 .duo-simple .duo-content .table-wrap,
 .duo-simple .duo-content .info-box,
 .duo-simple .duo-content .highlight{ animation:duoRise .35s .18s ease both !important; }
-/* mascot speech bubble lead */
+/* mascot speech bubble lead — polished Duolingo-style */
 .duo-simple .duo-main-card,
 .duo-simple .duo-content>.duo-main-card{
-  position:relative !important; padding-left:66px !important;
+  background:#ffffff !important;
+  border:2px solid #e2e8f0 !important;
+  border-radius:20px !important;
+  box-shadow:0 4px 0 #cbd5e1 !important;
+  padding:24px 28px 24px 84px !important;
+  position:relative !important;
+  min-height:110px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  margin:4px 0 0 0 !important;
+  box-sizing:border-box !important;
 }
 .duo-simple .duo-main-card::before{
-  content:'🦉' !important; position:absolute !important; left:0 !important; top:0 !important;
-  width:50px !important; height:50px !important; border-radius:50% !important;
-  background:#d7ffb8 !important; border:2px solid #e5e5e5 !important;
-  box-shadow:0 3px 0 #e5e5e5 !important;
-  display:flex !important; align-items:center !important; justify-content:center !important;
-  font-size:27px !important; line-height:1 !important;
+  content:'🦉' !important;
+  position:absolute !important;
+  left:18px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  width:50px !important;
+  height:50px !important;
+  border-radius:50% !important;
+  background:#e8f9d8 !important;
+  border:2px solid #8ee000 !important;
+  box-shadow:0 3px 0 #58cc02 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:27px !important;
+  line-height:1 !important;
+}
+.duo-simple .duo-main-card .lead-p,
+.duo-simple .duo-content>.duo-main-card .lead-p{
+  font-size:19px !important;
+  line-height:1.65 !important;
+  color:#1e293b !important;
+  font-weight:600 !important;
+  margin:0 !important;
 }
 /* progress bar with shine */
 .duo-simple .duo-progress{ overflow:hidden !important; }
@@ -2964,26 +3328,36 @@ table.retro-table{ min-width:560px; }
 }
 /* ── rotating accents (card border / tile / bullets / rule) ── */
 .duo-simple .duo-content .card-icon{ color:#fff !important; text-shadow:0 1px 0 rgba(0,0,0,.18) !important; }
-.duo-simple .duo-content.accent-0 .card-item{ border-color:#b6e388 !important; box-shadow:0 4px 0 #9edc69 !important; }
+.duo-simple .duo-content.accent-0 .card-item,
+.duo-simple .duo-content.accent-0 .duo-main-card{ border-color:#b6e388 !important; box-shadow:0 4px 0 #9edc69 !important; }
 .duo-simple .duo-content.accent-0 .card-icon{ background:linear-gradient(135deg,#8ee000,#58cc02) !important; box-shadow:0 3px 0 #58a700 !important; }
 .duo-simple .duo-content.accent-0 .card-desc::before{ color:#58a700 !important; }
 .duo-simple .duo-content.accent-0 .card-top{ border-bottom-color:#e3f5cd !important; }
-.duo-simple .duo-content.accent-1 .card-item{ border-color:#a8ddf9 !important; box-shadow:0 4px 0 #7cc7ef !important; }
+
+.duo-simple .duo-content.accent-1 .card-item,
+.duo-simple .duo-content.accent-1 .duo-main-card{ border-color:#a8ddf9 !important; box-shadow:0 4px 0 #7cc7ef !important; }
 .duo-simple .duo-content.accent-1 .card-icon{ background:linear-gradient(135deg,#4fc3f7,#1cb0f6) !important; box-shadow:0 3px 0 #1899d6 !important; }
 .duo-simple .duo-content.accent-1 .card-desc::before{ color:#1899d6 !important; }
 .duo-simple .duo-content.accent-1 .card-top{ border-bottom-color:#d6eefb !important; }
-.duo-simple .duo-content.accent-2 .card-item{ border-color:#ffd08a !important; box-shadow:0 4px 0 #f5b95c !important; }
+
+.duo-simple .duo-content.accent-2 .card-item,
+.duo-simple .duo-content.accent-2 .duo-main-card{ border-color:#ffd08a !important; box-shadow:0 4px 0 #f5b95c !important; }
 .duo-simple .duo-content.accent-2 .card-icon{ background:linear-gradient(135deg,#ffb020,#ff9600) !important; box-shadow:0 3px 0 #d97c06 !important; }
 .duo-simple .duo-content.accent-2 .card-desc::before{ color:#d97c06 !important; }
 .duo-simple .duo-content.accent-2 .card-top{ border-bottom-color:#ffedd2 !important; }
-.duo-simple .duo-content.accent-3 .card-item{ border-color:#c9b3ef !important; box-shadow:0 4px 0 #a98ce0 !important; }
+
+.duo-simple .duo-content.accent-3 .card-item,
+.duo-simple .duo-content.accent-3 .duo-main-card{ border-color:#c9b3ef !important; box-shadow:0 4px 0 #a98ce0 !important; }
 .duo-simple .duo-content.accent-3 .card-icon{ background:linear-gradient(135deg,#b07fe8,#7d5bc9) !important; box-shadow:0 3px 0 #6a48b5 !important; }
 .duo-simple .duo-content.accent-3 .card-desc::before{ color:#6a48b5 !important; }
 .duo-simple .duo-content.accent-3 .card-top{ border-bottom-color:#e7ddf9 !important; }
-.duo-simple .duo-content.accent-4 .card-item{ border-color:#ffb3c1 !important; box-shadow:0 4px 0 #f58ba0 !important; }
+
+.duo-simple .duo-content.accent-4 .card-item,
+.duo-simple .duo-content.accent-4 .duo-main-card{ border-color:#ffb3c1 !important; box-shadow:0 4px 0 #f58ba0 !important; }
 .duo-simple .duo-content.accent-4 .card-icon{ background:linear-gradient(135deg,#ff7b9c,#ff4b4b) !important; box-shadow:0 3px 0 #d92f2f !important; }
 .duo-simple .duo-content.accent-4 .card-desc::before{ color:#d92f2f !important; }
 .duo-simple .duo-content.accent-4 .card-top{ border-bottom-color:#ffdee5 !important; }
+
 /* hover lift on precise pointers */
 @media(hover:hover){
   .duo-simple .duo-content .card-item{ transition:transform .15s ease !important; }
@@ -2995,7 +3369,7 @@ table.retro-table{ min-width:560px; }
   box-shadow:0 4px 0 #46a302 !important;
 }
 .duo-simple .duo-btn.primary:hover{ background:linear-gradient(180deg,#6fe316,#61d609) !important; }
-.duo-simple .duo-btn.ghost:hover{ background:#f7f7f7 !important; color:#777 !important; }
+.duo-simple .duo-btn.ghost:hover{ background:#f8fafc !important; color:#334155 !important; }
 /* tables dressed as cards */
 .duo-simple .duo-content .table-wrap{
   background:#fff !important; border:2px solid #e5e5e5 !important; border-radius:16px !important;
@@ -3004,8 +3378,8 @@ table.retro-table{ min-width:560px; }
 .duo-simple .duo-content table.retro-table{ border:0 !important; border-radius:0 !important; }
 .duo-simple .duo-content table.retro-table tbody tr:hover td{ background:#f7fdf0 !important; }
 @media(max-width:768px){
-  .duo-simple .duo-main-card,.duo-simple .duo-content>.duo-main-card{ padding-left:56px !important; }
-  .duo-simple .duo-main-card::before{ width:42px !important; height:42px !important; font-size:22px !important; }
+  .duo-simple .duo-main-card,.duo-simple .duo-content>.duo-main-card{ padding:20px 20px 20px 70px !important; }
+  .duo-simple .duo-main-card::before{ width:44px !important; height:44px !important; font-size:24px !important; left:14px !important; }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -3028,29 +3402,99 @@ table.retro-table{ min-width:560px; }
 .duo-simple .duo-content .card-item .card-desc>*:last-child{ margin-bottom:0 !important; }
 
 /* ═══════════════════════════════════════════════════════════
-   RESPONSIVE FIX v12 — one chrome to rule them all
-   The REFERENCE card (lavender frame, purple tile + bullets)
-   is now the only card chrome: overrides every rotating
-   accent, flattens nested flow visuals inside shells.
+   RESPONSIVE FIX v12 — card kinds, not one purple chrome
+   Concept cards keep rotating accents. SOURCE (purple),
+   REMEMBER (amber), and WARNING (red) override accents.
    ═══════════════════════════════════════════════════════════ */
-.duo-simple .duo-content .card-item,
-.duo-simple .duo-content[class*="accent"] .card-item{
-  border-color:#c6b3ee !important; box-shadow:0 4px 0 #a78bfa !important;
-}
-.duo-simple .duo-content .card-top,
-.duo-simple .duo-content[class*="accent"] .card-top{ border-bottom-color:#e7ddf9 !important; }
-.duo-simple .duo-content .card-icon,
-.duo-simple .duo-content[class*="accent"] .card-icon{
-  background:linear-gradient(135deg,#9d7bea,#7d5bc9) !important;
-  box-shadow:0 3px 0 #6a48b5 !important;
-}
-.duo-simple .duo-content .card-desc::before,
-.duo-simple .duo-content[class*="accent"] .card-desc::before{ color:#7d5bc9 !important; }
 .duo-simple .duo-content .card-item .comm-flow-visual,
 .duo-simple .duo-content .card-item .comm-key-property{
   background:none !important; border:0 !important; border-radius:0 !important;
   box-shadow:none !important; padding-left:0 !important; padding-right:0 !important;
   margin-left:0 !important; margin-right:0 !important;
+}
+.duo-simple .duo-content .card-item.card-kind-source,
+.duo-simple .duo-content[class*="accent"] .card-item.card-kind-source{
+  border-color:#c6b3ee !important; box-shadow:0 4px 0 #a78bfa !important;
+}
+.duo-simple .duo-content .card-item.card-kind-source .card-top,
+.duo-simple .duo-content[class*="accent"] .card-item.card-kind-source .card-top{ border-bottom-color:#e7ddf9 !important; }
+.duo-simple .duo-content .card-item.card-kind-source .card-icon,
+.duo-simple .duo-content[class*="accent"] .card-item.card-kind-source .card-icon{
+  background:linear-gradient(135deg,#9d7bea,#7d5bc9) !important;
+  box-shadow:0 3px 0 #6a48b5 !important;
+}
+.duo-simple .duo-content .card-item.card-kind-source .card-desc::before,
+.duo-simple .duo-content[class*="accent"] .card-item.card-kind-source .card-desc::before{ color:#7d5bc9 !important; }
+.duo-simple .duo-content .card-item.card-kind-remember,
+.duo-simple .duo-content[class*="accent"] .card-item.card-kind-remember{
+  border-color:#ffd08a !important; box-shadow:0 4px 0 #f5b95c !important;
+}
+.duo-simple .duo-content .card-item.card-kind-remember .card-top{ border-bottom-color:#ffedd2 !important; }
+.duo-simple .duo-content .card-item.card-kind-remember .card-icon,
+.duo-simple .duo-content[class*="accent"] .card-item.card-kind-remember .card-icon{
+  background:linear-gradient(135deg,#ffb020,#ff9600) !important;
+  box-shadow:0 3px 0 #d97c06 !important;
+}
+.duo-simple .duo-content .card-item.card-kind-warning,
+.duo-simple .duo-content[class*="accent"] .card-item.card-kind-warning{
+  border-color:#ffb3c1 !important; box-shadow:0 4px 0 #f58ba0 !important;
+}
+.duo-simple .duo-content .card-item.card-kind-warning .card-top{ border-bottom-color:#ffdee5 !important; }
+.duo-simple .duo-content .card-item.card-kind-warning .card-icon,
+.duo-simple .duo-content[class*="accent"] .card-item.card-kind-warning .card-icon{
+  background:linear-gradient(135deg,#ff7b9c,#ff4b4b) !important;
+  box-shadow:0 3px 0 #d92f2f !important;
+}
+.duo-credit{
+  margin:0 0 10px !important; color:#afafaf !important;
+  font-size:13px !important; font-weight:700 !important;
+}
+.source-chip{
+  display:inline-flex !important; align-items:center !important; gap:7px !important;
+  margin-top:16px !important; padding:6px 14px !important;
+  background:#f1ebfc !important; color:#633ec9 !important;
+  border:1px solid #e2d5f8 !important; border-radius:999px !important;
+  font-size:12px !important; font-weight:800 !important; letter-spacing:0.2px !important;
+  align-self:flex-start !important;
+}
+.section-close{ display:block !important; }
+.close-banner{
+  display:flex !important; align-items:center !important; gap:12px !important;
+  margin:0 0 12px !important;
+}
+.close-check{
+  width:42px !important; height:42px !important; border-radius:50% !important;
+  background:#58cc02 !important; color:#fff !important;
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  font-size:22px !important; font-weight:900 !important; box-shadow:0 3px 0 #46a302 !important;
+}
+.close-kicker{ font-size:15px !important; font-weight:900 !important; color:#3c3c3c !important; }
+.close-xp{
+  display:inline-block !important; margin-top:2px !important; padding:2px 8px !important;
+  background:#d7ffb8 !important; color:#58a700 !important; border-radius:999px !important;
+  font-size:11px !important; font-weight:900 !important;
+}
+.close-recap{
+  margin:0 0 12px !important; color:#4b4b4b !important;
+  font-size:16px !important; font-weight:700 !important; line-height:1.45 !important;
+}
+.cite-why{ margin:0 0 10px !important; color:#3c3c3c !important; font-weight:800 !important; }
+.cite-grid{ display:grid !important; gap:8px !important; }
+.cite-row{ display:grid !important; grid-template-columns:110px minmax(0,1fr) !important; gap:8px !important; align-items:start !important; }
+.cite-row span{ color:#afafaf !important; font-size:12px !important; font-weight:800 !important; text-transform:uppercase !important; letter-spacing:.3px !important; }
+.cite-row em{ font-style:italic !important; color:#3c3c3c !important; font-weight:800 !important; }
+.cite-copy{
+  margin-top:12px !important; padding:8px 14px !important; border:2px solid #c6b3ee !important;
+  background:#f7f2ff !important; color:#6a48b5 !important; border-radius:12px !important;
+  font-family:inherit !important; font-size:13px !important; font-weight:900 !important; cursor:pointer !important;
+}
+.cite-copy:hover{ background:#efe7ff !important; }
+.cite-copy.copied{ background:#d7ffb8 !important; border-color:#9edc69 !important; color:#58a700 !important; }
+.close-next{
+  margin-top:12px !important; color:#58a700 !important; font-size:14px !important; font-weight:800 !important;
+}
+@media(max-width:520px){
+  .cite-row{ grid-template-columns:1fr !important; gap:2px !important; }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -3089,6 +3533,52 @@ table.retro-table{ min-width:560px; }
 }
 .duo-simple .duo-content .comm-key-property-head,
 .duo-simple .duo-content .comm-key-property small{ font-family:inherit !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE FIX v14 — bullets off the text + vertical balance
+   1) A later rule zeroed the desc's left padding while the
+      absolute ::before bullet kept firing → "•This" glued
+      bullets. Restore a true hanging indent, and suppress the
+      decorative bullet wherever real block content (p / lists /
+      tables / cite grids) already provides its own structure.
+   2) The stage top-anchored every slide, stranding dead space
+      under the card. Center the column in free space.
+   3) Tighten the over-loose desktop rhythm (42px card padding,
+      1.8 line-height, 20px footer margins) for even density.
+   ═══════════════════════════════════════════════════════════ */
+/* — bullets: hanging indent, breathing room, no doubles — */
+.duo-simple .duo-content .card-desc{ padding-left:28px !important; }
+.duo-simple .duo-content .card-desc::before{ left:0 !important; top:1px !important; }
+.duo-simple .duo-content .card-desc:has(> p)::before,
+.duo-simple .duo-content .card-desc:has(> ul)::before,
+.duo-simple .duo-content .card-desc:has(> ol)::before,
+.duo-simple .duo-content .card-desc:has(> table)::before,
+.duo-simple .duo-content .card-desc:has(> .cite-grid)::before,
+.duo-simple .duo-content .card-desc:has(> button)::before{ display:none !important; }
+.duo-simple .duo-content .card-desc > p{ margin:0 0 10px !important; }
+.duo-simple .duo-content .card-desc > p:last-child{ margin-bottom:0 !important; }
+.duo-simple .duo-content .card-desc ul,
+.duo-simple .duo-content .card-desc ol{ margin:0 0 10px !important; padding-left:22px !important; }
+.duo-simple .duo-content .card-desc li{ margin-bottom:6px !important; }
+.duo-simple .duo-content .card-desc li:last-child{ margin-bottom:0 !important; }
+/* — vertical balance: card rests in the middle of free space — */
+.duo-simple .duo-body{
+  display:flex !important; flex-direction:column !important; justify-content:center !important;
+}
+.duo-simple .duo-col{ height:auto !important; }
+/* — even desktop density — */
+@media(min-width:900px){
+  .duo-simple .duo-content .card-item{ padding:28px 32px 24px !important; }
+  .duo-simple .duo-content .card-desc{ font-size:18px !important; line-height:1.65 !important; }
+  .duo-simple .duo-content .card-footer{ margin-top:12px !important; padding-top:12px !important; }
+  .duo-simple .duo-content .info-box,
+  .duo-simple .duo-content .dossier-briefing,
+  .duo-simple .duo-content .study-briefing{ padding:24px 26px 20px !important; }
+  .duo-simple .duo-content .highlight{ padding:18px 22px !important; margin:14px 0 !important; }
+}
+.duo-simple .section-close{ gap:0 !important; }
+.duo-simple .close-banner{ margin-bottom:14px !important; }
+.duo-simple .close-next{ margin-top:14px !important; }
 </style>
 </head>
 <body>
@@ -3158,6 +3648,18 @@ var lessons = [
     "id": 1,
     "title": "Communication\nProcess",
     "icon": "💬",
+    "lecturer": "Ms. Jennelle F. Apolonio, TSU",
+    "source": {
+      "short": "Manzano et al., 2018",
+      "authors": "Manzano, B.M. et al.",
+      "year": "2018",
+      "book": "Purposive Communication for College Freshmen",
+      "pages": "7–14",
+      "publisher": "St. Andrew Publishing House",
+      "place": "Plaridel, Bulacan",
+      "apa": "Manzano, B.M. et al. (2018). Purposive Communication for College Freshmen (pp. 7–14). Plaridel, Bulacan: St. Andrew Publishing House.",
+      "why": "This lecture is based on Chapter 1, pages 7–14."
+    },
     "content": [
       {
         "h": "Overview",
@@ -3240,6 +3742,18 @@ var lessons = [
     "id": 2,
     "title": "Globalization &\nCompetence",
     "icon": "🌐",
+    "lecturer": "Ms. Jennelle F. Apolonio, TSU",
+    "source": {
+      "short": "Manzano et al., 2018",
+      "authors": "Manzano, B.M. et al.",
+      "year": "2018",
+      "book": "Purposive Communication for College Freshmen",
+      "pages": "15–20",
+      "publisher": "St. Andrew Publishing House",
+      "place": "Plaridel, Bulacan",
+      "apa": "Manzano, B.M. et al. (2018). Communication and Globalization. In Purposive Communication for College Freshmen (pp. 15–20). St. Andrew Publishing House.",
+      "why": "This lecture is based on Chapter 2, pages 15–20."
+    },
     "content": [
       {
         "h": "Lecture 2: Communication and Globalization",
@@ -3312,6 +3826,18 @@ var lessons = [
     "id": 3,
     "title": "Multicultural\nSetting",
     "icon": "🤝",
+    "lecturer": "Ms. Jennelle F. Apolonio, TSU",
+    "source": {
+      "short": "Manzano et al., 2018",
+      "authors": "Manzano, B.M. et al.",
+      "year": "2018",
+      "book": "Purposive Communication for College Freshmen",
+      "pages": "21–25",
+      "publisher": "St. Andrew Publishing House",
+      "place": "Plaridel, Bulacan",
+      "apa": "Manzano, B.M. et al. (2018). Local and Global Communication in a Multicultural Setting. In Purposive Communication for College Freshmen (pp. 21–25). St. Andrew Publishing House.",
+      "why": "This lecture is based on Chapter 3, pages 21–25."
+    },
     "content": [
       {
         "h": "Culture, Context & Communication Levels",
@@ -3364,6 +3890,18 @@ var lessons = [
     "id": 4,
     "title": "Varieties &\nRegisters",
     "icon": "📚",
+    "lecturer": "Ms. Jennelle F. Apolonio, TSU",
+    "source": {
+      "short": "Manzano et al., 2018",
+      "authors": "Manzano, B.M. et al.",
+      "year": "2018",
+      "book": "Purposive Communication for College Freshmen",
+      "pages": "26–31",
+      "publisher": "St. Andrew Publishing House",
+      "place": "Plaridel, Bulacan",
+      "apa": "Manzano, B.M. et al. (2018). Purposive Communication for College Freshmen (Lecture 4: pp. 26–31). Plaridel, Bulacan: St. Andrew Publishing House.",
+      "why": "This lecture is based on Chapter 4, pages 26–31."
+    },
     "content": [
       {
         "h": "Linguistic Repertoire: Dialect vs. Register",
@@ -4170,19 +4708,16 @@ function openLessonWin(lessonId){
   var steps = buildLessonSteps(l);
 
   if(!document.getElementById(wid)){
-    // Open at a large default size that uses most of the available screen
+    // Open at a balanced, proportional window — centred on the desktop
     var sw = window.innerWidth;
     var sh = window.innerHeight;
-    var winW = Math.min(sw - 30, 1300);
-    var winH = sh - 70;
-    var offX = Math.max(20, (sw - winW) / 2);
-    var offY = 34;
+    // Target ~1040 wide × 680 tall; shrink if the screen is smaller
+    var winW = Math.min(Math.max(sw - 80, 820), 1080);
+    var winH = Math.min(Math.max(sh - 100, 560), 740);
+    var offX = Math.max(20, Math.round((sw - winW) / 2));
+    var offY = Math.max(34, Math.round((sh - winH) / 2));
     createWin(wid, 'DOC: ' + l.title.replace('\n',' '), offX, offY, winW, winH, false);
-    // Auto-maximize on first open for full-screen experience
-    setTimeout(function(){
-      var w = document.getElementById(wid);
-      if(w) w.classList.add('maximized');
-    }, 0);
+    // No auto-maximize — keep window proportional for balanced layout
   }
 
   if(!AppState.slideState[lessonId]){
@@ -4212,38 +4747,174 @@ function communicationProcessVisual(){
   '<div class="comm-key-property"><div class="comm-key-property-head"><span class="comm-key-property-icon">📐</span><span>KEY PROPERTY</span></div><p>Communication is a <strong>two-way process</strong> that occurs in an orderly and systematic sequence to create a <strong>shared understanding</strong>.</p><small>Nature: two-way, orderly, systematic.</small></div>';
 }
 
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escapeAttr(s){
+  return escapeHtml(s).replace(/"/g,'&quot;');
+}
+function parseCite(html, fallback){
+  var f = fallback || {};
+  var text = String(html || '').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()
+    .replace(/^(Primary\s+)?Reference:\s*/i,'').replace(/^\*\s*/,'').replace(/\*$/,'');
+  var cite = {
+    authors: f.authors || 'Manzano, B.M. et al.',
+    year: f.year || '2018',
+    book: f.book || 'Purposive Communication for College Freshmen',
+    pages: f.pages || '',
+    publisher: f.publisher || 'St. Andrew Publishing House',
+    place: f.place || 'Plaridel, Bulacan',
+    apa: f.apa || '',
+    why: f.why || '',
+    short: f.short || 'Manzano et al., 2018'
+  };
+  var ym = text.match(/\((\d{4})\)/);
+  if(ym) cite.year = ym[1];
+  var pm = text.match(/pp?\.\s*([\d][\d–\-]*\d)/i);
+  if(pm) cite.pages = pm[1];
+  var em = String(html || '').match(/<em>([^<]+)<\/em>/i);
+  if(em) cite.book = em[1].replace(/\s+/g,' ').trim();
+  if(text && !cite.apa) cite.apa = text;
+  if(!cite.why && cite.pages) cite.why = 'This lecture is based on pages ' + cite.pages + '.';
+  return cite;
+}
+function cardKindFromTitle(title){
+  var t = (title || '').toUpperCase();
+  if(/REFERENCE|CITATION|\bSOURCE\b/.test(t)) return 'source';
+  if(/REMEMBER/.test(t)) return 'remember';
+  if(/WARNING|UNETHICAL|AWARENESS OF ISSUES/.test(t)) return 'warning';
+  return 'concept';
+}
+function isRefTitle(title){
+  return /REFERENCE|CITATION/.test((title || '').toUpperCase());
+}
+function sourceChipHtml(lesson){
+  if(!lesson || !lesson.source) return '';
+  return '<div class="source-chip">Source: ' + escapeHtml(lesson.source.short || 'Manzano et al., 2018') + '</div>';
+}
+function decorateCard(card, lesson){
+  if(!card) return;
+  var titleEl = card.querySelector('.card-title');
+  var title = titleEl ? titleEl.textContent.replace(/\s+/g,' ').trim() : '';
+  var kind = cardKindFromTitle(title);
+  card.classList.add('card-kind-' + kind);
+  if(kind === 'source') return;
+  var foot = card.querySelector('.card-footer');
+  if(foot && /Source:/i.test(foot.textContent || '')) return;
+  if((card.innerHTML || '').indexOf('source-chip') !== -1) return;
+  card.insertAdjacentHTML('beforeend', sourceChipHtml(lesson));
+}
+function sectionCloseHtml(opts){
+  var cite = opts.cite || {};
+  var recap = opts.recap || '';
+  var nextH = opts.nextH || '';
+  var completeLabel = opts.completeLabel || 'Section complete';
+  var apa = cite.apa || '';
+  var rows = '';
+  if(cite.book) rows += '<div class="cite-row"><span>Book</span><em>' + escapeHtml(cite.book) + '</em></div>';
+  if(cite.authors) rows += '<div class="cite-row"><span>Authors / year</span>' + escapeHtml(cite.authors + ' (' + cite.year + ')') + '</div>';
+  if(cite.pages) rows += '<div class="cite-row"><span>Pages</span>' + escapeHtml(cite.pages) + '</div>';
+  var pub = [cite.place, cite.publisher].filter(Boolean).join(': ');
+  if(pub) rows += '<div class="cite-row"><span>Publisher</span>' + escapeHtml(pub) + '</div>';
+  var why = cite.why ? '<p class="cite-why">' + escapeHtml(cite.why) + '</p>' : '';
+  var next = nextH ? '<div class="close-next">Next: ' + escapeHtml(nextH) + '</div>' : '';
+  var recapHtml = recap ? '<p class="close-recap">' + escapeHtml(recap) + '</p>' : '';
+  return '<div class="section-close">' +
+    '<div class="close-banner"><span class="close-check">✓</span><div><div class="close-kicker">' + escapeHtml(completeLabel) + '</div><div class="close-xp">+5 XP</div></div></div>' +
+    recapHtml +
+    '<div class="content-grid duo-single-card"><div class="card-item card-kind-source">' +
+    '<div class="card-top"><span class="card-icon">📚</span><span class="card-title">SOURCE</span></div>' +
+    '<div class="card-desc">' + why + '<div class="cite-grid">' + rows + '</div>' +
+    '<button type="button" class="cite-copy" data-cite="' + escapeAttr(apa) + '" onclick="copyLessonCite(this)">Copy citation</button>' +
+    '</div>' +
+    '<div class="card-footer"><span>Required reading:</span> pp. ' + escapeHtml(cite.pages || 'this chapter') + '</div>' +
+    '</div></div>' + next + '</div>';
+}
+function copyLessonCite(btn){
+  var text = (btn && btn.getAttribute('data-cite')) || '';
+  function mark(){
+    if(!btn) return;
+    btn.classList.add('copied');
+    btn.textContent = 'Copied!';
+    setTimeout(function(){ btn.classList.remove('copied'); btn.textContent = 'Copy citation'; }, 1600);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(mark).catch(mark);
+  } else { mark(); }
+}
+
 /* Standard shell for takeaway briefings: rebuilds the old dossier box
    (badge + title + columns) as a concept card — tile header,
-   bulleted body, footer caption. */
-function briefingCard(b, cat){
+   bulleted body, footer caption. Citation briefings become
+   section-complete slides instead of a raw APA dump. */
+function briefingCard(b, cat, lesson, extra){
   if(!b) return null;
+  extra = extra || {};
   var titleEl = b.querySelector('.briefing-title');
   var titleTxt = titleEl ? titleEl.textContent.replace(/\s+/g,' ').trim() : 'KEY TAKEAWAY';
   var cols = b.querySelectorAll('.briefing-col');
   var body = '';
-  for(var i = 0; i < cols.length; i++){ body += '<p>' + cols[i].innerHTML + '</p>'; }
-  if(!body) body = '<p>' + b.textContent.replace(/\s+/g,' ').trim() + '</p>';
-  return { h: 'Key takeaway', cat: cat,
-    t: '<div class="content-grid duo-single-card"><div class="card-item">' +
+  var recapParts = [];
+  var refHtml = '';
+  for(var i = 0; i < cols.length; i++){
+    var colText = (cols[i].textContent || '').replace(/\s+/g,' ').trim();
+    if(/^(Primary\s+)?Reference:/i.test(colText)){
+      refHtml = cols[i].innerHTML;
+    } else {
+      recapParts.push(colText.replace(/^(Generalization|Chapter Goal|Ethics Goal|Quote|Key Point):\s*/i,''));
+      body += '<p>' + cols[i].innerHTML + '</p>';
+    }
+  }
+  if(!body && !refHtml) body = '<p>' + b.textContent.replace(/\s+/g,' ').trim() + '</p>';
+  if(refHtml || /REFERENCE|CITATION/i.test(titleTxt)){
+    var cite = parseCite(refHtml || body, lesson && lesson.source);
+    return { h: extra.h || 'Section complete', cat: cat, kind: 'close',
+      t: sectionCloseHtml({
+        cite: cite,
+        recap: recapParts[0] || '',
+        nextH: extra.nextH || '',
+        completeLabel: extra.completeLabel || (titleTxt.replace(/\s+/g,' ') + ' complete')
+      }) };
+  }
+  return { h: 'Key takeaway', cat: cat, kind: 'concept',
+    t: '<div class="content-grid duo-single-card"><div class="card-item card-kind-concept">' +
        '<div class="card-top"><span class="card-icon">📝</span><span class="card-title">' + titleTxt + '</span></div>' +
        '<div class="card-desc">' + body + '</div>' +
        '<div class="card-footer"><span>Note:</span> Key takeaway — review before continuing.</div>' +
+       sourceChipHtml(lesson) +
        '</div></div>' };
 }
 
 /* Standard concept-card shell shared by every slide type. */
-function shell(icon, title, inner, footLabel, footText){
-  return '<div class="content-grid duo-single-card"><div class="card-item">' +
+function shell(icon, title, inner, footLabel, footText, lesson){
+  var kind = cardKindFromTitle(title);
+  return '<div class="content-grid duo-single-card"><div class="card-item card-kind-' + kind + '">' +
     '<div class="card-top"><span class="card-icon">' + icon + '</span><span class="card-title">' + title + '</span></div>' +
     '<div class="card-desc">' + inner + '</div>' +
-    '<div class="card-footer"><span>' + footLabel + ':</span> ' + footText + '</div></div></div>';
+    '<div class="card-footer"><span>' + footLabel + ':</span> ' + footText + '</div>' +
+    (kind === 'concept' || kind === 'warning' ? sourceChipHtml(lesson) : '') +
+    '</div></div>';
 }
 
 function buildLessonSteps(lesson){
   // PACKED RULE: fill the card, no scroll, fewer slides.
   // Lead joins first chunk, up to 2 cards per slide, tables 6 rows, briefing own slide.
   var steps = [];
-  function cleanText(el){ return el ? el.textContent.replace(/\s+/g,' ').trim() : ''; }
+  function nextTitle(idx){
+    return (idx + 1 < lesson.content.length) ? lesson.content[idx + 1].h.replace(/\s+/g,' ') : 'Lesson quiz';
+  }
+  function briefExtra(source, idx){
+    return { nextH: nextTitle(idx), completeLabel: source.h + ' complete', h: source.h + ' complete' };
+  }
+  function recapFromCards(cards){
+    return cards.map(function(card){
+      var te = card.querySelector('.card-title');
+      var t = te ? te.textContent.replace(/\s+/g,' ').trim() : '';
+      return t.replace(/\b[A-Z]{2,}\b/g, function(w){
+        return w.charAt(0) + w.slice(1).toLowerCase();
+      });
+    }).filter(Boolean).join(' · ');
+  }
   for(var i = 0; i < lesson.content.length; i++){
     var source = lesson.content[i];
     var sourceHtml = source.t;
@@ -4275,7 +4946,7 @@ function buildLessonSteps(lesson){
       var tablePos = 0;
       if(leadHtml){
         tablePos++;
-        steps.push({ h: source.h + ' · ' + tablePos + '/' + tableTotal, cat: source.cat, t: '<div class="duo-main-card duo-compact">' + leadHtml + boxTitleHtml + '</div>' });
+        steps.push({ h: source.h + ' · ' + tablePos + '/' + tableTotal, cat: source.cat, kind: 'lead', t: '<div class="duo-main-card duo-compact">' + leadHtml + boxTitleHtml + '</div>' });
       }
       for(var rs=0; rs<tableRows.length; rs+=5){
         tablePos++;
@@ -4285,59 +4956,88 @@ function buildLessonSteps(lesson){
         for(var r=rs; r<Math.min(rs+5, tableRows.length); r++) tb.appendChild(tableRows[r].cloneNode(true));
         clone.appendChild(tb);
         var lo = rs + 1, hi = Math.min(rs + 5, tableRows.length);
-        var tt = '<div class="content-grid duo-single-card"><div class="card-item">' +
+        var tt = '<div class="content-grid duo-single-card"><div class="card-item card-kind-concept">' +
           '<div class="card-top"><span class="card-icon">📊</span><span class="card-title">STUDY TABLE</span></div>' +
           '<div class="table-wrap">' + clone.outerHTML + '</div>' +
           '<div class="card-footer"><span>Rows:</span> ' + lo + '–' + hi + ' of ' + tableRows.length + '.</div>' +
+          sourceChipHtml(lesson) +
           '</div></div>';
-        steps.push({ h: source.h + ' · ' + tablePos + '/' + tableTotal, cat: source.cat, t: tt });
+        steps.push({ h: source.h + ' · ' + tablePos + '/' + tableTotal, cat: source.cat, kind: 'concept', t: tt });
       }
-      if(briefingHtml) steps.push(briefingCard(briefing, source.cat));
+      if(briefingHtml) steps.push(briefingCard(briefing, source.cat, lesson, briefExtra(source, i)));
       continue;
     }
 
     // CARDS (standard shell): lead gets its own instruction slide,
-    // then exactly one concept card per view
+    // then exactly one concept card per view. REFERENCE cards become
+    // a section-complete + scannable source slide.
     if(allCards.length){
       var cardsArr = Array.prototype.slice.call(allCards);
+      var conceptCards = [];
+      var refCard = null;
+      for(var ci=0; ci<cardsArr.length; ci++){
+        var cTitleEl = cardsArr[ci].querySelector('.card-title');
+        var cTitle = cTitleEl ? cTitleEl.textContent.replace(/\s+/g,' ').trim() : '';
+        if(isRefTitle(cTitle)) refCard = cardsArr[ci];
+        else conceptCards.push(cardsArr[ci]);
+      }
       var leadSlideCount = leadHtml ? 1 : 0;
       var visualSlideCount = processVisualHtml ? 1 : 0;
-      var totalCardSlides = leadSlideCount + visualSlideCount + cardsArr.length;
+      var closeCount = refCard ? 1 : 0;
+      var totalCardSlides = leadSlideCount + visualSlideCount + conceptCards.length + closeCount;
       var cardPos = 0;
       if(leadHtml){
         cardPos++;
-        steps.push({ h: source.h + ' · ' + cardPos + '/' + totalCardSlides, cat: source.cat, t: '<div class="duo-main-card duo-compact">' + leadHtml + boxTitleHtml + '</div>' });
+        steps.push({ h: source.h + ' · ' + cardPos + '/' + totalCardSlides, cat: source.cat, kind: 'lead', t: '<div class="duo-main-card duo-compact">' + leadHtml + boxTitleHtml + '</div>' });
       }
       if(processVisualHtml){
         cardPos++;
-        steps.push({ h: source.h + ' · ' + cardPos + '/' + totalCardSlides, cat: source.cat,
-          t: '<div class="content-grid duo-single-card"><div class="card-item">' +
+        steps.push({ h: source.h + ' · ' + cardPos + '/' + totalCardSlides, cat: source.cat, kind: 'concept',
+          t: '<div class="content-grid duo-single-card"><div class="card-item card-kind-concept">' +
              '<div class="card-top"><span class="card-icon">🔁</span><span class="card-title">PROCESS MAP</span></div>' +
              processVisualHtml +
              '<div class="card-footer"><span>Nature:</span> Two-way, orderly, systematic.</div>' +
+             sourceChipHtml(lesson) +
              '</div></div>' });
         processVisualHtml = '';
       }
-      for(var c=0; c<cardsArr.length; c++){
+      for(var c=0; c<conceptCards.length; c++){
         cardPos++;
+        decorateCard(conceptCards[c], lesson);
         var t = '';
         if(c===0 && !leadHtml && boxTitleHtml) t += '<div class="duo-boxname">' + boxTitle.textContent + '</div>';
-        t += '<div class="content-grid duo-single-card">' + cardsArr[c].outerHTML + '</div>';
-        steps.push({ h: source.h + ' · ' + cardPos + '/' + totalCardSlides, cat: source.cat, t: t });
+        t += '<div class="content-grid duo-single-card">' + conceptCards[c].outerHTML + '</div>';
+        var kindTitle = conceptCards[c].querySelector('.card-title');
+        steps.push({ h: source.h + ' · ' + cardPos + '/' + totalCardSlides, cat: source.cat,
+          kind: cardKindFromTitle(kindTitle ? kindTitle.textContent : ''), t: t });
+      }
+      if(refCard){
+        cardPos++;
+        var desc = refCard.querySelector('.card-desc');
+        var cite = parseCite(desc ? desc.innerHTML : '', lesson.source);
+        var recap = recapFromCards(conceptCards);
+        if(!recap && lead) recap = lead.textContent.replace(/\s+/g,' ').trim();
+        steps.push({ h: source.h + ' · ' + cardPos + '/' + totalCardSlides, cat: source.cat, kind: 'close',
+          t: sectionCloseHtml({
+            cite: cite,
+            recap: recap,
+            nextH: nextTitle(i),
+            completeLabel: source.h + ' complete'
+          }) });
       }
       if(highlight){
         var lines = highlight.innerHTML.split(/<br\s*\/?\s*>/i).filter(function(x){return x.trim()});
         var remTotal = Math.ceil(lines.length / 2);
         for(var hs=0, remN=1; hs<lines.length; hs+=2, remN++){
-          steps.push({ h: 'Remember · ' + remN + '/' + remTotal, cat: source.cat,
-            t: '<div class="content-grid duo-single-card"><div class="card-item">' +
+          steps.push({ h: 'Remember · ' + remN + '/' + remTotal, cat: source.cat, kind: 'remember',
+            t: '<div class="content-grid duo-single-card"><div class="card-item card-kind-remember">' +
                '<div class="card-top"><span class="card-icon">💡</span><span class="card-title">REMEMBER</span></div>' +
                '<div class="highlight">' + lines.slice(hs,hs+2).join('<br>') + '</div>' +
                '<div class="card-footer"><span>Note:</span> Core reminder for this section.</div>' +
                '</div></div>' });
         }
       }
-      if(briefingHtml) steps.push(briefingCard(briefing, source.cat));
+      if(briefingHtml) steps.push(briefingCard(briefing, source.cat, lesson, briefExtra(source, i)));
       continue;
     }
 
@@ -4352,16 +5052,17 @@ function buildLessonSteps(lesson){
         var btx = tmp.querySelector('.box-title');
         var btTxt = btx ? btx.textContent.replace(/\s+/g,' ').trim() : 'NOTES';
         if(btx) btx.remove();
-        t2 = shell('📘', btTxt, tmp.innerHTML, 'Note', 'Essentials for this section.');
+        t2 = shell('📘', btTxt, tmp.innerHTML, 'Note', 'Essentials for this section.', lesson);
       }
       else if(t2.indexOf('card-item')===-1 && t2.indexOf('table-wrap')===-1 && t2.indexOf('highlight')===-1){
-        t2 = '<div class="content-grid duo-single-card"><div class="card-item">' +
+        t2 = '<div class="content-grid duo-single-card"><div class="card-item card-kind-concept">' +
              '<div class="card-top"><span class="card-icon">📌</span><span class="card-title">KEY POINTS</span></div>' +
              '<div class="card-desc">' + t2 + '</div>' +
              '<div class="card-footer"><span>Note:</span> Essentials for this section.</div>' +
+             sourceChipHtml(lesson) +
              '</div></div>';
       }
-      steps.push({ h: chunkN===1 ? source.h : source.h + ' · ' + chunkN, cat: source.cat, t: t2 });
+      steps.push({ h: chunkN===1 ? source.h : source.h + ' · ' + chunkN, cat: source.cat, kind: 'concept', t: t2 });
       chunk=''; chunkLen=0; chunkN++; chunks++;
     }
     for(var k=0; k<kids.length; k++){
@@ -4372,7 +5073,7 @@ function buildLessonSteps(lesson){
       chunk += kid.outerHTML; chunkLen += len;
     }
     flush();
-    if(hasBrief) steps.push(briefingCard(briefing, source.cat));
+    if(hasBrief) steps.push(briefingCard(briefing, source.cat, lesson, briefExtra(source, i)));
   }
   return steps;
 }
@@ -4391,7 +5092,7 @@ function renderLessonContent(lessonId){
 function renderCommunicationLab(lessonId, stepIndex, slide){
   // Duolingo-simple: briefing lives on its own slide, so never duplicate it as a tip.
   if(!slide || !slide.t) return '';
-  if((slide.h||'') === 'Key takeaway') return '';
+  if((slide.h||'') === 'Key takeaway' || slide.kind === 'close') return '';
   if(slide.t.indexOf('dossier-briefing') !== -1 || slide.t.indexOf('study-briefing') !== -1) return '';
   return '';
 }
@@ -4419,39 +5120,48 @@ function renderSlideView(lessonId){
   }
 
   var html = '<div class="slide-wrap duo-simple">';
-  html += '<div class="duo-top"><button class="duo-x" onclick="closeWin(\'lesson_' + lessonId + '\')" title="Close">✕</button>';
+  html += '<div class="duo-top"><div class="duo-top-inner">';
+  html += '<button class="duo-x" onclick="closeWin(\'lesson_' + lessonId + '\')" title="Close">✕</button>';
   html += '<div class="duo-progress"><div class="duo-progress-fill" style="width:' + progress + '%"></div></div>';
-  html += '<div class="duo-count">' + (s.idx + 1) + ' / ' + s.total + '</div></div>';
-
-  html += '<div class="duo-course-bar"><div class="duo-course-meta"><span>English · Purposive Communication</span><span>Lesson ' + lessonId + '</span></div>';
-  html += '<div class="duo-course-title">' + courseTitle + '</div><div class="duo-step-path" aria-label="Lesson progress">' + pathHtml + '</div></div>';
+  html += '<div class="duo-count">' + (s.idx + 1) + ' / ' + s.total + '</div></div></div>';
 
   html += '<div class="duo-body"><div class="duo-col">';
   html += '<div class="duo-content">';
   html += '<div class="duo-content-head"><span class="duo-tag">Lesson ' + lessonId + '</span>';
   html += '<span class="duo-subtag">' + (slide.cat || 'Purposive Communication') + '</span></div>';
-  html += '<h2 class="duo-title">' + slide.h + '</h2>' + slide.t + '</div>';
+  html += '<h2 class="duo-title">' + slide.h + '</h2>';
+  if(s.idx === 0 && l.lecturer){
+    html += '<div class="duo-credit">Lecturer: ' + l.lecturer + '</div>';
+  }
+  html += slide.t + '</div>';
   html += renderCommunicationLab(lessonId, s.idx, slide);
   html += '</div></div>';
 
-  // Bottom bar: Back + Continue only
-  html += '<div class="duo-nav">';
+  // Bottom bar: Back + Continue aligned with content
+  html += '<div class="duo-nav"><div class="duo-nav-inner">';
   html += '<button class="duo-btn ghost" onclick="slidePrev(' + lessonId + ')"' + (s.idx === 0 ? ' disabled' : '') + '>BACK</button>';
   if(isLastSlide){
     html += '<button class="duo-btn primary" onclick="startLessonQuiz(' + lessonId + ')">START QUIZ</button>';
   } else {
     html += '<button class="duo-btn primary" onclick="slideNext(' + lessonId + ')">CONTINUE</button>';
   }
-  html += '</div></div>';
+  html += '</div></div></div>';
   body.innerHTML = html;
   var _dc = body.querySelector('.duo-content');
-  if(_dc) _dc.classList.add('accent-' + (s.idx % 5));
+  if(_dc){
+    if(slide.kind === 'close' || slide.kind === 'source') _dc.classList.add('accent-3');
+    else if(slide.kind === 'remember') _dc.classList.add('accent-2');
+    else if(slide.kind === 'warning') _dc.classList.add('accent-4');
+    else _dc.classList.add('accent-' + (s.idx % 5));
+  }
   fitSlideToViewport(lessonId);
 }
 
-/* NO-SCROLL FIT: shrink the slide to fit its viewport instead of
-   scrolling. Uses CSS zoom (Chrome/Edge/FF126+) on .duo-col,
-   stepped down until content fits both height and width. */
+/* BIDIRECTIONAL FIT: zoom .duo-col DOWN when content overflows, or UP when
+   content is significantly shorter than the viewport — so vacant white space
+   is used rather than wasted. Cap: 0.45× (min) … 1.45× (max).
+   NOTE: .duo-col has height:100%!important in CSS, so we must temporarily
+   override it with setProperty() before measuring the true content height. */
 function fitSlideToViewport(lessonId){
   try{
     var body = document.getElementById('lesson_' + lessonId + 'Body');
@@ -4460,14 +5170,24 @@ function fitSlideToViewport(lessonId){
     var col = body.querySelector('.duo-col');
     if(!scroller || !col) return;
     scroller.scrollTop = 0;
+
     col.style.zoom = '1';
-    var z = 1, guard = 0;
-    while(guard < 24 && z > 0.45 &&
-      (col.scrollHeight > scroller.clientHeight + 2 ||
-       col.scrollWidth > scroller.clientWidth + 2)){
-      z = Math.round((z - 0.04) * 100) / 100;
-      col.style.zoom = String(z);
-      guard++;
+    var naturalH = col.scrollHeight;
+    var naturalW = col.scrollWidth;
+
+    var availH = scroller.clientHeight;
+    var availW = scroller.clientWidth;
+    var z = 1;
+
+    // Only scale down gracefully if content overflows viewport bounds
+    if(naturalH > availH + 4 || naturalW > availW + 4){
+      var guard = 0;
+      while(guard < 24 && z > 0.55 &&
+        (col.scrollHeight > availH + 4 || col.scrollWidth > availW + 4)){
+        z = Math.round((z - 0.04) * 100) / 100;
+        col.style.zoom = String(z);
+        guard++;
+      }
     }
   }catch(e){}
 }
