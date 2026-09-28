@@ -1519,7 +1519,11 @@ function checkAnswer(){
     saveState();
   }
 
+  const lsc = document.getElementById('lesson-scroll');
+  const lst = lsc ? lsc.scrollTop : 0;
   render();
+  const lsc2 = document.getElementById('lesson-scroll');
+  if(lsc2) lsc2.scrollTop = lst;
 
   if(state.hearts <= 0){
     setTimeout(showOutOfHearts, 420);
@@ -1618,15 +1622,19 @@ app.addEventListener('click', (e) => {
 
   if(!s) return;
 
-  /* ---------- answering ---------- */
+  /* ---------- answering (in-place, no scroll reset) ---------- */
   if(action === 'pick'){
     s.selected = Number(el.dataset.index);
-    render();
+    app.querySelectorAll('.option').forEach(function(o){ o.classList.remove('selected'); });
+    el.classList.add('selected');
+    const cb = app.querySelector('[data-action="check"]'); if(cb) cb.removeAttribute('disabled');
     return;
   }
   if(action === 'pick-tf'){
     s.selected = el.dataset.value === 'true';
-    render();
+    app.querySelectorAll('.option').forEach(function(o){ o.classList.remove('selected'); });
+    el.classList.add('selected');
+    const cb2 = app.querySelector('[data-action="check"]'); if(cb2) cb2.removeAttribute('disabled');
     return;
   }
   if(action === 'pick-multi'){
@@ -1634,12 +1642,17 @@ app.addEventListener('click', (e) => {
     const pos = s.multiSel.indexOf(i);
     if(pos >= 0) s.multiSel.splice(pos,1);
     else s.multiSel.push(i);
-    render();
+    el.classList.toggle('selected');
+    const cb3 = app.querySelector('[data-action="check"]');
+    if(cb3){ if(s.multiSel.length > 0) cb3.removeAttribute('disabled'); else cb3.setAttribute('disabled',''); }
     return;
   }
   if(action === 'pick-word'){
     s.selectedWord = el.dataset.word;
-    render();
+    app.querySelectorAll('.chip-word').forEach(function(o){ o.classList.remove('selected'); });
+    el.classList.add('selected');
+    const bl = app.querySelector('.blank'); if(bl){ bl.textContent = s.selectedWord; bl.classList.remove('empty'); }
+    const cb4 = app.querySelector('[data-action="check"]'); if(cb4) cb4.removeAttribute('disabled');
     return;
   }
   if(action === 'short-chip'){
@@ -1650,11 +1663,18 @@ app.addEventListener('click', (e) => {
     return;
   }
 
-  /* ---------- matching ---------- */
+  /* ---------- matching (keep scroll) ---------- */
+  function keepScroll(fn){
+    const sc = document.getElementById('lesson-scroll');
+    const t = sc ? sc.scrollTop : 0;
+    fn();
+    const sc2 = document.getElementById('lesson-scroll');
+    if(sc2) sc2.scrollTop = t;
+  }
   if(action === 'match-left'){
     if(s.checked) return;
     s.matchSel = Number(el.dataset.index);
-    render();
+    keepScroll(render);
     return;
   }
   if(action === 'match-right'){
@@ -1674,14 +1694,14 @@ app.addEventListener('click', (e) => {
         s.correct = true;
         s.correctCount++;
       }
-      render();
+      keepScroll(render);
     } else {
       s.matchWrong = word;
-      render();
+      keepScroll(render);
       setTimeout(() => {
         if(state.session === s){
           s.matchWrong = null;
-          render();
+          keepScroll(render);
         }
       }, 480);
     }
