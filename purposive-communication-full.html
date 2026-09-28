@@ -250,6 +250,8 @@ button{font-family:inherit}
   border-color:#84d8ff;background:var(--blue-light);color:var(--blue-dark);
 }
 .chip-word.used{opacity:.35;pointer-events:none}
+.short-chips{gap:8px;margin-top:14px}
+.short-chips .chip-word{padding:9px 13px;font-size:13.5px}
 
 /* match */
 .match-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -1209,10 +1211,10 @@ function shortBankFor(q){
   const seen = {}; const bank = [];
   function add(w){ w=(w||'').trim(); if(!w) return; const k=w.toLowerCase(); if(!seen[k]){ seen[k]=1; bank.push(w); } }
   (q.keywords||[]).forEach(add);
-  (q.keywords||[]).forEach(function(k){ wds(k).forEach(function(w){ if(w.length>1 && bank.length < 12) add(w); }); });
-  wds(q.model).forEach(function(w){ if(bank.length < 12) add(w); });
-  DIST.forEach(function(w){ if(bank.length < 12) add(w); });
-  return shuffle(bank).slice(0,12);
+  (q.keywords||[]).forEach(function(k){ wds(k).forEach(function(w){ if(w.length>1 && bank.length < 10) add(w); }); });
+  wds(q.model).forEach(function(w){ if(bank.length < 10) add(w); });
+  DIST.forEach(function(w){ if(bank.length < 10) add(w); });
+  return shuffle(bank);
 }
 function prepQuestions(list){
   return list.map(function(o){
@@ -1391,7 +1393,7 @@ function renderQuestion(q){
     const bank = q._bank || shortBankFor(q);
     q._bank = bank;
     body = '<div><textarea id="short-input" rows="1" enterkeyhint="done" placeholder="Type your answer… or tap the word buttons below" style="width:100%;border:3px solid #111;border-radius:12px;padding:10px 12px;font-family:monospace;font-weight:700;font-size:14px;resize:none">'+v+'</textarea>'
-      + '<div class="chips">'
+      + '<div class="chips short-chips">'
       + bank.map(function(w){ return '<button class="chip-word" data-action="short-chip" data-word="'+w+'">'+w+'</button>'; }).join('')
       + '</div></div>';
   }
