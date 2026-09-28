@@ -1018,7 +1018,7 @@ u1: [
 {type:'short', kicker:'Lecture 1 • Q9', prompt:'Define communication ethics (key words).', keywords:['negotiating','reflecting','right and wrong'], need:2, model:'deals with the process of negotiating and reflecting on our actions and communication regarding what we believe to be right and wrong', explain:'Answer Key: deals with negotiating and reflecting on actions and communication regarding right and wrong.'},
 {type:'match', kicker:'Lecture 1 • Q10', prompt:'Match element to description.', pairs:[['Sender','D) initiates communication'],['Message','E) idea, opinion, information, feeling'],['Channel','A) pathway or medium'],['Receiver','B) receives, analyzes, interprets'],['Feedback','C) receiver response to sender'],['Noise','F) distortion, barrier, obstacle']], explain:'Answer Key: Sender-D, Message-E, Channel-A, Receiver-B, Feedback-C, Noise-F.'},
 {type:'mc', kicker:'Lecture 1 • Q11', prompt:'Term for situation/environment where message is delivered?', options:['Content','Process','Context','Channel'], answer:2, explain:'Answer Key: c) Context.'},
-{type:'short', kicker:'Lecture 1 • Q12', prompt:'Difference between content and process?', keywords:['information','experiences','way','presented','delivered'], need:3, model:'Content = information and experiences; Process = way message is presented or delivered', explain:'Answer Key: Content = information/experiences; Process = way presented/delivered.'},
+{type:'short', kicker:'Lecture 1 • Q12', prompt:'Difference between content and process?', keywords:['information','experiences','way','presented','delivered'], need:2, model:'Content = information and experiences; Process = way message is presented or delivered', explain:'Answer Key: Content = information/experiences; Process = way presented/delivered.'},
 {type:'tf', kicker:'Lecture 1 • Q13', prompt:'Principle of consistency: inconsistency leads to confusion.', answer:true, explain:'Answer Key: True.'},
 {type:'short', kicker:'Lecture 1 • Q14', prompt:'List two principles (type any two: clarity attention feedback informality consistency timeliness adequacy).', keywords:['clarity','attention','feedback','informality','consistency','timeliness','adequacy'], need:2, model:'clarity, attention, feedback, informality, consistency, timeliness, adequacy', explain:'Answer Key: Any two of clarity, attention, feedback, informality, consistency, timeliness, adequacy.'},
 {type:'fill', kicker:'Lecture 1 • Q15', prompt:'Principle of ______: informal works when formal fails.', before:'Principle of ', after:' prevails when formal fails.', bank:['informality','clarity','timeliness','adequacy'], answer:'informality', explain:'Answer Key: informality.'},
@@ -1048,7 +1048,7 @@ u2: [
 {type:'match', kicker:'Lecture 2 • Q10', prompt:'Match Chen dimension to description.', pairs:[['Global Mindset','B) beyond own perspective'],['Unfolding the Self','D) shared symbols'],['Mapping the Culture','A) comparing differences'],['Aligning the Interaction','C) respecting norms']], explain:'Answer Key: Global-B, Unfolding-D, Mapping-A, Aligning-C.'},
 {type:'fill', kicker:'Lecture 2 • Q11', prompt:'Chen (2005): capacity to communicate across ______ and global contexts.', before:'Across ', after:' and global contexts.', bank:['cultural','empty','silent','narrow'], answer:'cultural', explain:'Answer Key: cultural.'},
 {type:'tf', kicker:'Lecture 2 • Q12', prompt:'Global mindset: our way is the only way.', answer:false, explain:'Answer Key: False. Not the only way.'},
-{type:'short', kicker:'Lecture 2 • Q13', prompt:'Four dimensions per Chen (2005)?', keywords:['global mindset','unfolding','mapping','aligning'], need:3, model:'global mindset, unfolding the self, mapping the culture, aligning the interaction', explain:'Answer Key: Global mindset, unfolding self, mapping culture, aligning interaction.'},
+{type:'short', kicker:'Lecture 2 • Q13', prompt:'Four dimensions per Chen (2005)?', keywords:['global mindset','unfolding','mapping','aligning'], need:2, model:'global mindset, unfolding the self, mapping the culture, aligning the interaction', explain:'Answer Key: Global mindset, unfolding self, mapping culture, aligning interaction.'},
 {type:'mc', kicker:'Lecture 2 • Q14', prompt:'Globalization: all EXCEPT:', options:['deterritorialization','social interconnectedness','speed','isolation'], answer:3, explain:'Answer Key: d) isolation.'},
 {type:'tf', kicker:'Lecture 2 • Q15', prompt:'Globalization is sudden and temporary.', answer:false, explain:'Answer Key: False. Continuous long-term.'},
 {type:'fill', kicker:'Lecture 2 • Q16', prompt:'Technological development and ______ transformation.', before:'and ', after:' transformation.', bank:['economic','artistic','silent','local'], answer:'economic', explain:'Answer Key: economic.'},
@@ -1390,7 +1390,7 @@ function renderQuestion(q){
     const v = state.session.shortText || '';
     const bank = q._bank || shortBankFor(q);
     q._bank = bank;
-    body = '<div><textarea id="short-input" rows="2" placeholder="Type your answer… or tap the word buttons below" style="width:100%;border:3px solid #111;border-radius:12px;padding:12px;font-family:monospace;font-weight:700;font-size:14px">'+v+'</textarea>'
+    body = '<div><textarea id="short-input" rows="1" enterkeyhint="done" placeholder="Type your answer… or tap the word buttons below" style="width:100%;border:3px solid #111;border-radius:12px;padding:10px 12px;font-family:monospace;font-weight:700;font-size:14px;resize:none">'+v+'</textarea>'
       + '<div class="chips">'
       + bank.map(function(w){ return '<button class="chip-word" data-action="short-chip" data-word="'+w+'">'+w+'</button>'; }).join('')
       + '</div></div>';
@@ -1850,6 +1850,14 @@ app.addEventListener('change', function(e){
   const url = URL.createObjectURL(inp.files[0]);
   state.homePhotos[idx] = url;
   render();
+});
+app.addEventListener('focusin', function(e){
+  if(e.target && e.target.id === 'short-input'){
+    setTimeout(function(){
+      const sc = document.getElementById('lesson-scroll');
+      if(sc) sc.scrollTop = 0;
+    }, 350);
+  }
 });
 loadState();
 if(!state.selectedUnit) state.selectedUnit = 'u1';
