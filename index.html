@@ -1425,14 +1425,16 @@ function renderQuestion(q){
   let promptHTML;
   if(q.type === 'fill'){
     const word = state.session.selectedWord;
-    const stem = (q.prompt || '').split('______').join('…');
+    const parts = (q.prompt || '').split('______');
+    let sentence = '';
+    parts.forEach(function(p, i){
+      sentence += p;
+      if(i < parts.length - 1) sentence += '<span class="blank ' + (word ? '' : 'empty') + '">' + (word || '​') + '</span>';
+    });
     promptHTML = `
       <h2 class="q-prompt">
         <span class="kicker">${q.kicker}</span>
-        ${stem}
-      </h2>
-      <h2 class="q-prompt" style="font-size:19px;margin-top:-8px;">
-        ${q.before}<span class="blank ${word ? '' : 'empty'}">${word || '​'}</span>${q.after}
+        ${sentence}
       </h2>`;
   } else {
     promptHTML = `
