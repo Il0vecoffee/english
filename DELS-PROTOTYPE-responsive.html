@@ -3579,6 +3579,34 @@ table.retro-table{ min-width:560px; }
 .duo-simple .section-close{ gap:0 !important; }
 .duo-simple .close-banner{ margin-bottom:14px !important; }
 .duo-simple .close-next{ margin-top:14px !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE FIX v15 — uniform card size on every slide
+   Cards shrink-wrapped their content, so each slide had a
+   different height. Now the card fills the stage: identical
+   height everywhere, body centered, footer pinned to the
+   same bottom line. Zoom-fit still guards no-scroll.
+   ═══════════════════════════════════════════════════════════ */
+.duo-simple .duo-body{ justify-content:stretch !important; }
+.duo-simple .duo-col{ height:100% !important; }
+.duo-simple .duo-content{
+  flex:1 1 auto !important; min-height:0 !important;
+  display:flex !important; flex-direction:column !important;
+}
+.duo-simple .duo-content-head,
+.duo-simple .duo-content h2.duo-title,
+.duo-simple .duo-content > .duo-main-card,
+.duo-simple .duo-content > .lead-p{ flex:none !important; }
+.duo-simple .duo-content .content-grid{
+  flex:1 1 auto !important; min-height:0 !important;
+  display:flex !important; flex-direction:column !important;
+}
+.duo-simple .duo-content .card-item{
+  flex:1 1 auto !important; min-height:0 !important;
+  display:flex !important; flex-direction:column !important; justify-content:center !important;
+}
+.duo-simple .duo-content .card-desc{ flex:none !important; }
+.duo-simple .duo-content .card-footer{ margin-top:auto !important; }
 </style>
 </head>
 <body>
