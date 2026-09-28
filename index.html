@@ -319,6 +319,25 @@ button{font-family:inherit}
 .unit-btn.sel{background:#4be000}
 .lesson-row{display:flex;gap:10px;align-items:center;background:#fff;border:3px solid #111;border-radius:12px;padding:12px;box-shadow:0 4px 0 #111;cursor:pointer;width:100%;margin-top:10px;text-align:left}
 .lessons-list{display:flex;flex-direction:column;gap:2px}
+/* slides (PATHFIT ref: progress + clip + cards + back/continue) */
+.clip-row{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.slide-progress{flex:1;height:18px;border:3px solid #111;border-radius:99px;background:#fff;overflow:hidden}
+.slide-progress > div{height:100%;background:#4be000;transition:width .3s}
+.clip-chip{border:3px solid #111;border-radius:10px;background:#fff;font-family:'Courier New',monospace;font-weight:900;font-size:11px;padding:6px 8px;box-shadow:0 3px 0 #111;white-space:nowrap}
+.slide-title-card{background:#fff;border:3px solid #111;border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 5px 0 #111}
+.slide-title-card .eyebrow{font-family:'Courier New',monospace;font-weight:900;letter-spacing:3px;font-size:12px}
+.slide-title-card h2{margin:6px 0;font-size:26px;font-weight:900;letter-spacing:-.5px;line-height:1.05}
+.slide-title-card p{margin:0;font-family:'Courier New',monospace;font-weight:700;font-size:14px}
+.slide-body-card{background:#fff;border:3px solid #111;border-radius:16px;padding:14px;box-shadow:0 5px 0 #111;margin-bottom:12px}
+.slide-body-card h3{margin:0 0 8px;font-size:22px;font-weight:900}
+.slide-body-scroll{max-height:300px;overflow-y:auto;padding-right:4px}
+.slide-body-scroll ul{margin:0;padding-left:20px}
+.slide-body-scroll li{margin-bottom:10px;font-family:'Courier New',monospace;font-weight:700;font-size:14px;line-height:1.45}
+.slide-footer{display:flex;gap:10px}
+.slide-btn{flex:1;border:3px solid #111;border-radius:12px;padding:13px;font-weight:900;font-family:'Courier New',monospace;font-size:14px;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 0 #111;background:#fff;color:#999}
+.slide-btn.go{background:#4be000;color:#111}
+.slide-btn:active{transform:translateY(2px);box-shadow:none}
+.slide-btn[disabled]{opacity:.6;cursor:not-allowed;transform:none}
 
 /* ============================================================
    COMPLETE SCREEN
@@ -1133,6 +1152,35 @@ function renderLongSets(){
     + '<div class="lessons-list">'+rows+'</div>'
     + '</div></div></div>';
 }
+function mockUnitKey(uid){ return uid; }
+function startSlides(uid){
+  state.slides = { uid: uid, idx: 0 };
+  state.view = 'slides';
+  render();
+}
+function renderSlides(){
+  const uid = state.slides.uid;
+  const u = unitById(uid);
+  const list = SLIDES[uid];
+  const i = state.slides.idx;
+  const sl = list[i];
+  const pct = Math.round(((i+1) / list.length) * 100);
+  const bullets = sl.b.map(function(x){ return '<li>'+x+'</li>'; }).join('');
+  const last = (i === list.length - 1);
+  app.innerHTML = ''
+    + '<div class="screen">'
+    + '<div class="home-bar"><button data-action="go-home">←</button><span class="t">'+u.section.toUpperCase()+'</span></div>'
+    + '<div class="home-scroll"><div class="home-frame" style="border:none;background:transparent;box-shadow:none;padding:0;">'
+    + '<div class="clip-row"><div class="slide-progress"><div style="width:'+pct+'%"></div></div>'
+    + '<span class="clip-chip">Clip '+(i+1)+' / '+list.length+'</span>'
+    + '<span class="clip-chip">⚡'+state.xp+'</span>'
+    + '<span class="clip-chip">❤️'+state.hearts+'</span></div>'
+    + '<div class="slide-title-card"><div class="eyebrow">'+unitRoman(u.section)+'</div><h2>'+sl.t+'</h2><p>'+sl.s+'</p></div>'
+    + '<div class="slide-body-card"><div class="slide-body-scroll"><ul>'+bullets+'</ul></div></div>'
+    + '<div class="slide-footer"><button class="slide-btn" data-action="slide-back"'+(i===0?' disabled':'')+'>← BACK</button>'
+    + '<button class="slide-btn go" data-action="slide-next">'+(last?'START QUIZ ▶':'CONTINUE ▶')+'</button></div>'
+    + '</div></div></div>';
+}
 function collectUnitQuestions(uid, n){
   const u = unitById(uid); let all = [];
   u.lessons.forEach(function(l){ l.questions.forEach(function(q){ all.push(q); }); });
@@ -1187,6 +1235,51 @@ function startCustom(title, questions){
   if(state.hearts<=0) state.hearts = 5;
   resetQuestionState(); state.view='lesson'; render();
 }
+const SLIDES = {
+u1: [
+{t:'Communication Process, Principles and Ethics', s:'At the end of the unit, the students are expected to understand communication — its aspects, types, elements, and process — and achieve its goal through issues, principles, and ethics.', b:['It is not possible to go through a day without communication.', 'Types vary, and you are almost certainly familiar with all of them.']},
+{t:'What Is Communication?', s:'From Latin roots to a working definition.', b:['con (with) + munus (a business) + communis (common) + communico (to confer or relate with one another).', 'Together: the process of accomplishing a goal, with a business to confer or relate with one another.', 'Two-way process in orderly, systematic sequence — transfer of information, thoughts, or ideas to create shared understanding between sender and receiver.']},
+{t:'Four Domains of Life', s:'Communication is integrated in all episodes of our lives.', b:['Academics: skills tied to academic success.', 'Professional: English courses give skills essential for entry-level jobs.', 'Personal: crucial for a person\u2019s success.', 'Civic: engaged with the world, participating in society, becoming a virtuous citizen.']},
+{t:'Four Needs It Meets', s:'Why we communicate.', b:['Physical needs — affects well-being.', 'Instrumental needs — achieve long-term and short-term goals.', 'Relational needs — maintains social bonds and interpersonal relationships.', 'Identity needs — present ourselves in a distinct manner.']},
+{t:'Culture, Context, Learned, Ethics', s:'What guides communication.', b:['Culture (O\u2019Neil 2006): full range of learned human behavioral patterns — knowledge, belief, art, law, morals, customs, capabilities, habits of man as member of society.', 'Context (Oxford 2018): circumstances forming the setting for an event, statement, or idea, in terms of which it can be fully understood.', 'Learned, not innate — through human contact; varies by culture and context.', 'Ethical implications — decisions about right and wrong; negotiating and reflecting on actions and communication.']},
+{t:'Types of Communication', s:'Verbal and non-verbal.', b:['Verbal: word symbols for ideas and objects.', 'Oral: face-to-face, phone calls, meetings, speeches, lectures and discussions.', 'Written: hand-written or printed/electronic symbols.', 'Non-verbal: other than spoken language; intentional or unintentional.', 'By the body — gestures, expressions, posture.', 'By broad setting — time, space, and silence.']},
+{t:'Elements (1 of 2)', s:'The backbone of the process.', b:['SENDER — person, group, or organization who initiates. Also: source, encoder, speaker, writer, communicator.', 'MESSAGE — idea, opinion, information, feeling, or attitude transmitted.', 'CHANNEL — pathway or medium: oral, written, visual.', 'RECEIVER — receives, analyzes, understands, interprets. Also: decoder, reader, listener.']},
+{t:'Elements (2 of 2)', s:'Return path and interference.', b:['FEEDBACK — receiver\u2019s response giving information to sender; verbal and non-verbal signals showing if understood.', 'ADJUSTMENT — done if the message is distorted or not clearly understood.', 'NOISE — distortion, barrier, or obstacle in any phase; visual, aural, physical, or psychological; can break the process, distort hearing, distract attention.']},
+{t:'Issues and Principles', s:'Three issues, seven principles.', b:['CONTENT — information and experiences provided to the receiver.', 'PROCESS — way the message is presented; content must not contradict non-verbal cues.', 'CONTEXT — situation or environment; when and where it happens.', 'Clarity — code or word the message clearly.', 'Attention — draw the receiver\u2019s attention.', 'Feedback — confirm the same understanding the sender meant.', 'Informality — works when formal fails.', 'Consistency — avoids conflict; inconsistency confuses.', 'Timeliness — real time and relevant; delayed serves no purpose.', 'Adequacy — complete info for decisions and action plans.']},
+{t:'Ethics and the NCA Credo', s:'Every act is an ethical choice.', b:['Communication ethics: behavior governed by morals, affecting communication.', 'ETHICAL — enhances human worth and dignity. UNETHICAL — threatens communication quality.', 'NCA Credo — ethics relevant across contexts and every channel.', 'Advocate truthfulness, accuracy, honesty, reason.', 'Endorse free expression, diversity, tolerance of dissent.', 'Understand and respect others before evaluating.', 'Promote access to resources; climates of caring and mutual understanding.', 'Condemn distortion, intimidation, coercion, violence, intolerance, hatred.', 'Courageous expression for fairness and justice; share info while respecting privacy.', 'Accept responsibility for short- and long-term consequences.', '\u201CEvery act of communication is an ethical choice, for language does not merely describe our world \u2014 it shapes the kind of world we create together.\u201D']}
+],
+u2: [
+{t:'Communication and Globalization', s:'At the end of the unit, the students are expected to perform effectively across cultural, social, and geographical boundaries through effective, ethical, culturally sensitive communication.', b:['21st-century communication opens new perspectives and interconnectedness.', 'Language must be used accurately, appropriately, and creatively.']},
+{t:'Communication Competence', s:'Knowing is not enough — using it well matters.', b:['Ability to function effectively in a truly communicative setting.', 'Not only knowing how language works, but how, when, and why to use it.', 'Knowledge — language, patterns, conventions.', 'Ability to use — apply knowledge effectively.', 'Ability to adapt — adjust to people, situations, cultures, contexts.', 'Competence = what we know. Communication competence = how we use it effectively and appropriately.']},
+{t:'Four Competences', s:'The building blocks.', b:['Grammatical — grammar and vocabulary for meaningful, accurate messages.', 'Sociolinguistic — social context: relationships, background knowledge, purpose.', 'Discourse — how messages connect into a meaningful whole; beyond single sentences.', 'Strategic — manage difficulties: initiate, maintain, repair, redirect, terminate.']},
+{t:'Expected Skills (NCA)', s:'What graduates must demonstrate.', b:['State ideas clearly — organized, understandable.', 'Communicate ethically — truthfully, responsibly, respectfully.', 'Recognize when to communicate — or delay.', 'Identify communication goals.', 'Select the appropriate medium for message and audience.', 'Demonstrate credibility — trustworthy, reliable.', 'Identify and manage misunderstandings.', 'Manage conflict constructively.', 'Be open-minded; listen attentively with genuine understanding.']},
+{t:'Chen (2005) Global Model', s:'Capacity across cultures toward a peaceful, productive society.', b:['Global Mindset — perceive beyond own culture; our way is not the only way.', 'Unfolding the Self — shared symbols; thoughts, feelings, emotions; empathy, perspective-taking.', 'Mapping the Culture — recognize and compare differences; adjust to function.', 'Aligning the Interaction — respect norms; cultural adroitness without violation.']},
+{t:'Globalization', s:'Interconnectedness in motion.', b:['Increasing interconnectedness of people, societies, economies, cultures, institutions.', 'Not just connection — movement, speed, long-term development across boundaries.', 'Deterritorialization — geography limits reduced; interact while far apart.', 'Social Interconnectedness — connections across geographical and political boundaries.', 'Speed/Velocity — fast circulation of info, ideas, goods, practices.', 'Long-Term Process — continuous, not sudden or temporary.']},
+{t:'Trends and Impact', s:'Two trends, four impact areas.', b:['Technological Development — communication and transport advances; widespread, hard to reverse.', 'Economic Transformation — economies increasingly connected.', 'Virtual — know each medium\u2019s strengths; urgent = video call, formal = email/document.', 'Same language \u2260 same meaning — culture shapes vocab, tone, taboos.', 'Non-verbal — eye contact, distance, posture, gestures differ; not universal.', 'Time zones — availability, response expectations, deadlines, schedules.']},
+{t:'Media and Language', s:'Globalization reshapes both.', b:['Media constructs and represents globalization.', 'Enables real-time communication across distances.', 'Advances the globalization of communication.', 'Transforms education and learning in the 21st century.', 'Language lives in a digital, interconnected environment; new tech brings new forms.', 'Global competence = new thinking valuing cultural differences.', 'Language keeps evolving as people grow globally literate.']}
+],
+u3: [
+{t:'Local and Global in Multicultural Settings', s:'At the end of the unit, students are expected to explain how culture and globalization shape interaction, and communicate with sensitivity across local and global contexts.', b:['Effective communication requires understanding cultural and global issues.', 'Media shapes global connections, interactions, and perspectives.']},
+{t:'Culture, Context, Local, Global', s:'Foundations.', b:['Communication is shaped by values, beliefs, practices, social environment.', 'Culture — manifested through actions; expresses identity, values, beliefs; basis of behavior.', 'Context — stimuli, environment, circumstances surrounding an event; deeper insight into others and ourselves.', 'Local — self-identity, values, sense of community.', 'Global — modifying influence; new ideas reshape local interaction.', 'Intercultural — recognize, understand, respect, value differences.', 'Language reflects identity, culture, values, beliefs, experiences; competence exceeds mere accuracy.']},
+{t:'Grice\u2019s Cooperative Principle', s:'Cooperate for mutual understanding — what, how, when, why.', b:['Relation (Relevance) — relevant info, appropriate to cultural and situational context.', 'Quantity (Informativeness) — right amount; fair share; don\u2019t dominate or pad.', 'Quality (Truthfulness) — accurate, truthful, evidenced; never assumptions as facts.', 'Manner (Clarity) — clear, orderly, appropriate; expression shapes cross-cultural interpretation.']},
+{t:'Modes and the ABCs', s:'Words, gestures, and three habits.', b:['Words and gestures carry culturally shaped meanings.', 'Language — words, greetings, expressions; same word, different meaning or appropriateness.', 'Body language — gestures, face, eye contact, posture, distance; can reinforce, complement, or alter the message.', 'A \u2013 ACKNOWLEDGED — styles differ; awareness of uniqueness.', 'B \u2013 BI-LEVEL — holistic: verbal + non-verbal; nuances vary by culture.', 'C \u2013 CLARIFY — when doubtful, ask; verify now, save time later.']},
+{t:'Cultural Barriers', s:'Four walls between meanings.', b:['Language Barrier — second or foreign language difficulty.', 'Hostile Stereotypes — generalized assumptions; bias, misunderstanding, prejudice.', 'Behavioral Differences — gestures, manners, styles, practices differ.', 'Emotional Display — acceptable expression differs by culture.']},
+{t:'Enhancing Oral Communication', s:'Ten practices (Pages 11\u201312).', b:['Learn basic foreign phrases.', 'Use simple English; avoid jargon and idioms.', 'Speak slowly; articulate clearly.', 'Observe eye contact and non-verbals with cultural care.', 'Encourage accurate feedback.', 'Check comprehension frequently; never assume.', 'Accept responsibility for misunderstandings.', 'Listen actively; don\u2019t interrupt.', 'Smile when culturally appropriate.', 'Follow up in writing when it matters.']},
+{t:'Developing Written Communication', s:'Eight practices (Page 13).', b:['Consider local writing styles and conventions.', 'Observe titles and status.', 'Use short sentences and paragraphs.', 'Avoid ambiguous expressions.', 'Strive for clarity.', 'Use correct grammar.', 'Cite numbers and figures carefully.', 'Accommodate the reader — organization, tone, style.']},
+{t:'Ambiguous Expressions', s:'Five traps with examples.', b:['Idioms (literal \u2260 intended): beat the clock (before deadline); dirty work; labor of love; go with the flow; bend the rules.', 'Slang (casual only): gonna, wanna, \u201CCover your ass,\u201D \u201CWhat you see is what you get.\u201D', 'Acronyms (initial letters): LAM, IMO, AKA, AWOL, ASAP.', 'Abbreviations (shortened, space-saving): Acct, recd, w/o, fwd, ad.', 'Jargon (in-profession only): bang for the buck; helicopter view; desk job; end-user perspective; cubicle farm.']}
+],
+u4: [
+{t:'Varieties and Registers', s:'At the end of the unit, students are expected to explain how language changes with user, place, situation, and purpose — and to write with bias-free consistency.', b:['Repertoire — varieties we know and use; shaped by community, geography, background, needs.', 'Dialect — variety of a GROUP of users (geographic/social).', 'Register (Halliday et al. 1964) — \u201Cvariety according to use\u201D; chosen by situation or purpose.', 'Dialect = who you are. Register = how and why you speak now.']},
+{t:'Seven Varieties of English', s:'One language, many homes (Pages 3\u20136).', b:['AmE — United States; color, apartment; distinct spelling, vocab, pronunciation.', 'BrE — United Kingdom; with AmE, the main ESL/EFL variant.', 'AuE — Australia; diverged after late-18th-century settlement; near NZ and South East England dialects; BrE spelling; arvo, lollies, bottle shop.', 'NZE — most New Zealanders\u2019 first language; closest to Australian.', 'Black English (AAVE/British Black) — black communities in US/UK, Caribbean, Africa.', 'Singlish — Singapore English + Colloquial; leading academe medium.', 'PhE — Philippines, official and native beside Filipino; AmE spelling/grammar; code-switching prevalent, formal and informal.']},
+{t:'Vocabulary (Lexical Variation)', s:'Same thing, different word (Page 7).', b:['drugstore / chemist\u2019s / chemist.', 'afternoon / afternoon / arvo.', 'apartment / flat / flat.', 'candy / sweets / lollies.', 'liquor store / off-licence / bottle shop.', 'potato chips / crisps / chips; subway / underground / loop; stroller / push-chair / pusher.', 'cab/taxi; gas/petrol; hood/bonnet; windshield/windscreen; elevator/lift.', 'diaper/nappy; pants/trousers; purse/handbag; sneakers/trainers; cookie/biscuit; vacation/holiday; garbage/rubbish; flashlight/torch; fall/autumn.']},
+{t:'Spelling Rules', s:'Pick one variety; stay consistent (Pages 9\u201310).', b:['-our \u2192 -or: favour/favor; humour/humor; behaviour/behavior; colour/color.', '-re \u2192 -er: centre/center; theatre/theater; fibre/fiber; metre/meter.', '-ce/-se nouns vs verbs (BrE): advice\u2013advise; licence\u2013license; practice\u2013practise. AmE often one form: license, practice.', '-t \u2192 -ed: dreamt/dreamed; leapt/leaped; learnt/learned; spelt/spelled.']},
+{t:'Three Registers', s:'Adjust language to fit the situation (Page 12).', b:['Formal — professional, academic, business, official; standard conventions. Ex: papers, interviews, presentations.', 'Informal — relaxed, familiar; contractions, colloquial. Ex: chats, texts with friends.', 'Neutral — neither strongly formal nor informal; straightforward, objective. Ex: announcements, news, info materials.']},
+{t:'Bias-Free Language', s:'Respect, fairness, inclusivity (Page 13).', b:['Be clear and objective; no unnecessary judgment.', 'Avoid generalizations by gender, ethnicity, race, orientation, disability, age.', 'Consider audience — harmless to you may offend others.', 'Use inclusive language — individuals, not stereotypes.']},
+{t:'Avoiding Bias in Practice', s:'Gender, race, age, disability (Pages 14\u201318).', b:['Gender-neutral titles: chairperson/chair, firefighter, salesperson; they/them when unknown.', 'businessman \u2192 businessperson; manpower \u2192 workforce; policeman \u2192 police officer; stewardess \u2192 flight attendant.', 'Race/ethnicity only when relevant; preferred terms; Asian not Oriental; Native American/tribal identity over Indian.', 'Age only when relevant: \u201CPeople over 59 should be helped.\u201D', 'Disability person-first: person who uses a wheelchair (not confined); has asthma (not suffers); person with disability.']},
+{t:'Generalization', s:'Carry these forward (Page 19).', b:['English has many varieties; BrE and AmE are the most widely used.', 'Varieties differ in vocabulary and spelling — choose one and stay consistent.', 'Register = level and style fitted to situation, audience, purpose.', 'Effective communication uses sensitive, bias-free language.']}
+]
+};
+
 function startUnitLessons(uid){
   const u = unitById(uid);
   let qs = [];
@@ -1422,6 +1515,7 @@ function renderComplete(){
 function render(){
   if(state.view === 'home'){ renderHome(); return; }
   if(state.view === 'lessons'){ renderLessonsList(); return; }
+  if(state.view === 'slides'){ renderSlides(); return; }
   if(state.view === 'lesson' && state.session){
     renderLesson();
   } else if(state.view === 'complete' && state.session){
@@ -1584,7 +1678,14 @@ app.addEventListener('click', (e) => {
   /* ---------- global ---------- */
   if(action === 'go-home'){ state.view='home'; render(); return; }
   if(action === 'go-map'){ state.view='home'; render(); return; }
-  if(action === 'go-lessons'){ startUnitLessons(state.selectedUnit); return; }
+  if(action === 'go-lessons'){ startSlides(state.selectedUnit); return; }
+  if(action === 'slide-back'){ if(state.slides && state.slides.idx > 0){ state.slides.idx--; render(); } return; }
+  if(action === 'slide-next'){
+    const uid = state.slides.uid; const list = SLIDES[uid];
+    if(state.slides.idx < list.length - 1){ state.slides.idx++; render(); const sc = document.querySelector('.slide-body-scroll'); if(sc) sc.scrollTop = 0; }
+    else { const k = mockKey(state.selectedUnit); const u2 = unitById(state.selectedUnit); startCustom(u2.section+' Mock Test', MOCK[k].slice()); }
+    return;
+  }
   if(action === 'pick-unit'){
     e.preventDefault();
     state.selectedUnit = el.dataset.unit;
