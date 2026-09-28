@@ -1186,6 +1186,14 @@ function startCustom(title, questions){
   if(state.hearts<=0) state.hearts = 5;
   resetQuestionState(); state.view='lesson'; render();
 }
+function startUnitLessons(uid){
+  const u = unitById(uid);
+  let qs = [];
+  u.lessons.forEach(function(l){ l.questions.forEach(function(q){ qs.push(q); }); });
+  state.session = { lessonId:u.lessons[0].id, lessonIds:u.lessons.map(function(l){ return l.id; }), lessonTitle:u.title, questions:prepQuestions(qs), index:0, correctCount:0, startedAt:Date.now(), selected:null, multiSel:[], selectedWord:null, shortText:'', matched:{}, matchSel:null, matchRightOrder:[], matchWrong:null, checked:false, correct:false, explain:'', heartShake:false };
+  if(state.hearts<=0) state.hearts = 5;
+  resetQuestionState(); state.view='lesson'; render();
+}
 
 /* ============================================================
    3. RENDER — PATH (removed roadmap style, redirect to HOME)
@@ -1534,7 +1542,8 @@ function continueLesson(){
 
 function finishLesson(){
   const s = state.session;
-  state.completed.add(s.lessonId);
+  if(s.lessonIds) s.lessonIds.forEach(function(id){ state.completed.add(id); });
+  else state.completed.add(s.lessonId);
   state.xp += s.correctCount * 2 + 4;
   saveState();
   state.view = 'complete';
@@ -1570,7 +1579,7 @@ app.addEventListener('click', (e) => {
   /* ---------- global ---------- */
   if(action === 'go-home'){ state.view='home'; render(); return; }
   if(action === 'go-map'){ state.view='home'; render(); return; }
-  if(action === 'go-lessons'){ state.view='lessons'; render(); return; }
+  if(action === 'go-lessons'){ startUnitLessons(state.selectedUnit); return; }
   if(action === 'pick-unit'){
     e.preventDefault();
     state.selectedUnit = el.dataset.unit;
