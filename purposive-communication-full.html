@@ -1779,7 +1779,7 @@ app.addEventListener('click', (e) => {
   if(action === 'short-chip'){
     const w = el.dataset.word;
     const inp = document.getElementById('short-input');
-    if(inp){ inp.value = (inp.value ? inp.value.trim()+' ' : '') + w; s.shortText = inp.value; inp.focus(); }
+    if(inp){ inp.value = (inp.value ? inp.value.trim()+' ' : '') + w; s.shortText = inp.value; if(document.activeElement) document.activeElement.blur(); }
     else { s.shortText = ((s.shortText||'')+' '+w).trim(); render(); }
     return;
   }
