@@ -46,7 +46,7 @@ button{font-family:inherit}
 }
 
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;background:#fff}
-.scroll{flex:1;overflow-y:auto;overscroll-behavior:contain}
+.scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;overflow-anchor:none}
 .scroll::-webkit-scrollbar{width:7px}
 .scroll::-webkit-scrollbar-thumb{background:#dcdcdc;border-radius:99px}
 
@@ -190,7 +190,8 @@ button{font-family:inherit}
   75%{transform:translateX(5px)}
 }
 
-.lesson-scroll{flex:1;overflow-y:auto;padding:26px 22px 30px}
+.lesson-scroll{flex:1;overflow-y:auto;padding:26px 22px 30px;overflow-anchor:none}
+.lesson-scroll .option,.lesson-scroll .chip-word,.lesson-scroll .match-item{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .lesson-scroll::-webkit-scrollbar{width:7px}
 .lesson-scroll::-webkit-scrollbar-thumb{background:#dcdcdc;border-radius:99px}
 
