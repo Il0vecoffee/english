@@ -62,7 +62,7 @@ button.big{flex:1;border:3px solid var(--ink);border-radius:14px;padding:14px;fo
 </head>
 <body>
 <div class="topnav"><button class="back" onclick="goHome()">&#8592;</button><div class="title">HUM-1 ARTS APPRECIATION</div></div>
-<div class="stats"><span>🔥 <span id="h-streak">0</span></span><span>⚡ <span id="h-xp">0</span></span><span>❤️ <span id="h-heart">5</span></span><span id="h-mode" style="margin-left:auto"></span></div>
+<div class="stats"><span>🔥 <span id="h-streak">0</span></span><span>⚡ <span id="h-xp">0</span></span><span id="h-mode" style="margin-left:auto"></span></div>
 
 <!-- HOME -->
 <div id="home" class="frame"><div class="sheet">
@@ -121,6 +121,7 @@ button.big{flex:1;border:3px solid var(--ink);border-radius:14px;padding:14px;fo
 <h1 class="big" style="font-size:36px" id="done-title">Complete!</h1>
 <p class="sub" id="done-sub"></p>
 <div class="card"><div id="done-xp" style="font-size:40px;font-weight:900"></div><p id="done-acc"></p></div>
+<div id="done-mistakes" style="text-align:left"></div>
 <button class="menu-card green" onclick="goHome()"><div class="icon">▶</div><div><h2>Back Home</h2><p>Pick the next unit or quiz.</p></div></button>
 </div></div>
 
@@ -475,10 +476,10 @@ let SEL = localStorage.getItem('hum1_unit') || 'UNIT I';
 let XP = parseInt(localStorage.getItem('hum1_xp')||'0');
 let STREAK = parseInt(localStorage.getItem('hum1_streak')||'0');
 let DONE = JSON.parse(localStorage.getItem('hum1_done')||'[]');
-let mode='lesson', steps=[], idx=0, hearts=5, xpRun=0, correctFirst=0, totalQ=0, locked=false, chosen=null, tfChosen=null, lastQuiz='unit';
+let mode='lesson', steps=[], idx=0, xpRun=0, correctFirst=0, totalQ=0, locked=false, chosen=null, tfChosen=null, lastQuiz='unit', wrongList=[];
 function $(id){return document.getElementById(id)}
 function save(){localStorage.setItem('hum1_xp',XP);localStorage.setItem('hum1_streak',STREAK);localStorage.setItem('hum1_done',JSON.stringify(DONE));localStorage.setItem('hum1_unit',SEL)}
-function refresh(){ $('h-xp').textContent=XP; $('h-streak').textContent=STREAK; $('h-heart').textContent='5';
+function refresh(){ $('h-xp').textContent=XP; $('h-streak').textContent=STREAK;
 ['UNIT I','UNIT II','UNIT III'].forEach((u,i)=>{ $('u'+(i+1)).classList.toggle('active', u===SEL) });
 $('unit-desc').textContent = UNITS[SEL].desc;
 }
@@ -570,7 +571,7 @@ d.onclick=()=>startSingleLesson(L.id); ml.appendChild(d);
 window.scrollTo(0,0);
 }
 function begin(title, badge){
-idx=0; hearts=5; xpRun=0; correctFirst=0; if(mode==='quiz') totalQ=steps.length;
+idx=0; xpRun=0; correctFirst=0; wrongList=[]; if(mode==='quiz') totalQ=steps.length;
 $('home').classList.add('hidden');$('mapview').classList.add('hidden');$('pretestview').classList.add('hidden');$('done').classList.add('hidden');
 $('runner').classList.remove('hidden');$('bbar').classList.remove('hidden');
 $('r-title').textContent=title; $('r-badge').textContent=badge; $('h-mode').textContent=badge;
@@ -619,21 +620,23 @@ function nextStep(force){
 let s=steps[idx]; if(!s){finish();return;}
 if(s.kind==='slide'){ idx++; if(idx>=steps.length) finish(); else render(); return; }
 if(!force){ checkAnswer(); return; }
+if(!locked && !$('feedback').classList.contains('show')){
+let correctText=''; if(s.qtype==='tf'){ correctText=s.a?'TRUE':'FALSE'; } else if(s._bank){ correctText=s._bankAnswer; } else if(s.qtype==='fill'){ correctText=s.a; } else { correctText=s.opts[s.a]; }
+wrongList.push({q:s.q, yours:'(skipped)', correct:correctText, why:s.why||''});
+}
 $('feedback').classList.remove('show'); idx++; if(idx>=steps.length) finish(); else render();
 }
 function checkAnswer(){
 let s=steps[idx]; locked=true;
-let correct=false, correctText='';
-if(s.qtype==='tf'){ correct=(tfChosen===s.a); correctText=s.a?'TRUE':'FALSE'; markTF(s.a,tfChosen); }
-else if(s._bank){ let v=normT(bankText()); correct=(v===normT(s._bankAnswer)); correctText=s._bankAnswer; }
-else if(s.qtype==='fill'){ let f=$('fill'); let v=f?f.value.trim().toLowerCase():''; correct=(v===String(s.a).toLowerCase()); correctText=s.a; if(f) f.style.background=correct?'#d7ffb8':'#ffdfe0'; }
-else{ let ai=(s._a!==undefined?s._a:s.a); correct=(chosen===ai); correctText=s.opts[s.a]; markOpts(ai,chosen); }
+let correct=false, correctText='', yours='';
+if(s.qtype==='tf'){ correct=(tfChosen===s.a); correctText=s.a?'TRUE':'FALSE'; yours=(tfChosen===null||tfChosen===undefined)?'(no answer)':(tfChosen?'TRUE':'FALSE'); markTF(s.a,tfChosen); }
+else if(s._bank){ let v=normT(bankText()); correct=(v===normT(s._bankAnswer)); correctText=s._bankAnswer; yours=bankText()||'(no answer)'; }
+else if(s.qtype==='fill'){ let f=$('fill'); let v=f?f.value.trim().toLowerCase():''; yours=f&&f.value.trim()?f.value.trim():'(no answer)'; correct=(v===String(s.a).toLowerCase()); correctText=s.a; if(f) f.style.background=correct?'#d7ffb8':'#ffdfe0'; }
+else{ let ai=(s._a!==undefined?s._a:s.a); correct=(chosen===ai); correctText=s.opts[s.a]; let disp=s._disp||s.opts.map((_,i)=>i); yours=(chosen===null||chosen===undefined)?'(no answer)':s.opts[disp[chosen]]; markOpts(ai,chosen); }
 $('bbar').style.visibility='hidden';
 let fb=$('feedback'); fb.classList.add('show');
 if(correct){ xpRun+=10; correctFirst++; fb.className='feedback show ok'; $('fb-title').textContent='🎉 Correct! +10 XP'; $('fb-msg').textContent=s.why||'Nice!'; $('fb-btn').style.background='var(--green)'; }
-else{ hearts--; fb.className='feedback show no'; $('fb-title').textContent='💔 Answer: '+correctText; $('fb-msg').textContent=(s.why||'')+' — lost 1 heart ❤️ ('+hearts+' left)'; $('fb-btn').style.background='var(--red)'; $('fb-btn').style.color='#fff';
-if(hearts<=0){ $('fb-btn').textContent='RETRY'; $('fb-btn').onclick=()=>{ $('feedback').classList.remove('show'); $('bbar').style.visibility='visible'; if(lastQuiz==='long'){ startLongQuiz(); } else if(lastQuiz==='pretest'){ startSpecificPretest(currentPretestKey||SEL); } else { startQuiz(); } }; $('h-heart').textContent=hearts; return; } }
-$('h-heart').textContent=hearts;
+else{ wrongList.push({q:s.q, yours:yours, correct:correctText, why:s.why||''}); fb.className='feedback show no'; $('fb-title').textContent='💔 Answer: '+correctText; $('fb-msg').textContent=(s.why||''); $('fb-btn').style.background='var(--red)'; $('fb-btn').style.color='#fff'; }
 $('pfill').style.width=((idx+1)/steps.length*100)+'%';
 $('fb-btn').textContent='GOT IT'; $('fb-btn').onclick=()=>{ $('bbar').style.visibility='visible'; nextStep(true); };
 }
@@ -645,6 +648,14 @@ $('runner').classList.add('hidden');$('bbar').classList.add('hidden');$('feedbac
 $('done-sub').textContent=$('r-badge').textContent;
 $('done-xp').textContent='+'+xpRun+' XP';
 $('done-acc').textContent = mode==='quiz' ? ('Score: '+correctFirst+'/'+steps.length+' • Total XP: '+XP+' • 🔥'+STREAK) : ('Slides finished: '+steps.length+' • Total XP: '+XP+' • 🔥'+STREAK);
+let dm=$('done-mistakes');
+if(dm){
+if(mode==='quiz' && wrongList.length){
+dm.innerHTML='<div class="badge">RECALL YOUR MISTAKES ('+wrongList.length+')</div>'+wrongList.map((w,i)=>'<div class="card"><p><b>'+(i+1)+'. '+w.q+'</b></p><p>❌ Yours: '+w.yours+'</p><p>✅ Correct: '+w.correct+'</p>'+(w.why?'<p class="src">'+w.why+'</p>':'')+'</div>').join('');
+}else if(mode==='quiz'){
+dm.innerHTML='<div class="card"><p>🌟 Perfect! No mistakes to recall.</p></div>';
+}else{ dm.innerHTML=''; }
+}
 window.scrollTo(0,0);
 }
 refresh();
