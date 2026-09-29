@@ -70,8 +70,8 @@ button.big{flex:1;border:3px solid var(--ink);border-radius:14px;padding:14px;fo
 <h1 class="big">Create with purpose.</h1>
 <div class="sub">Choose where you want to begin.</div>
 <button class="menu-card green" onclick="startLessons()"><div class="icon">▶</div><div><h2>Start Lessons</h2><p>Study the selected unit's lessons.</p></div></button>
-<button class="menu-card" onclick="startQuiz()"><div class="icon">?</div><div><h2>Quiz</h2><p>Answer a unit-specific checkpoint set.</p></div></button>
-<button class="menu-card" onclick="startLongQuiz()"><div class="icon">?</div><div><h2>Long Quiz</h2><p>Take the full quiz without lesson navigation.</p></div></button>
+<button class="menu-card" onclick="showQuizPicker()"><div class="icon">?</div><div><h2>Quiz</h2><p>Choose a unit quiz to take.</p></div></button>
+<button class="menu-card" onclick="showLongQuizPicker()"><div class="icon">?</div><div><h2>Long Quiz</h2><p>Choose a full quiz to take.</p></div></button>
 <button class="menu-card" onclick="startPretest()"><div class="icon">📝</div><div><h2>Pretests</h2><p>Choose a pretest to take.</p></div></button>
 <button class="menu-card" onclick="showMap()"><div class="icon">▦</div><div><h2>Course Map</h2><p>See the HUM1 sequence.</p></div></button>
 <div class="unit-box"><h3>CHOOSE A UNIT FOR LESSONS &amp; QUIZZES</h3><div class="unit-grid">
@@ -112,6 +112,24 @@ button.big{flex:1;border:3px solid var(--ink);border-radius:14px;padding:14px;fo
 <h1 class="big" style="font-size:38px">Choose a pretest.</h1>
 <div class="sub">Tap the pretest you prefer.</div>
 <div id="pretestlist"></div>
+<button class="menu-card" onclick="goHome()"><div class="icon">←</div><div><h2>Back Home</h2><p>Choose lessons, quiz, or long quiz.</p></div></button>
+</div></div>
+
+<!-- QUIZ PICKER -->
+<div id="quizview" class="frame hidden"><div class="sheet">
+<div class="kicker">HUM-1 / QUIZZES</div>
+<h1 class="big" style="font-size:38px">Choose a quiz.</h1>
+<div class="sub">Tap the quiz you prefer.</div>
+<div id="quizlist"></div>
+<button class="menu-card" onclick="goHome()"><div class="icon">←</div><div><h2>Back Home</h2><p>Choose lessons, quiz, or long quiz.</p></div></button>
+</div></div>
+
+<!-- LONG QUIZ PICKER -->
+<div id="longquizview" class="frame hidden"><div class="sheet">
+<div class="kicker">HUM-1 / LONG QUIZZES</div>
+<h1 class="big" style="font-size:38px">Choose a long quiz.</h1>
+<div class="sub">Tap the long quiz you prefer.</div>
+<div id="longquizlist"></div>
 <button class="menu-card" onclick="goHome()"><div class="icon">←</div><div><h2>Back Home</h2><p>Choose lessons, quiz, or long quiz.</p></div></button>
 </div></div>
 
@@ -507,26 +525,65 @@ function prepQuiz(){ shuffleArr(steps); steps.forEach(s=>{
   else if(s.opts && wordsOf(s.opts[s.a]).length<=2){ buildBank(s, s.opts[s.a]); }
 }); }
 function lessonsOfUnit(u){ return DATA.filter(L=>UNITS[u].lessons.includes(L.id)); }
-function goHome(){ ['runner','mapview','pretestview','done'].forEach(id=>$(id).classList.add('hidden')); $('bbar').classList.add('hidden'); $('feedback').classList.remove('show'); $('home').classList.remove('hidden'); refresh(); window.scrollTo(0,0); }
+function goHome(){ ['runner','mapview','pretestview','quizview','longquizview','done'].forEach(id=>$(id).classList.add('hidden')); $('bbar').classList.add('hidden'); $('feedback').classList.remove('show'); $('home').classList.remove('hidden'); refresh(); window.scrollTo(0,0); }
 function startLessons(){
 let LS = lessonsOfUnit(SEL);
 steps=[]; LS.forEach(L=>L.slides.forEach(s=>steps.push({kind:'slide',lesson:L,...s})));
 mode='lesson'; begin(LS.map(l=>l.title).join(' + ')||SEL, SEL+' • LESSONS (slides only, full text)');
 }
 function startQuiz(){
-let LS = lessonsOfUnit(SEL);
+showQuizPicker();
+}
+function showQuizPicker(){
+$('home').classList.add('hidden');$('runner').classList.add('hidden');$('done').classList.add('hidden');$('bbar').classList.add('hidden');$('mapview').classList.add('hidden');$('pretestview').classList.add('hidden');$('longquizview').classList.add('hidden');$('quizview').classList.remove('hidden');
+let ql=$('quizlist'); ql.innerHTML='';
+Object.keys(UNITS).forEach(u=>{
+let LS=lessonsOfUnit(u); let n=0; LS.forEach(L=>n+=L.questions.length);
+let d=document.createElement('button'); d.className='menu-card';
+d.innerHTML='<div class="icon">?</div><div><h2>Quiz — '+u+'</h2><p>'+n+' questions • shuffled</p></div>';
+d.onclick=()=>startSpecificQuiz(u); ql.appendChild(d);
+});
+window.scrollTo(0,0);
+}
+function startSpecificQuiz(unit){
+SEL=unit; save(); refresh();
+let LS=lessonsOfUnit(unit);
 steps=[]; LS.forEach(L=>L.questions.forEach(q=>steps.push({kind:'quiz',lesson:L,...q})));
 prepQuiz();
-mode='quiz'; lastQuiz='unit'; totalQ=steps.length; begin('Checkpoint — '+SEL, SEL+' • QUIZ (questions only, shuffled)');
+mode='quiz'; lastQuiz='unit'; totalQ=steps.length; begin('Quiz — '+unit+' ('+steps.length+' items)', unit+' • QUIZ (shuffled)');
 }
 function startLongQuiz(){
 steps=[]; DATA.forEach(L=>L.questions.forEach(q=>steps.push({kind:'quiz',lesson:L,...q})));
 prepQuiz();
 mode='quiz'; lastQuiz='long'; totalQ=steps.length; begin('Long Quiz — all units', 'ALL UNITS • FULL QUIZ (shuffled)');
 }
+function showLongQuizPicker(){
+$('home').classList.add('hidden');$('runner').classList.add('hidden');$('done').classList.add('hidden');$('bbar').classList.add('hidden');$('mapview').classList.add('hidden');$('pretestview').classList.add('hidden');$('quizview').classList.add('hidden');$('longquizview').classList.remove('hidden');
+let ll=$('longquizlist'); ll.innerHTML='';
+let nQ=0; DATA.forEach(L=>nQ+=L.questions.length);
+let nP=0; if(typeof PRETEST_LIST!=='undefined'){ PRETEST_LIST.forEach(e=>nP+=e.items.length); }
+let d1=document.createElement('button'); d1.className='menu-card';
+d1.innerHTML='<div class="icon">?</div><div><h2>Long Quiz — All Units</h2><p>'+nQ+' lesson questions • shuffled</p></div>';
+d1.onclick=()=>startLongQuiz(); ll.appendChild(d1);
+let d2=document.createElement('button'); d2.className='menu-card';
+d2.innerHTML='<div class="icon">📝</div><div><h2>Long Pretest — All (A–E)</h2><p>'+nP+' pretest items • shuffled</p></div>';
+d2.onclick=()=>startLongPretest(); ll.appendChild(d2);
+window.scrollTo(0,0);
+}
+function startLongPretest(){
+steps=[];
+if(typeof PRETEST_LIST!=='undefined'){
+PRETEST_LIST.forEach(e=>{
+let pseudo={id:'PT-'+e.key, short:e.unit.replace('UNIT ','Unit '), title:e.title+' '+e.unit};
+e.items.forEach(q=>steps.push({kind:'quiz',lesson:pseudo,...q}));
+});
+}
+prepQuiz();
+mode='quiz'; lastQuiz='long'; totalQ=steps.length; begin('Long Pretest — All (A–E) ('+steps.length+' items)', 'ALL PRETESTS • FULL (shuffled)');
+}
 function startPretest(){ showPretests(); }
 function showPretests(){
-$('home').classList.add('hidden');$('runner').classList.add('hidden');$('done').classList.add('hidden');$('bbar').classList.add('hidden');$('mapview').classList.add('hidden');$('pretestview').classList.remove('hidden');
+$('home').classList.add('hidden');$('runner').classList.add('hidden');$('done').classList.add('hidden');$('bbar').classList.add('hidden');$('mapview').classList.add('hidden');$('quizview').classList.add('hidden');$('longquizview').classList.add('hidden');$('pretestview').classList.remove('hidden');
 let pl=$('pretestlist'); pl.innerHTML='';
 PRETEST_LIST.forEach(e=>{
 let PT=e.items;
@@ -558,7 +615,7 @@ let L=DATA.find(x=>x.id===id);
 steps=L.slides.map(s=>({kind:'slide',lesson:L,...s})); mode='lesson'; begin(L.title, L.short+' • LESSON (slides only)');
 }
 function showMap(){
-$('home').classList.add('hidden');$('runner').classList.add('hidden');$('done').classList.add('hidden');$('bbar').classList.add('hidden');$('pretestview').classList.add('hidden');$('mapview').classList.remove('hidden');
+$('home').classList.add('hidden');$('runner').classList.add('hidden');$('done').classList.add('hidden');$('bbar').classList.add('hidden');$('pretestview').classList.add('hidden');$('quizview').classList.add('hidden');$('longquizview').classList.add('hidden');$('mapview').classList.remove('hidden');
 let ml=$('maplist'); ml.innerHTML='';
 Object.keys(UNITS).forEach(u=>{
 let h=document.createElement('div'); h.className='badge'; h.textContent=u; ml.appendChild(h);
@@ -572,7 +629,7 @@ window.scrollTo(0,0);
 }
 function begin(title, badge){
 idx=0; xpRun=0; correctFirst=0; wrongList=[]; if(mode==='quiz') totalQ=steps.length;
-$('home').classList.add('hidden');$('mapview').classList.add('hidden');$('pretestview').classList.add('hidden');$('done').classList.add('hidden');
+$('home').classList.add('hidden');$('mapview').classList.add('hidden');$('pretestview').classList.add('hidden');$('quizview').classList.add('hidden');$('longquizview').classList.add('hidden');$('done').classList.add('hidden');
 $('runner').classList.remove('hidden');$('bbar').classList.remove('hidden');
 $('r-title').textContent=title; $('r-badge').textContent=badge; $('h-mode').textContent=badge;
 render(); window.scrollTo(0,0);
