@@ -305,7 +305,7 @@ questions:[
 
 const UNITS = {
 'UNIT I': {lessons:['L1'], desc:'UNIT I = Unit 1: Humanities and the Arts (HUM-1.txt) • Pretest A: 30 items'},
-'UNIT II': {lessons:['L2','L3','L4'], desc:'UNIT II = Subject + Content/Function + Perspectives/Artist/Forms (HUM1-UNIT-2-3)'},
+'UNIT II': {lessons:['L2','L3','L4'], desc:'UNIT II = Subject + Content/Function + Perspectives/Artist/Forms (HUM1-UNIT-2-3) • Pretest B: 20 items'},
 'UNIT III': {lessons:['L5'], desc:'UNIT III = Elements, Principles, Production & Curation (LECTURE5.txt)'}
 };
 
@@ -341,6 +341,28 @@ const PRETESTS = {
 {q:'What are different ways human beings perceive, evaluate, and respond to artworks?', opts:['System of Appreciation','Assumptions of Arts','Elements of Art','Principles of Design'], a:0, why:'System of Appreciation definition.'},
 {q:'Which system of appreciation involves responding through sight, hearing, touch, smell, and taste?', opts:['Emotional Appreciation','Intellectual Appreciation','Cultural Appreciation','Sensory Appreciation'], a:3, why:'Sensory Appreciation — through the senses.'},
 {q:'Sensory appreciation involves recognizing which of the following without necessarily analyzing deeper meanings?', opts:['Beauty','Harmony','Proportion and appeal','All of the above'], a:3, why:'Beauty, harmony, proportion, and appeal.'}
+],
+'UNIT II': [
+{q:'Which system of appreciation focuses on how an artwork touches the heart or resonates with the viewer\'s experiences?', opts:['Sensory Appreciation','Emotional Appreciation','Intellectual Appreciation','Cultural Appreciation'], a:1, why:'Emotional Appreciation — touches the heart.'},
+{q:'Art has the power to move emotions such as:', opts:['Happiness','Sadness','Nostalgia, fear, awe, peace','All of the above'], a:3, why:'Happiness, sadness, nostalgia, fear, awe, peace.'},
+{q:'Which system of appreciation requires understanding symbolism, context, and philosophy?', opts:['Sensory Appreciation','Emotional Appreciation','Intellectual Appreciation','Cultural Appreciation'], a:2, why:'Intellectual Appreciation definition.'},
+{q:'Art is appreciated in intellectual appreciation because it stimulates what?', opts:['Thought and reflection','Emotion and feeling','Sensory pleasure','Cultural pride'], a:0, why:'Stimulates thought and reflection.'},
+{q:'Which system of appreciation involves recognizing artworks as part of traditions, heritage, and identity?', opts:['Sensory Appreciation','Emotional Appreciation','Intellectual Appreciation','Cultural Appreciation'], a:3, why:'Cultural Appreciation — traditions, heritage, identity.'},
+{q:'Cultural appreciation includes respect for what in art?', opts:['Diversity','Uniformity','Simplicity','Complexity'], a:0, why:'Respect for diversity in art.'},
+{q:'What may seem "strange" to one culture is deeply meaningful to another. This statement is part of which system of appreciation?', opts:['Sensory Appreciation','Emotional Appreciation','Intellectual Appreciation','Cultural Appreciation'], a:3, why:'Cultural Appreciation.'},
+{q:'Art is human creativity expressed in what?', opts:['Different forms','Only paintings','Only sculptures','Only music'], a:0, why:'Expressed in different forms.'},
+{q:'Which of the following is a reason why humans create art?', opts:['Entertainment','Religion','Love','All of the above'], a:3, why:'Entertainment, Religion, Love are listed reasons.'},
+{q:'Which of the following is NOT a reason why humans create art?', opts:['Money','Communication','History','Mathematics'], a:3, why:'Money, Communication, History are reasons; Mathematics is not listed.'},
+{q:'Which of the following is a reason why humans create art?', opts:['Identity','Communication','History','All of the above'], a:3, why:'Identity, Communication, History are listed reasons.'},
+{q:'Why did humans create art according to the "To Communicate" section?', opts:['People already communicated through cave paintings','People did not need to communicate','People only communicated through writing','People did not create art to communicate'], a:0, why:'People already communicated through cave paintings.'},
+{q:'Which of the following is a form of art based on other people?', opts:['Painting','Music','Literature','All of the above'], a:3, why:'Painting, Music, Literature listed.'},
+{q:'Which of the following is a form of art based on other people?', opts:['Photography','Mathematics','Engineering','Accounting'], a:0, why:'Photography listed; others are not art forms.'},
+{q:'What is the ability to generate original ideas and bring something new into existence?', opts:['Imagination','Creativity','Expression','Interpretation'], a:1, why:'Creativity definition.'},
+{q:'What is the power of the mind to form images, concepts, and sensations without immediate input of the senses?', opts:['Creativity','Innovation','Imagination','Perception'], a:2, why:'Imagination definition.'},
+{q:'Art is one of humanity\'s oldest and most universal what?', opts:['Expressions','Inventions','Discoveries','Theories'], a:0, why:'Oldest and most universal expressions.'},
+{q:'Art arises from the human capacity for what?', opts:['Creativity and imagination','Logic and reasoning','Memory and recall','Speed and accuracy'], a:0, why:'Creativity and imagination.'},
+{q:'What allows individuals to transform ideas, feelings, and experiences into tangible or intangible forms?', opts:['Creativity and imagination','Logic and reasoning','Memory and recall','Speed and accuracy'], a:0, why:'Creativity + imagination transform ideas/feelings/experiences.'},
+{q:'Which assumption of art states that art exists in every culture, society, and historical era?', opts:['Art is Intentional','Art is Symbolic','Art is Universal','Art Reflects and Shapes Society'], a:2, why:'Art is Universal.'}
 ]
 };
 let SEL = localStorage.getItem('hum1_unit') || 'UNIT I';
@@ -406,7 +428,7 @@ PT.forEach(q=>steps.push({kind:'quiz',lesson:pseudo,...q}));
 LS.forEach(L=>L.questions.forEach(q=>steps.push({kind:'quiz',lesson:L,...q})));
 }
 prepQuiz();
-mode='quiz'; lastQuiz='pretest'; totalQ=steps.length; begin('Pretest A — '+SEL+' (30 items)', SEL+' • PRETEST (multiple choice, shuffled)');
+mode='quiz'; lastQuiz='pretest'; totalQ=steps.length; begin('Pretest '+SEL+' ('+steps.length+' items)', SEL+' • PRETEST (multiple choice, shuffled)');
 }
 function startSingleLesson(id){
 let L=DATA.find(x=>x.id===id);
