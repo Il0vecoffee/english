@@ -72,7 +72,7 @@ button.big{flex:1;border:3px solid var(--ink);border-radius:14px;padding:14px;fo
 <button class="menu-card green" onclick="startLessons()"><div class="icon">▶</div><div><h2>Start Lessons</h2><p>Study the selected unit's lessons.</p></div></button>
 <button class="menu-card" onclick="startQuiz()"><div class="icon">?</div><div><h2>Quiz</h2><p>Answer a unit-specific checkpoint set.</p></div></button>
 <button class="menu-card" onclick="startLongQuiz()"><div class="icon">?</div><div><h2>Long Quiz</h2><p>Take the full quiz without lesson navigation.</p></div></button>
-<button class="menu-card" onclick="startPretest()"><div class="icon">📝</div><div><h2>Pretests</h2><p>Test yourself on the selected unit before studying.</p></div></button>
+<button class="menu-card" onclick="startPretest()"><div class="icon">📝</div><div><h2>Pretests</h2><p>Choose a pretest to take.</p></div></button>
 <button class="menu-card" onclick="showMap()"><div class="icon">▦</div><div><h2>Course Map</h2><p>See the HUM1 sequence.</p></div></button>
 <div class="unit-box"><h3>CHOOSE A UNIT FOR LESSONS &amp; QUIZZES</h3><div class="unit-grid">
 <button class="unit-btn active" id="u1" onclick="setUnit('UNIT I')">UNIT I</button>
@@ -103,6 +103,15 @@ button.big{flex:1;border:3px solid var(--ink);border-radius:14px;padding:14px;fo
 <h1 class="big" style="font-size:38px">HUM1 sequence.</h1>
 <div class="sub">Tap a lesson to study its slides only.</div>
 <div id="maplist"></div>
+<button class="menu-card" onclick="goHome()"><div class="icon">←</div><div><h2>Back Home</h2><p>Choose lessons, quiz, or long quiz.</p></div></button>
+</div></div>
+
+<!-- PRETEST PICKER -->
+<div id="pretestview" class="frame hidden"><div class="sheet">
+<div class="kicker">HUM-1 / PRETESTS</div>
+<h1 class="big" style="font-size:38px">Choose a pretest.</h1>
+<div class="sub">Tap the pretest you prefer.</div>
+<div id="pretestlist"></div>
 <button class="menu-card" onclick="goHome()"><div class="icon">←</div><div><h2>Back Home</h2><p>Choose lessons, quiz, or long quiz.</p></div></button>
 </div></div>
 
@@ -400,7 +409,7 @@ function prepQuiz(){ shuffleArr(steps); steps.forEach(s=>{
   else if(s.opts && wordsOf(s.opts[s.a]).length<=2){ buildBank(s, s.opts[s.a]); }
 }); }
 function lessonsOfUnit(u){ return DATA.filter(L=>UNITS[u].lessons.includes(L.id)); }
-function goHome(){ ['runner','mapview','done'].forEach(id=>$(id).classList.add('hidden')); $('bbar').classList.add('hidden'); $('feedback').classList.remove('show'); $('home').classList.remove('hidden'); refresh(); window.scrollTo(0,0); }
+function goHome(){ ['runner','mapview','pretestview','done'].forEach(id=>$(id).classList.add('hidden')); $('bbar').classList.add('hidden'); $('feedback').classList.remove('show'); $('home').classList.remove('hidden'); refresh(); window.scrollTo(0,0); }
 function startLessons(){
 let LS = lessonsOfUnit(SEL);
 steps=[]; LS.forEach(L=>L.slides.forEach(s=>steps.push({kind:'slide',lesson:L,...s})));
@@ -417,25 +426,34 @@ steps=[]; DATA.forEach(L=>L.questions.forEach(q=>steps.push({kind:'quiz',lesson:
 prepQuiz();
 mode='quiz'; lastQuiz='long'; totalQ=steps.length; begin('Long Quiz — all units', 'ALL UNITS • FULL QUIZ (shuffled)');
 }
-function startPretest(){
-let LS = lessonsOfUnit(SEL);
-let PT = PRETESTS[SEL];
-steps=[];
-if(PT && PT.length){
-let pseudo={id:'PT-'+SEL, short:SEL.replace('UNIT ','Unit '), title:'Pretest '+SEL};
-PT.forEach(q=>steps.push({kind:'quiz',lesson:pseudo,...q}));
-}else{
-LS.forEach(L=>L.questions.forEach(q=>steps.push({kind:'quiz',lesson:L,...q})));
+function startPretest(){ showPretests(); }
+function showPretests(){
+$('home').classList.add('hidden');$('runner').classList.add('hidden');$('done').classList.add('hidden');$('bbar').classList.add('hidden');$('mapview').classList.add('hidden');$('pretestview').classList.remove('hidden');
+let pl=$('pretestlist'); pl.innerHTML='';
+Object.keys(PRETESTS).forEach(k=>{
+let PT=PRETESTS[k];
+let label = k==='UNIT I' ? 'Pretest A' : k==='UNIT II' ? 'Pretest B' : 'Pretest';
+let d=document.createElement('button'); d.className='menu-card';
+d.innerHTML='<div class="icon">📝</div><div><h2>'+label+' — '+k+'</h2><p>'+PT.length+' multiple-choice items • shuffled</p></div>';
+d.onclick=()=>startSpecificPretest(k); pl.appendChild(d);
+});
+window.scrollTo(0,0);
 }
+function startSpecificPretest(key){
+SEL=key; save(); refresh();
+let PT=PRETESTS[key]||[];
+steps=[];
+let pseudo={id:'PT-'+key, short:key.replace('UNIT ','Unit '), title:'Pretest '+key};
+PT.forEach(q=>steps.push({kind:'quiz',lesson:pseudo,...q}));
 prepQuiz();
-mode='quiz'; lastQuiz='pretest'; totalQ=steps.length; begin('Pretest '+SEL+' ('+steps.length+' items)', SEL+' • PRETEST (multiple choice, shuffled)');
+mode='quiz'; lastQuiz='pretest'; totalQ=steps.length; begin('Pretest '+key+' ('+steps.length+' items)', key+' • PRETEST (multiple choice, shuffled)');
 }
 function startSingleLesson(id){
 let L=DATA.find(x=>x.id===id);
 steps=L.slides.map(s=>({kind:'slide',lesson:L,...s})); mode='lesson'; begin(L.title, L.short+' • LESSON (slides only)');
 }
 function showMap(){
-$('home').classList.add('hidden');$('runner').classList.add('hidden');$('done').classList.add('hidden');$('bbar').classList.add('hidden');$('mapview').classList.remove('hidden');
+$('home').classList.add('hidden');$('runner').classList.add('hidden');$('done').classList.add('hidden');$('bbar').classList.add('hidden');$('pretestview').classList.add('hidden');$('mapview').classList.remove('hidden');
 let ml=$('maplist'); ml.innerHTML='';
 Object.keys(UNITS).forEach(u=>{
 let h=document.createElement('div'); h.className='badge'; h.textContent=u; ml.appendChild(h);
@@ -449,7 +467,7 @@ window.scrollTo(0,0);
 }
 function begin(title, badge){
 idx=0; hearts=5; xpRun=0; correctFirst=0; if(mode==='quiz') totalQ=steps.length;
-$('home').classList.add('hidden');$('mapview').classList.add('hidden');$('done').classList.add('hidden');
+$('home').classList.add('hidden');$('mapview').classList.add('hidden');$('pretestview').classList.add('hidden');$('done').classList.add('hidden');
 $('runner').classList.remove('hidden');$('bbar').classList.remove('hidden');
 $('r-title').textContent=title; $('r-badge').textContent=badge; $('h-mode').textContent=badge;
 render(); window.scrollTo(0,0);
@@ -510,7 +528,7 @@ $('bbar').style.visibility='hidden';
 let fb=$('feedback'); fb.classList.add('show');
 if(correct){ xpRun+=10; correctFirst++; fb.className='feedback show ok'; $('fb-title').textContent='🎉 Correct! +10 XP'; $('fb-msg').textContent=s.why||'Nice!'; $('fb-btn').style.background='var(--green)'; }
 else{ hearts--; fb.className='feedback show no'; $('fb-title').textContent='💔 Answer: '+correctText; $('fb-msg').textContent=(s.why||'')+' — lost 1 heart ❤️ ('+hearts+' left)'; $('fb-btn').style.background='var(--red)'; $('fb-btn').style.color='#fff';
-if(hearts<=0){ $('fb-btn').textContent='RETRY'; $('fb-btn').onclick=()=>{ $('feedback').classList.remove('show'); $('bbar').style.visibility='visible'; if(lastQuiz==='long'){ startLongQuiz(); } else if(lastQuiz==='pretest'){ startPretest(); } else { startQuiz(); } }; $('h-heart').textContent=hearts; return; } }
+if(hearts<=0){ $('fb-btn').textContent='RETRY'; $('fb-btn').onclick=()=>{ $('feedback').classList.remove('show'); $('bbar').style.visibility='visible'; if(lastQuiz==='long'){ startLongQuiz(); } else if(lastQuiz==='pretest'){ startSpecificPretest(SEL); } else { startQuiz(); } }; $('h-heart').textContent=hearts; return; } }
 $('h-heart').textContent=hearts;
 $('pfill').style.width=((idx+1)/steps.length*100)+'%';
 $('fb-btn').textContent='GOT IT'; $('fb-btn').onclick=()=>{ $('bbar').style.visibility='visible'; nextStep(true); };
