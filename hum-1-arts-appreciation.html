@@ -315,7 +315,7 @@ questions:[
 const UNITS = {
 'UNIT I': {lessons:['L1'], desc:'UNIT I = Unit 1: Humanities and the Arts (HUM-1.txt) • Pretest A: 30 items'},
 'UNIT II': {lessons:['L2','L3','L4'], desc:'UNIT II = Subject + Content/Function + Perspectives/Artist/Forms (HUM1-UNIT-2-3) • Pretest B: 20 items'},
-'UNIT III': {lessons:['L5'], desc:'UNIT III = Elements, Principles, Production & Curation (LECTURE5.txt)'}
+'UNIT III': {lessons:['L5'], desc:'UNIT III = Elements, Principles, Production & Curation (LECTURE5.txt) • Pretest C: 25 items (True/False)'}
 };
 
 const PRETESTS = {
@@ -372,6 +372,33 @@ const PRETESTS = {
 {q:'Art arises from the human capacity for what?', opts:['Creativity and imagination','Logic and reasoning','Memory and recall','Speed and accuracy'], a:0, why:'Creativity and imagination.'},
 {q:'What allows individuals to transform ideas, feelings, and experiences into tangible or intangible forms?', opts:['Creativity and imagination','Logic and reasoning','Memory and recall','Speed and accuracy'], a:0, why:'Creativity + imagination transform ideas/feelings/experiences.'},
 {q:'Which assumption of art states that art exists in every culture, society, and historical era?', opts:['Art is Intentional','Art is Symbolic','Art is Universal','Art Reflects and Shapes Society'], a:2, why:'Art is Universal.'}
+],
+'UNIT III': [
+{qtype:'tf', q:'TRUE or FALSE: Art is one of humanity\'s oldest and most universal expressions.', a:true, why:'Intro: oldest and most universal expressions.'},
+{qtype:'tf', q:'TRUE or FALSE: Art arises from the human capacity for logic and reasoning.', a:false, why:'It arises from creativity and imagination, not logic and reasoning.'},
+{qtype:'tf', q:'TRUE or FALSE: Creativity is the ability to generate original ideas and bring something new into existence.', a:true, why:'Creativity definition.'},
+{qtype:'tf', q:'TRUE or FALSE: Creativity involves innovation, exploration, and pushing beyond the ordinary.', a:true, why:'All three are part of creativity.'},
+{qtype:'tf', q:'TRUE or FALSE: Imagination requires immediate input from the senses.', a:false, why:'Imagination forms images without immediate input of the senses.'},
+{qtype:'tf', q:'TRUE or FALSE: Imagination makes art limitless, turning what "is" into what "could be."', a:true, why:'Exact imagination line.'},
+{qtype:'tf', q:'TRUE or FALSE: Creativity and imagination expand human experience by allowing us to see the world differently.', a:true, why:'Expand human experience.'},
+{qtype:'tf', q:'TRUE or FALSE: Creativity and imagination challenge limits by moving art beyond tradition into innovation.', a:true, why:'Challenge limits.'},
+{qtype:'tf', q:'TRUE or FALSE: Creativity and imagination connect cultures and generations.', a:true, why:'Connect cultures and generations.'},
+{qtype:'tf', q:'TRUE or FALSE: Creativity and imagination shape identities.', a:true, why:'Shape identities.'},
+{qtype:'tf', q:'TRUE or FALSE: Assumptions of Arts are basic beliefs, underlying truths, and universal principles.', a:true, why:'Assumptions definition.'},
+{qtype:'tf', q:'TRUE or FALSE: Art is only found in technologically advanced societies.', a:false, why:'Art exists in every culture, even with little technology.'},
+{qtype:'tf', q:'TRUE or FALSE: Art is universal and exists in every culture, society, and historical era.', a:true, why:'Art is Universal.'},
+{qtype:'tf', q:'TRUE or FALSE: Even in societies with little technology, artistic expression is always present.', a:true, why:'Dance, body art, chants, crafts always present.'},
+{qtype:'tf', q:'TRUE or FALSE: Art is often referred to as a "mirror of life."', a:true, why:'Mirror of life = Expresses Human Experiences.'},
+{qtype:'tf', q:'TRUE or FALSE: Art embodies personal emotions, collective experiences, and cultural values.', a:true, why:'Love/fear/joy, war/migration/celebrations, beliefs/myths/traditions.'},
+{qtype:'tf', q:'TRUE or FALSE: Behind every artwork is a story about the artist, the society, or the historical period.', a:true, why:'Exact line from Expresses Human Experiences.'},
+{qtype:'tf', q:'TRUE or FALSE: Art is created randomly without any intention.', a:false, why:'Art is Intentional — not random; carries meaning, vision, design.'},
+{qtype:'tf', q:'TRUE or FALSE: Art is created with intention — whether to beautify, persuade, provoke thought, or simply express.', a:true, why:'Intentional definition.'},
+{qtype:'tf', q:'TRUE or FALSE: Art is not random; it carries meaning, vision, and design.', a:true, why:'Art is Intentional.'},
+{qtype:'tf', q:'TRUE or FALSE: Symbolism in art allows for multiple interpretations.', a:true, why:'Art is Symbolic — multiple interpretations.'},
+{qtype:'tf', q:'TRUE or FALSE: Art often goes beyond the literal and uses symbols, metaphors, and signs.', a:true, why:'Symbolic definition.'},
+{qtype:'tf', q:'TRUE or FALSE: Art is influenced by social context and, in turn, influences people\'s values.', a:true, why:'Reflects and shapes Society.'},
+{qtype:'tf', q:'TRUE or FALSE: Sensory appreciation involves responding through sight, hearing, touch, smell, and taste.', a:true, why:'Sensory definition.'},
+{qtype:'tf', q:'TRUE or FALSE: Sensory appreciation involves recognizing beauty, harmony, proportion, and appeal without necessarily analyzing deeper meanings.', a:true, why:'Exact sensory line.'}
 ]
 };
 let SEL = localStorage.getItem('hum1_unit') || 'UNIT I';
@@ -432,9 +459,11 @@ $('home').classList.add('hidden');$('runner').classList.add('hidden');$('done').
 let pl=$('pretestlist'); pl.innerHTML='';
 Object.keys(PRETESTS).forEach(k=>{
 let PT=PRETESTS[k];
-let label = k==='UNIT I' ? 'Pretest A' : k==='UNIT II' ? 'Pretest B' : 'Pretest';
+let label = k==='UNIT I' ? 'Pretest A' : k==='UNIT II' ? 'Pretest B' : k==='UNIT III' ? 'Pretest C' : 'Pretest';
+let isTF = PT.length && PT[0].qtype==='tf';
+let kind = isTF ? 'true/false' : 'multiple-choice';
 let d=document.createElement('button'); d.className='menu-card';
-d.innerHTML='<div class="icon">📝</div><div><h2>'+label+' — '+k+'</h2><p>'+PT.length+' multiple-choice items • shuffled</p></div>';
+d.innerHTML='<div class="icon">📝</div><div><h2>'+label+' — '+k+'</h2><p>'+PT.length+' '+kind+' items • shuffled</p></div>';
 d.onclick=()=>startSpecificPretest(k); pl.appendChild(d);
 });
 window.scrollTo(0,0);
@@ -446,7 +475,9 @@ steps=[];
 let pseudo={id:'PT-'+key, short:key.replace('UNIT ','Unit '), title:'Pretest '+key};
 PT.forEach(q=>steps.push({kind:'quiz',lesson:pseudo,...q}));
 prepQuiz();
-mode='quiz'; lastQuiz='pretest'; totalQ=steps.length; begin('Pretest '+key+' ('+steps.length+' items)', key+' • PRETEST (multiple choice, shuffled)');
+let isTF = PT.length && PT[0].qtype==='tf';
+let kind = isTF ? 'true/false' : 'multiple choice';
+mode='quiz'; lastQuiz='pretest'; totalQ=steps.length; begin('Pretest '+key+' ('+steps.length+' items)', key+' • PRETEST ('+kind+', shuffled)');
 }
 function startSingleLesson(id){
 let L=DATA.find(x=>x.id===id);
