@@ -313,7 +313,7 @@ questions:[
 ];
 
 const UNITS = {
-'UNIT I': {lessons:['L1'], desc:'UNIT I = Unit 1: Humanities and the Arts (HUM-1.txt) • Pretest A: 30 items'},
+'UNIT I': {lessons:['L1'], desc:'UNIT I = Unit 1: Humanities and the Arts (HUM-1.txt) • Pretests A, D, E'},
 'UNIT II': {lessons:['L2','L3','L4'], desc:'UNIT II = Subject + Content/Function + Perspectives/Artist/Forms (HUM1-UNIT-2-3) • Pretest B: 20 items'},
 'UNIT III': {lessons:['L5'], desc:'UNIT III = Elements, Principles, Production & Curation (LECTURE5.txt) • Pretest C: 25 items (True/False)'}
 };
@@ -401,6 +401,76 @@ const PRETESTS = {
 {qtype:'tf', q:'TRUE or FALSE: Sensory appreciation involves recognizing beauty, harmony, proportion, and appeal without necessarily analyzing deeper meanings.', a:true, why:'Exact sensory line.'}
 ]
 };
+
+const PRETEST_D = [
+{qtype:'tf', q:'TRUE or FALSE: Emotional appreciation focuses on how an artwork touches the heart or resonates with the viewer\'s experiences.', a:true, why:'Emotional Appreciation definition.'},
+{qtype:'tf', q:'TRUE or FALSE: Art has the power to move emotions such as happiness, sadness, nostalgia, fear, awe, and peace.', a:true, why:'All six emotions listed.'},
+{qtype:'tf', q:'TRUE or FALSE: Intellectual appreciation requires understanding symbolism, context, and philosophy.', a:true, why:'Intellectual Appreciation definition.'},
+{qtype:'tf', q:'TRUE or FALSE: Art is appreciated in intellectual appreciation because it stimulates thought and reflection.', a:true, why:'Stimulates thought and reflection.'},
+{qtype:'tf', q:'TRUE or FALSE: Cultural appreciation involves recognizing artworks as part of traditions, heritage, and identity.', a:true, why:'Cultural Appreciation definition.'},
+{qtype:'tf', q:'TRUE or FALSE: Cultural appreciation includes respect for diversity in art.', a:true, why:'Respect for diversity.'},
+{qtype:'tf', q:'TRUE or FALSE: What may seem "strange" to one culture is deeply meaningful to another.', a:true, why:'Cultural Appreciation line.'},
+{qtype:'tf', q:'TRUE or FALSE: Art is human creativity expressed in different forms.', a:true, why:'Forms of Art intro.'},
+{qtype:'tf', q:'TRUE or FALSE: Humans create art for entertainment, religion, love, money, communication, history, and identity.', a:true, why:'All 7 reasons listed.'},
+{qtype:'tf', q:'TRUE or FALSE: People already communicated through cave paintings.', a:true, why:'To Communicate section.'},
+{qtype:'tf', q:'TRUE or FALSE: Painting, music, literature, and photography are forms of art.', a:true, why:'Four forms listed.'},
+{qtype:'tf', q:'TRUE or FALSE: Creativity is the ability to generate original ideas.', a:true, why:'Creativity definition (short form).'},
+{qtype:'tf', q:'TRUE or FALSE: Imagination is the power of the mind to form images without sensory input.', a:true, why:'Imagination definition (short form).'},
+{qtype:'tf', q:'TRUE or FALSE: Art is universal.', a:true, why:'Art is Universal.'},
+{qtype:'tf', q:'TRUE or FALSE: Art expresses human experiences.', a:true, why:'Expresses Human Experiences.'},
+{qtype:'tf', q:'TRUE or FALSE: Art is intentional.', a:true, why:'Art is Intentional.'},
+{qtype:'tf', q:'TRUE or FALSE: Art is symbolic.', a:true, why:'Art is Symbolic.'},
+{qtype:'tf', q:'TRUE or FALSE: Art reflects and shapes society.', a:true, why:'Reflects and shapes Society.'},
+{qtype:'tf', q:'TRUE or FALSE: Sensory appreciation is one of the systems of appreciation.', a:true, why:'Sensory is a system.'},
+{qtype:'tf', q:'TRUE or FALSE: Emotional appreciation is one of the systems of appreciation.', a:true, why:'Emotional is a system.'},
+{qtype:'tf', q:'TRUE or FALSE: Intellectual appreciation is one of the systems of appreciation.', a:true, why:'Intellectual is a system.'},
+{qtype:'tf', q:'TRUE or FALSE: Cultural appreciation is one of the systems of appreciation.', a:true, why:'Cultural is a system.'},
+{qtype:'tf', q:'TRUE or FALSE: Art can only be appreciated through sight.', a:false, why:'Sight, hearing, touch, smell, and taste — not sight only.'},
+{qtype:'tf', q:'TRUE or FALSE: Art is only for entertainment.', a:false, why:'Entertain, teach, express, inspire, protest — not only entertainment.'},
+{qtype:'tf', q:'TRUE or FALSE: Art has no connection to society.', a:false, why:'Art reflects and shapes society.'}
+];
+
+const PRETEST_E = [
+{qtype:'fill', q:'Identify: One of humanity\'s oldest and most universal expressions.', a:'Art', why:'Intro line.'},
+{qtype:'fill', q:'Identify: The human capacity from which art arises.', a:'Creativity and imagination', why:'Art arises from creativity and imagination.'},
+{qtype:'fill', q:'Identify: The ability to generate original ideas and bring something new into existence.', a:'Creativity', why:'Creativity definition.'},
+{qtype:'fill', q:'Identify: The power of the mind to form images, concepts, and sensations without immediate input of the senses.', a:'Imagination', why:'Imagination definition.'},
+{qtype:'fill', q:'Identify: What imagination turns what "is" into.', a:'Could be', why:'Turns what "is" into what "could be."'},
+{qtype:'fill', q:'Identify: Basic beliefs, underlying truths, and universal principles that guide our understanding and appreciation of art.', a:'Assumptions of Arts', why:'Assumptions definition.'},
+{qtype:'fill', q:'Identify: The assumption of art that states art exists in every culture, society, and historical era.', a:'Art is Universal', why:'Art is Universal.'},
+{qtype:'fill', q:'Identify: The assumption of art that describes art as a "mirror of life."', a:'Art Expresses Human Experiences', why:'Mirror of life.'},
+{qtype:'fill', q:'Identify: The assumption of art that emphasizes art is not random and carries meaning, vision, and design.', a:'Art is Intentional', why:'Art is Intentional.'},
+{qtype:'fill', q:'Identify: The assumption of art that allows multiple interpretations depending on the viewer\'s perspective.', a:'Art is Symbolic', why:'Art is Symbolic.'},
+{qtype:'fill', q:'Identify: The assumption of art that states it is influenced by social context and, in turn, influences people\'s values.', a:'Art Reflects and Shapes Society', why:'Reflects and shapes Society.'},
+{qtype:'fill', q:'Identify: Different ways human beings perceive, evaluate, and respond to artworks.', a:'System of Appreciation', why:'System of Appreciation.'},
+{qtype:'fill', q:'Identify: The system of appreciation that responds through the senses.', a:'Sensory Appreciation', why:'Sensory.'},
+{qtype:'fill', q:'Identify: The system of appreciation that focuses on how art touches the heart.', a:'Emotional Appreciation', why:'Emotional.'},
+{qtype:'fill', q:'Identify: The system of appreciation that requires understanding symbolism, context, and philosophy.', a:'Intellectual Appreciation', why:'Intellectual.'},
+{qtype:'fill', q:'Identify: The system of appreciation that involves recognizing artworks as part of traditions, heritage, and identity.', a:'Cultural Appreciation', why:'Cultural.'},
+{qtype:'fill', q:'Identify: Personal emotions embodied in art.', a:'Love, fear, joy, grief', why:'Personal emotions listed.'},
+{qtype:'fill', q:'Identify: Collective experiences embodied in art.', a:'War, migration, celebrations', why:'Collective experiences listed.'},
+{qtype:'fill', q:'Identify: Cultural values embodied in art.', a:'Beliefs, myths, traditions', why:'Cultural values listed.'},
+{qtype:'fill', q:'Identify: The intention behind art that involves making something beautiful.', a:'Beautify', why:'To beautify.'},
+{qtype:'fill', q:'Identify: The intention behind art that involves convincing others.', a:'Persuade', why:'To persuade.'},
+{qtype:'fill', q:'Identify: The intention behind art that involves stimulating thought.', a:'Provoke thought', why:'To provoke thought.'},
+{qtype:'fill', q:'Identify: The intention behind art that involves simply expressing.', a:'Express', why:'To simply express.'},
+{qtype:'fill', q:'Identify: What art uses to communicate ideas beyond the literal.', a:'Symbols, metaphors, signs', why:'Symbols, metaphors, and signs.'},
+{qtype:'fill', q:'Identify: The reason humans create art that involves amusing others.', a:'Entertainment', why:'Entertainment reason.'},
+{qtype:'fill', q:'Identify: The reason humans create art that involves spiritual belief.', a:'Religion', why:'Religion reason.'},
+{qtype:'fill', q:'Identify: The reason humans create art that involves affection.', a:'Love', why:'Love reason.'},
+{qtype:'fill', q:'Identify: The reason humans create art that involves financial gain.', a:'Money', why:'Money reason.'},
+{qtype:'fill', q:'Identify: The reason humans create art that involves conveying information.', a:'Communication', why:'Communication reason.'},
+{qtype:'fill', q:'Identify: The reason humans create art that involves recording events.', a:'History', why:'History reason.'}
+];
+
+const PRETEST_LIST = [
+{key:'A', unit:'UNIT I', title:'Pretest A', items:PRETESTS['UNIT I']},
+{key:'B', unit:'UNIT II', title:'Pretest B', items:PRETESTS['UNIT II']},
+{key:'C', unit:'UNIT III', title:'Pretest C', items:PRETESTS['UNIT III']},
+{key:'D', unit:'UNIT I', title:'Pretest D', items:PRETEST_D},
+{key:'E', unit:'UNIT I', title:'Pretest E', items:PRETEST_E}
+];
+let currentPretestKey = null;
 let SEL = localStorage.getItem('hum1_unit') || 'UNIT I';
 let XP = parseInt(localStorage.getItem('hum1_xp')||'0');
 let STREAK = parseInt(localStorage.getItem('hum1_streak')||'0');
@@ -457,27 +527,30 @@ function startPretest(){ showPretests(); }
 function showPretests(){
 $('home').classList.add('hidden');$('runner').classList.add('hidden');$('done').classList.add('hidden');$('bbar').classList.add('hidden');$('mapview').classList.add('hidden');$('pretestview').classList.remove('hidden');
 let pl=$('pretestlist'); pl.innerHTML='';
-Object.keys(PRETESTS).forEach(k=>{
-let PT=PRETESTS[k];
-let label = k==='UNIT I' ? 'Pretest A' : k==='UNIT II' ? 'Pretest B' : k==='UNIT III' ? 'Pretest C' : 'Pretest';
+PRETEST_LIST.forEach(e=>{
+let PT=e.items;
 let isTF = PT.length && PT[0].qtype==='tf';
-let kind = isTF ? 'true/false' : 'multiple-choice';
+let isFill = PT.length && PT[0].qtype==='fill';
+let kind = isTF ? 'true/false' : isFill ? 'identification' : 'multiple-choice';
 let d=document.createElement('button'); d.className='menu-card';
-d.innerHTML='<div class="icon">📝</div><div><h2>'+label+' — '+k+'</h2><p>'+PT.length+' '+kind+' items • shuffled</p></div>';
-d.onclick=()=>startSpecificPretest(k); pl.appendChild(d);
+d.innerHTML='<div class="icon">📝</div><div><h2>'+e.title+' — '+e.unit+'</h2><p>'+PT.length+' '+kind+' items • shuffled</p></div>';
+d.onclick=()=>startSpecificPretest(e.key); pl.appendChild(d);
 });
 window.scrollTo(0,0);
 }
 function startSpecificPretest(key){
-SEL=key; save(); refresh();
-let PT=PRETESTS[key]||[];
+let entry = (typeof PRETEST_LIST!=='undefined' ? PRETEST_LIST.find(x=>x.key===key) : null) || (typeof PRETEST_LIST!=='undefined' ? PRETEST_LIST.find(x=>x.unit===key) : null);
+if(!entry){ let PT0=PRETESTS[key]||[]; entry={key:key, unit:key, title:'Pretest '+key, items:PT0}; }
+SEL=entry.unit; save(); refresh(); currentPretestKey=entry.key;
+let PT=entry.items||[];
 steps=[];
-let pseudo={id:'PT-'+key, short:key.replace('UNIT ','Unit '), title:'Pretest '+key};
+let pseudo={id:'PT-'+entry.key, short:entry.unit.replace('UNIT ','Unit '), title:entry.title+' '+entry.unit};
 PT.forEach(q=>steps.push({kind:'quiz',lesson:pseudo,...q}));
 prepQuiz();
 let isTF = PT.length && PT[0].qtype==='tf';
-let kind = isTF ? 'true/false' : 'multiple choice';
-mode='quiz'; lastQuiz='pretest'; totalQ=steps.length; begin('Pretest '+key+' ('+steps.length+' items)', key+' • PRETEST ('+kind+', shuffled)');
+let isFill = PT.length && PT[0].qtype==='fill';
+let kind = isTF ? 'true/false' : isFill ? 'identification' : 'multiple choice';
+mode='quiz'; lastQuiz='pretest'; totalQ=steps.length; begin(entry.title+' '+entry.unit+' ('+steps.length+' items)', entry.unit+' • PRETEST ('+kind+', shuffled)');
 }
 function startSingleLesson(id){
 let L=DATA.find(x=>x.id===id);
@@ -559,7 +632,7 @@ $('bbar').style.visibility='hidden';
 let fb=$('feedback'); fb.classList.add('show');
 if(correct){ xpRun+=10; correctFirst++; fb.className='feedback show ok'; $('fb-title').textContent='🎉 Correct! +10 XP'; $('fb-msg').textContent=s.why||'Nice!'; $('fb-btn').style.background='var(--green)'; }
 else{ hearts--; fb.className='feedback show no'; $('fb-title').textContent='💔 Answer: '+correctText; $('fb-msg').textContent=(s.why||'')+' — lost 1 heart ❤️ ('+hearts+' left)'; $('fb-btn').style.background='var(--red)'; $('fb-btn').style.color='#fff';
-if(hearts<=0){ $('fb-btn').textContent='RETRY'; $('fb-btn').onclick=()=>{ $('feedback').classList.remove('show'); $('bbar').style.visibility='visible'; if(lastQuiz==='long'){ startLongQuiz(); } else if(lastQuiz==='pretest'){ startSpecificPretest(SEL); } else { startQuiz(); } }; $('h-heart').textContent=hearts; return; } }
+if(hearts<=0){ $('fb-btn').textContent='RETRY'; $('fb-btn').onclick=()=>{ $('feedback').classList.remove('show'); $('bbar').style.visibility='visible'; if(lastQuiz==='long'){ startLongQuiz(); } else if(lastQuiz==='pretest'){ startSpecificPretest(currentPretestKey||SEL); } else { startQuiz(); } }; $('h-heart').textContent=hearts; return; } }
 $('h-heart').textContent=hearts;
 $('pfill').style.width=((idx+1)/steps.length*100)+'%';
 $('fb-btn').textContent='GOT IT'; $('fb-btn').onclick=()=>{ $('bbar').style.visibility='visible'; nextStep(true); };
